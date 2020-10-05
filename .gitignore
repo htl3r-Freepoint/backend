@@ -1,0 +1,10 @@
+
+###> symfony/framework-bundle ###
+/config/secrets/prod/prod.decrypt.private.php
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
