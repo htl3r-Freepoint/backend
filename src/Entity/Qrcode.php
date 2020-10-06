@@ -22,7 +22,7 @@ class Qrcode {
     private $FK_User_ID;
 
     /**
-     * @ORM\Column(type="string", length=2048)
+     * @ORM\Column(type="string", length=4056)
      */
     private $Klartext;
 
