@@ -7,4 +7,5 @@
 .phpunit
 .phpunit.result.cache
 /phpunit.xml
+/var
 ###< symfony/phpunit-bridge ###

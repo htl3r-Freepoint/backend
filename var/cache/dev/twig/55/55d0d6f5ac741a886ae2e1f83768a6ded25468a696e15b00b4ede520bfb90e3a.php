@@ -154,6 +154,6 @@ class __TwigTemplate_e164178d348af6541c2c6f4673fcb6a20d1e1f50fbe185ae96c61d757cc
     </ul>
 </div>
 {% endblock %}
-", "qrcode/index.html.twig", "C:\\xampp\\htdocs\\backend\\templates\\qrcode\\index.html.twig");
+", "qrcode/index.html.twig", "C:\\Users\\chris\\PhpstormProjects\\backend\\templates\\qrcode\\index.html.twig");
     }
 }
