@@ -1,0 +1,15 @@
+<table>
+    <tr>
+        <th> FK_User_ID</th>
+        <th> Date</th>
+        <th> TEXT</th>
+    </tr>
+    <br>
+    {% for menu in menus %}
+        <tr>
+            <td> {{ menu.FK_User_ID }} </td>
+            <td> {{ menu.getDate().format("d-M-Y") }} </td>
+            <td> {{ menu.Klartext }} </td>
+        </tr>
+    {% endfor %}
+</table>

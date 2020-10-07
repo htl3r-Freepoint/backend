@@ -1558,6 +1558,6 @@ class __TwigTemplate_13de2dbda2580ea487bb783bb1e7b33a48c3454ba8658c6ca4454631ee3
         </small>
     {%- endif -%}
 {%- endblock form_help %}
-", "bootstrap_4_layout.html.twig", "C:\\xampp\\htdocs\\Freepoint\\vendor\\symfony\\twig-bridge\\Resources\\views\\Form\\bootstrap_4_layout.html.twig");
+", "bootstrap_4_layout.html.twig", "C:\\xampp\\htdocs\\backend\\vendor\\symfony\\twig-bridge\\Resources\\views\\Form\\bootstrap_4_layout.html.twig");
     }
 }

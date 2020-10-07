@@ -154,6 +154,6 @@ class __TwigTemplate_4b0d0275cac108e65cb116b4928cfa5eb8d97cd2061479fad3d0dd8c826
     </ul>
 </div>
 {% endblock %}
-", "user/index.html.twig", "C:\\xampp\\htdocs\\Freepoint\\templates\\user\\index.html.twig");
+", "user/index.html.twig", "C:\\xampp\\htdocs\\backend\\templates\\user\\index.html.twig");
     }
 }

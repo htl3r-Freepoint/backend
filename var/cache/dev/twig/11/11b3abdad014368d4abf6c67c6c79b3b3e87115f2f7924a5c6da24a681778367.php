@@ -173,6 +173,6 @@ class __TwigTemplate_7cb8417ba86a973d294e4ae5677e1c77b047edc0e8a9b81ee80ba609d4f
         {% block javascripts %}{% endblock %}
     </body>
 </html>
-", "base.html.twig", "C:\\xampp\\htdocs\\Freepoint\\templates\\base.html.twig");
+", "base.html.twig", "C:\\xampp\\htdocs\\backend\\templates\\base.html.twig");
     }
 }
