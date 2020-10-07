@@ -17,7 +17,8 @@ return [
     '_profiler_exception_css' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::stylesheet'], [], [['text', '/exception.css'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], []],
     'qrcode' => [[], ['_controller' => 'App\\Controller\\QrcodeController::index'], [], [['text', '/qrcode']], [], []],
     'showAll_qrcodes' => [[], ['_controller' => 'App\\Controller\\QrcodeController::showAll'], [], [['text', '/qrcode/showAll/']], [], []],
-    'add_qrcode' => [[], ['_controller' => 'App\\Controller\\QrcodeController::success'], [], [['text', '/qrcode/success']], [], []],
+    'add_qrcodeOLD' => [[], ['_controller' => 'App\\Controller\\QrcodeController::addOLD'], [], [['text', '/qrcode/add/OLD']], [], []],
+    'new_qrcode_form' => [[], ['_controller' => 'App\\Controller\\QrcodeController::add'], [], [['text', '/qrcode/new']], [], []],
     'user' => [[], ['_controller' => 'App\\Controller\\UserController::index'], [], [['text', '/user']], [], []],
     'show_user' => [[], ['_controller' => 'App\\Controller\\UserController::showUser'], [], [['text', '/user/show}']], [], []],
 ];

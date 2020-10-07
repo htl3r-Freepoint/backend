@@ -1,5 +1,15 @@
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
 <table>
     <tr>
+        <th> PK_ID</th>
         <th> FK_User_ID</th>
         <th> Date</th>
         <th> TEXT</th>
@@ -7,8 +17,9 @@
     <br>
     {% for menu in menus %}
         <tr>
-            <td> {{ menu.FK_User_ID }} </td>
-            <td> {{ menu.getDate().format("d-M-Y") }} </td>
+            <td> {{ menu.getID }} </td>
+            <td> {{ menu.getFKUserID }} </td>
+            <td> {{ menu.getScannDatum().format("d-M-Y") }} </td>
             <td> {{ menu.Klartext }} </td>
         </tr>
     {% endfor %}
