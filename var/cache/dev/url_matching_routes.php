@@ -13,12 +13,12 @@ return [
         '/_profiler/search_bar' => [[['_route' => '_profiler_search_bar', '_controller' => 'web_profiler.controller.profiler::searchBarAction'], null, null, null, false, false, null]],
         '/_profiler/phpinfo' => [[['_route' => '_profiler_phpinfo', '_controller' => 'web_profiler.controller.profiler::phpinfoAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
-        '/password' => [[['_route' => 'password', '_controller' => 'App\\Controller\\PasswordController::index'], null, null, null, false, false, null]],
         '/qrcode' => [[['_route' => 'qrcode', '_controller' => 'App\\Controller\\QrcodeController::index'], null, null, null, false, false, null]],
         '/qrcode/showAll' => [[['_route' => 'showAll_qrcodes', '_controller' => 'App\\Controller\\QrcodeController::showAll'], null, null, null, true, false, null]],
         '/qrcode/new' => [[['_route' => 'new_qrcode_form', '_controller' => 'App\\Controller\\QrcodeController::add'], null, null, null, false, false, null]],
         '/user' => [[['_route' => 'user', '_controller' => 'App\\Controller\\UserController::index'], null, null, null, false, false, null]],
-        '/user/show}' => [[['_route' => 'show_user', '_controller' => 'App\\Controller\\UserController::showUser'], null, null, null, false, false, null]],
+        '/user/show' => [[['_route' => 'show_user', '_controller' => 'App\\Controller\\UserController::showUser'], null, null, null, false, false, null]],
+        '/user/new' => [[['_route' => 'new_user_Form', '_controller' => 'App\\Controller\\UserController::addUser'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

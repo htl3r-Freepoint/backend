@@ -1,0 +1,30 @@
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+<table>
+    <tr>
+        <th> Id</th>
+        <th> Username</th>
+        <th> Email</th>
+        <th> Vorname</th>
+        <th> Nachname</th>
+        <th> Passwort</th>
+    </tr>
+    <br>
+    {% for menu in menus %}
+        <tr>
+            <td> {{ menu.getID }} </td>
+            <td> {{ menu.getUsername }} </td>
+            <td> {{ menu.getEmail }} </td>
+            <td> {{ menu.getVorname }} </td>
+            <td> {{ menu.getNachname }} </td>
+            <td>NONONONONONONO</td>
+        </tr>
+    {% endfor %}
+</table>

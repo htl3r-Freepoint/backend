@@ -324,13 +324,6 @@
       <tag name="controller.service_arguments"/>
       <tag name="routing.route_loader"/>
     </service>
-    <service id="App\Controller\PasswordController" class="App\Controller\PasswordController" public="true" autowire="true" autoconfigure="true">
-      <tag name="controller.service_arguments"/>
-      <tag name="container.service_subscriber"/>
-      <call method="setContainer">
-        <argument type="service" id=".service_locator.g9CqTPp.App\Controller\PasswordController"/>
-      </call>
-    </service>
     <service id="App\Controller\QrcodeController" class="App\Controller\QrcodeController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -345,7 +338,13 @@
         <argument type="service" id=".service_locator.g9CqTPp.App\Controller\UserController"/>
       </call>
     </service>
+    <service id="App\Form\PasswordType" class="App\Form\PasswordType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
     <service id="App\Form\QRCodeType" class="App\Form\QRCodeType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="App\Form\UserType" class="App\Form\UserType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
     <service id="App\Repository\AngestellteRepository" class="App\Repository\AngestellteRepository" autowire="true" autoconfigure="true">
@@ -834,7 +833,9 @@
         <argument>Symfony\Bridge\Doctrine\Form\Type</argument>
       </argument>
       <argument type="collection">
+        <argument>App\Form\PasswordType</argument>
         <argument>App\Form\QRCodeType</argument>
+        <argument>App\Form\UserType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\ChoiceType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FileType</argument>
@@ -1176,7 +1177,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension" public="false">
-      <argument type="service" id=".service_locator.PDPMQIN"/>
+      <argument type="service" id=".service_locator.t.lzrvQ"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -4909,17 +4910,18 @@
       <argument>^/((index|app(_[\w]+)?)\.php/)?_wdt</argument>
       <argument type="service" id="web_profiler.csp.handler"/>
     </service>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\PasswordController" class="App\Controller\PasswordController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\PasswordController" class="App\Controller\PasswordController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\PasswordController" class="App\Controller\PasswordController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\QrcodeController" class="App\Controller\QrcodeController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\QrcodeController" class="App\Controller\QrcodeController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\QrcodeController" class="App\Controller\QrcodeController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\UserController" class="App\Controller\UserController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\UserController" class="App\Controller\UserController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\UserController" class="App\Controller\UserController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\PasswordType" class="App\Form\PasswordType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\PasswordType" class="App\Form\PasswordType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\QRCodeType" class="App\Form\QRCodeType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\QRCodeType" class="App\Form\QRCodeType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\UserType" class="App\Form\UserType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\UserType" class="App\Form\UserType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AngestellteRepository" class="App\Repository\AngestellteRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\AngestellteRepository" class="App\Repository\AngestellteRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\BetriebRepository" class="App\Repository\BetriebRepository" autowire="true" abstract="true"/>
@@ -5268,10 +5270,12 @@
       <argument type="service" id="debug.argument_resolver.not_tagged_controller.inner"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.PDPMQIN" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.t.lzrvQ" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Form\PasswordType" type="service" id="App\Form\PasswordType"/>
         <argument key="App\Form\QRCodeType" type="service" id="App\Form\QRCodeType"/>
+        <argument key="App\Form\UserType" type="service" id="App\Form\UserType"/>
         <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service" id="form.type.entity"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ChoiceType" type="service" id="form.type.choice"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ColorType" type="service" id="form.type.color"/>
@@ -5505,12 +5509,6 @@
         <argument key="session" type="service" id="session" on-invalid="ignore"/>
         <argument key="twig" type="service" id="twig" on-invalid="ignore"/>
       </argument>
-    </service>
-    <service id=".service_locator.g9CqTPp.App\Controller\PasswordController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
-      <tag name="container.service_locator_context" id="App\Controller\PasswordController"/>
-      <argument>App\Controller\PasswordController</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.g9CqTPp" method="withContext"/>
     </service>
     <service id=".service_locator.g9CqTPp.App\Controller\QrcodeController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator_context" id="App\Controller\QrcodeController"/>

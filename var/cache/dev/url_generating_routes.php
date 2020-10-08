@@ -15,10 +15,10 @@ return [
     '_profiler_router' => [['token'], ['_controller' => 'web_profiler.controller.router::panelAction'], [], [['text', '/router'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], []],
     '_profiler_exception' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::body'], [], [['text', '/exception'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], []],
     '_profiler_exception_css' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::stylesheet'], [], [['text', '/exception.css'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], []],
-    'password' => [[], ['_controller' => 'App\\Controller\\PasswordController::index'], [], [['text', '/password']], [], []],
     'qrcode' => [[], ['_controller' => 'App\\Controller\\QrcodeController::index'], [], [['text', '/qrcode']], [], []],
     'showAll_qrcodes' => [[], ['_controller' => 'App\\Controller\\QrcodeController::showAll'], [], [['text', '/qrcode/showAll/']], [], []],
     'new_qrcode_form' => [[], ['_controller' => 'App\\Controller\\QrcodeController::add'], [], [['text', '/qrcode/new']], [], []],
     'user' => [[], ['_controller' => 'App\\Controller\\UserController::index'], [], [['text', '/user']], [], []],
-    'show_user' => [[], ['_controller' => 'App\\Controller\\UserController::showUser'], [], [['text', '/user/show}']], [], []],
+    'show_user' => [[], ['_controller' => 'App\\Controller\\UserController::showUser'], [], [['text', '/user/show']], [], []],
+    'new_user_Form' => [[], ['_controller' => 'App\\Controller\\UserController::addUser'], [], [['text', '/user/new']], [], []],
 ];

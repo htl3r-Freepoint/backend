@@ -36,6 +36,22 @@ class User {
      */
     private $nachname;
 
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $password;
+
+
+    public function getPassword() {
+        return $this->password;
+    }
+
+    public function setPassword($password): void {
+        $this->password = password_hash($password, PASSWORD_DEFAULT);;
+    }
+
+
     public function getId(): ?int {
         return $this->id;
     }
