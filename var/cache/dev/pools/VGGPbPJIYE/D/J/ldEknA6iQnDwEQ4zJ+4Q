@@ -1,0 +1,60 @@
+<?php //App_Entity_Firma
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\Firma',
+                'id',
+                'FK_User_ID__Owner',
+                'Firmanname',
+                'Kontakt_Email',
+                'XEuroFuer1Punkt',
+                'Datei',
+                'Domain',
+                'fKUserIDOwner',
+                'firmanname',
+                'kontaktEmail',
+                'xEuroFuer1Punkt',
+                'datei',
+                'domain',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'FK_User_ID__Owner' => $o[2],
+                    'Firmanname' => $o[3],
+                    'Kontakt_Email' => $o[4],
+                    'XEuroFuer1Punkt' => $o[5],
+                    'Datei' => $o[6],
+                    'Domain' => $o[7],
+                    'fKUserIDOwner' => $o[8],
+                    'firmanname' => $o[9],
+                    'kontaktEmail' => $o[10],
+                    'xEuroFuer1Punkt' => $o[11],
+                    'datei' => $o[12],
+                    'domain' => $o[13],
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Punkte;
+use App\Entity\User;
 use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -14,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Entity\Qrcode;
 use App\Form\QRCodeType;
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 class QrcodeController extends AbstractController {
