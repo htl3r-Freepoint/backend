@@ -13,6 +13,8 @@ return [
         '/_profiler/search_bar' => [[['_route' => '_profiler_search_bar', '_controller' => 'web_profiler.controller.profiler::searchBarAction'], null, null, null, false, false, null]],
         '/_profiler/phpinfo' => [[['_route' => '_profiler_phpinfo', '_controller' => 'web_profiler.controller.profiler::phpinfoAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
+        '/design' => [[['_route' => 'design', '_controller' => 'App\\Controller\\DesignController::index'], null, null, null, false, false, null]],
+        '/requestchecker/checkmanually' => [[['_route' => 'app_design_checkmanually', '_controller' => 'App\\Controller\\DesignController::checkManually'], null, null, null, false, false, null]],
         '/firma' => [[['_route' => 'firma', '_controller' => 'App\\Controller\\FirmaController::index'], null, null, null, false, false, null]],
         '/punkte' => [[['_route' => 'punkte', '_controller' => 'App\\Controller\\PunkteController::index'], null, null, null, false, false, null]],
         '/qrcode' => [[['_route' => 'qrcode', '_controller' => 'App\\Controller\\QrcodeController::index'], null, null, null, false, false, null]],
@@ -40,10 +42,12 @@ return [
                         .'|(*:159)'
                     .')'
                 .')'
+                .'|/requestchecker/checkautomatic(?:\\.(html|json))?(*:217)'
                 .'|/api/(?'
-                    .'|firma/([^/\\.]++)(?:\\.(html|json|xml))?(*:215)'
-                    .'|punkte/([^/\\.]++)(?:\\.(html|json|xml))?(*:262)'
-                    .'|rabatt/([^/\\.]++)(?:\\.(html|json|xml))?(*:309)'
+                    .'|firma/([^/\\.]++)(?:\\.(html|json|xml))?(*:271)'
+                    .'|punkte/([^/\\.]++)(?:\\.(html|json|xml))?(*:318)'
+                    .'|AddQrCode/([^/]++)(*:344)'
+                    .'|rabatt/([^/\\.]++)(?:\\.(html|json|xml))?(*:391)'
                 .')'
             .')/?$}sDu',
     ],
@@ -55,9 +59,11 @@ return [
         136 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
         149 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
         159 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
-        215 => [[['_route' => 'show_firma_json', '_format' => 'html', '_controller' => 'App\\Controller\\FirmaController::Firma_API'], ['id', '_format'], null, null, false, true, null]],
-        262 => [[['_route' => 'show_punkte_json', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::Punkte_API'], ['id', '_format'], null, null, false, true, null]],
-        309 => [
+        217 => [[['_route' => 'app_design_checkautomagic', '_format' => 'html', '_controller' => 'App\\Controller\\DesignController::checkAutomagic'], ['_format'], null, null, false, true, null]],
+        271 => [[['_route' => 'show_firma_json', '_format' => 'html', '_controller' => 'App\\Controller\\FirmaController::Firma_API'], ['id', '_format'], null, null, false, true, null]],
+        318 => [[['_route' => 'show_punkte_json', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::Punkte_API'], ['id', '_format'], null, null, false, true, null]],
+        344 => [[['_route' => 'add_qrcode_json', '_format' => 'html', '_controller' => 'App\\Controller\\QrcodeController::Add_QrCode_API'], ['string'], null, null, false, true, null]],
+        391 => [
             [['_route' => 'show_rabatt_json', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::Rabatt_API'], ['id', '_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

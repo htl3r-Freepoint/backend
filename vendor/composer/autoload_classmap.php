@@ -6,7 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Controller\\DesignController' => $baseDir . '/src/Controller/DesignController.php',
+    'App\\Controller\\FirmaController' => $baseDir . '/src/Controller/FirmaController.php',
+    'App\\Controller\\PunkteController' => $baseDir . '/src/Controller/PunkteController.php',
     'App\\Controller\\QrcodeController' => $baseDir . '/src/Controller/QrcodeController.php',
+    'App\\Controller\\RabattController' => $baseDir . '/src/Controller/RabattController.php',
     'App\\Controller\\UserController' => $baseDir . '/src/Controller/UserController.php',
     'App\\Entity\\Angestellte' => $baseDir . '/src/Entity/Angestellte.php',
     'App\\Entity\\Betrieb' => $baseDir . '/src/Entity/Betrieb.php',
@@ -1395,6 +1399,16 @@ return array(
     'Monolog\\SignalHandler' => $vendorDir . '/monolog/monolog/src/Monolog/SignalHandler.php',
     'Monolog\\Test\\TestCase' => $vendorDir . '/monolog/monolog/src/Monolog/Test/TestCase.php',
     'Monolog\\Utils' => $vendorDir . '/monolog/monolog/src/Monolog/Utils.php',
+    'Nelmio\\CorsBundle\\DependencyInjection\\Compiler\\CorsConfigurationProviderPass' => $vendorDir . '/nelmio/cors-bundle/DependencyInjection/Compiler/CorsConfigurationProviderPass.php',
+    'Nelmio\\CorsBundle\\DependencyInjection\\Configuration' => $vendorDir . '/nelmio/cors-bundle/DependencyInjection/Configuration.php',
+    'Nelmio\\CorsBundle\\DependencyInjection\\NelmioCorsExtension' => $vendorDir . '/nelmio/cors-bundle/DependencyInjection/NelmioCorsExtension.php',
+    'Nelmio\\CorsBundle\\EventListener\\CacheableResponseVaryListener' => $vendorDir . '/nelmio/cors-bundle/EventListener/CacheableResponseVaryListener.php',
+    'Nelmio\\CorsBundle\\EventListener\\CorsListener' => $vendorDir . '/nelmio/cors-bundle/EventListener/CorsListener.php',
+    'Nelmio\\CorsBundle\\NelmioCorsBundle' => $vendorDir . '/nelmio/cors-bundle/NelmioCorsBundle.php',
+    'Nelmio\\CorsBundle\\Options\\ConfigProvider' => $vendorDir . '/nelmio/cors-bundle/Options/ConfigProvider.php',
+    'Nelmio\\CorsBundle\\Options\\ProviderInterface' => $vendorDir . '/nelmio/cors-bundle/Options/ProviderInterface.php',
+    'Nelmio\\CorsBundle\\Options\\Resolver' => $vendorDir . '/nelmio/cors-bundle/Options/Resolver.php',
+    'Nelmio\\CorsBundle\\Options\\ResolverInterface' => $vendorDir . '/nelmio/cors-bundle/Options/ResolverInterface.php',
     'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     'NumberFormatter' => $vendorDir . '/symfony/intl/Resources/stubs/NumberFormatter.php',
     'PackageVersions\\FallbackVersions' => $vendorDir . '/composer/package-versions-deprecated/src/PackageVersions/FallbackVersions.php',
