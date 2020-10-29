@@ -61,7 +61,7 @@ class QrcodeController extends AbstractController {
                 return $this->render("qrcode/failed.html.twig", ["code" => $OGCode]);
             } else {
 
-                $this->saveCode($OGCode);
+                $this->saveCode($OGCode, 1);
 
                 ////////////////////////////////////////////
                 $codeFINISH = $this->getDoctrine()->getRepository(Qrcode::class);
@@ -74,12 +74,12 @@ class QrcodeController extends AbstractController {
         ]);
     }
 
-    protected function saveCode($OGCode) {
+    protected function saveCode($OGCode, $FKUserId) {
         $entityManager = $this->getDoctrine()->getManager();
 
         $QRCODE = new Qrcode();
         $QRCODE->setKlartext($OGCode);
-        $QRCODE->setFKUserID(1);
+        $QRCODE->setFKUserID($FKUserId);
         $QRCODE->setScannDatum(new \DateTime());
 
         $entityManager->persist($QRCODE);
@@ -120,31 +120,44 @@ class QrcodeController extends AbstractController {
             if ($parts[$length - 1] == $qrcodes[$length2 - 1]) {
                 return "true";
             }
+            if ($OGCode == "ADD_CODE_HERE") {
+                return "true";
+            }
         }
     }
 
     /**
-     * @Route(
-     *     "/api/AddQrCode/{string}",
-     *     format="html",
-     *     name="add_qrcode_json",
-     *     requirements={
-     *         "_format": "html|json|xml",
-     *     }
-     * )
+     * @Route("/api/AddQrCode.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @param Request $request
+     * @return Response
      */
-    public function Add_QrCode_API(string $string, string $_format, SerializerInterface $serializer, Request $request): Response {
-
-        $request = Request::createFromGlobals();
-//        $splitted = explode(";", $string);
-//        if (count($splitted) == 2) {
-//            if (($exists = $this->checkCode($splitted[1])) == "false") {
-//
+    public function Add_QrCode_API(Request $request, SerializerInterface $serializer): Response {
+        // Return JSON
+        if ($request->getRequestFormat() == 'json') {
+//            if ($request->getMethod() == 'GET') {
+//                $data = $this->getDoctrine()->getRepository(Qrcode::class)->findAll();
+//                return new Response($serializer->serialize($data, 'json'));
+////                return new Response("GET");
 //            }
-//        }
-//        $final = implode($splitted);
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
+                $OGCode = $data["code"];
+                $UserID = $data["UserId"];
 
-//        $request->getAcceptableContentTypes();
-        return new Response($final);
+                $exists = $this->checkCode($OGCode);
+
+                if ($exists == "true") {
+                    return new Response("-1");
+                } else {
+                    $this->saveCode($OGCode, $UserID);
+                    return new Response("1");
+                }
+            }
+
+            // Return HTML
+            return new Response(
+                '<html><body>Some HTML Response</body></html>'
+            );
+        }
     }
 }
