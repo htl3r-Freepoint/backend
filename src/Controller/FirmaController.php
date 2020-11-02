@@ -21,27 +21,83 @@ class FirmaController extends AbstractController {
         ]);
     }
 
+    private function check() {
+
+    }
+
+    private function save($owner, $name, $kontakt, $XEuro, $datei, $domain) {
+        if ($owner == "ADD_HERE" || isset($owner) || $owner == "undefined" || $owner == "null") $owner = null;
+        if ($name == "ADD_HERE" || isset($name) || $name == "undefined" || $name == "null") $name = null;
+        if ($kontakt == "ADD_HERE" || isset($kontakt) || $kontakt == "undefined" || $kontakt == "null") $kontakt = null;
+        if ($XEuro == "ADD_HERE" || isset($XEuro) || $XEuro == "undefined" || $XEuro == "null") $XEuro = null;
+        if ($datei == "ADD_HERE" || isset($datei) || $datei == "undefined" || $datei == "null") $datei = null;
+        if ($domain == "ADD_HERE" || isset($domain) || $domain == "undefined" || $domain == "null") $domain = null;
+
+        if ($name == null || $kontakt == null || $XEuro == null || $domain == null) return false;
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $Firma = new Firma();
+        $Firma->setFKUserIDOwner(null); //TODO !!!!!!!!!!
+        $Firma->setFirmanname($name);
+        $Firma->setKontaktEmail($kontakt);
+        $Firma->setXEuroFuer1Punkt($XEuro);
+        $Firma->setDatei($datei);
+        $Firma->setDomain($domain);
+
+        $entityManager->persist($Firma);
+        $entityManager->flush();
+
+        return true;
+    }
+
     /**
-     * @Route(
-     *     "/api/firma/{id}.{_format}",
-     *     format="html",
-     *     name="show_firma_json",
-     *     requirements={
-     *         "_format": "html|json|xml",
-     *     }
-     * )
+     * @Route("/api/firma.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @param Request $request
+     * @return Response
      */
-    public function Firma_API(Firma $firma, string $_format, SerializerInterface $serializer, Request $request): Response {
+    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
+        // Return JSON
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'GET') {
+                $data = $this->getDoctrine()->getRepository(Firma::class)->findAll();
+                return new Response($serializer->serialize($data, 'json'));
+//                return new Response("GET");
+            }
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
 
-//        $tournament = $this->getDoctrine()->getRepository(Punkte::class);
-//        $punkte = $tournament->findBy(['FK_User_ID' => $user->getId()]);
+                $owner = $data["owner"];
+                $name = $data["Name"];
+                $kontakt = $data["kontakt"];
+                $XEuro = $data["XEuro"];
+                $datei = $data["datei"];
+                $domain = $data["domain"];
 
 
-        $request->getAcceptableContentTypes();
-        if ($_format == 'json') {
-            $jsonContent = $serializer->serialize($firma, 'json');
-            return new Response($jsonContent);
+                $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
+                $exists = 0;
+                foreach ($Firmen as $firm) {
+                    if ($firm->getFirmanname() == $name) $exists = "-1";
+                    if ($firm->getDomain() == $domain) $exists = "-1";
+
+                }
+
+                if ($exists != 0) {
+                    return new Response("-1");
+                } else {
+                    if ($this->save($owner, $name, $kontakt, $XEuro, $datei, $domain) == true) {
+                        return new Response("1");
+                    } else {
+                        return new Response("-1");
+                    }
+                }
+            }
+
+            // Return HTML
+            return new Response(
+                '<html><body>Some HTML Response</body></html>'
+            );
         }
-        return new Response('Easily found tournament entry with flying distance ' . $firma->getFirmanname());
     }
 }

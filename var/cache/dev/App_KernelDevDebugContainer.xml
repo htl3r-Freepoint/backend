@@ -5321,10 +5321,9 @@
         <argument key="loader" type="service" id=".errored..service_locator.C9JCBPC.Symfony\Component\Config\Loader\LoaderInterface"/>
       </argument>
     </service>
-    <service id=".service_locator..aBUjoJ" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.jGCCKtX" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="firma" type="service" id=".errored..service_locator..aBUjoJ.App\Entity\Firma"/>
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
@@ -5335,16 +5334,17 @@
         <argument key="user" type="service" id=".errored..service_locator.kkPZwLp.App\Entity\User"/>
       </argument>
     </service>
-    <service id=".service_locator.jGCCKtX" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator..aBUjoJ" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="firma" type="service" id=".errored..service_locator..aBUjoJ.App\Entity\Firma"/>
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.c5QCesE" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.xEvCs79" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="App\Controller\FirmaController::Firma_API" type="service" id=".service_locator..aBUjoJ"/>
+        <argument key="App\Controller\FirmaController::POST_GET_FIRMA_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Controller\PunkteController::Punkte_API" type="service" id=".service_locator.kkPZwLp"/>
         <argument key="App\Controller\QrcodeController::Add_QrCode_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Controller\RabattController::Rabatt_API" type="service" id=".service_locator..aBUjoJ"/>
@@ -5354,7 +5354,7 @@
         <argument key="kernel::loadRoutes" type="service" id=".service_locator.C9JCBPC"/>
         <argument key="kernel::registerContainerConfiguration" type="service" id=".service_locator.C9JCBPC"/>
         <argument key="kernel::terminate" type="service" id=".service_locator.beq5mCo"/>
-        <argument key="App\Controller\FirmaController:Firma_API" type="service" id=".service_locator..aBUjoJ"/>
+        <argument key="App\Controller\FirmaController:POST_GET_FIRMA_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Controller\PunkteController:Punkte_API" type="service" id=".service_locator.kkPZwLp"/>
         <argument key="App\Controller\QrcodeController:Add_QrCode_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Controller\RabattController:Rabatt_API" type="service" id=".service_locator..aBUjoJ"/>
@@ -5859,12 +5859,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.c5QCesE"/>
+      <argument type="service" id=".service_locator.xEvCs79"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.c5QCesE"/>
+      <argument type="service" id=".service_locator.xEvCs79"/>
     </service>
     <service id=".debug.http_client.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface" public="false">
       <argument type="collection"/>
@@ -5876,8 +5876,8 @@
     </service>
     <service id=".errored..service_locator.beq5mCo.Symfony\Component\HttpFoundation\Response" class="Symfony\Component\HttpFoundation\Response"/>
     <service id=".errored..service_locator.C9JCBPC.Symfony\Component\Config\Loader\LoaderInterface" class="Symfony\Component\Config\Loader\LoaderInterface"/>
-    <service id=".errored..service_locator..aBUjoJ.App\Entity\Firma" class="App\Entity\Firma"/>
     <service id=".errored..service_locator.kkPZwLp.App\Entity\User" class="App\Entity\User"/>
+    <service id=".errored..service_locator..aBUjoJ.App\Entity\Firma" class="App\Entity\Firma"/>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <tag name="container.no_preload"/>
       <argument type="service" id=".service_locator.kjL308J"/>
@@ -6264,7 +6264,7 @@
     <service id="Twig\Environment" alias="twig" public="false"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.WaGDpDt" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.c5QCesE"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.xEvCs79"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
     <service id="Psr\Log\LoggerInterface $cacheLogger" alias="monolog.logger.cache"/>
