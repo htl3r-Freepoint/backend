@@ -26,6 +26,8 @@ return [
     'app_qrcode_add_qrcode_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\QrcodeController::Add_QrCode_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/AddQrCode']], [], []],
     'rabatt' => [[], ['_controller' => 'App\\Controller\\RabattController::index'], [], [['text', '/rabatt']], [], []],
     'app_rabatt_get_rabatt_api' => [['id', '_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/rabatt'], ['variable', '/', '[^/]++', 'id', true], ['text', '/api']], [], []],
+    'standort' => [[], ['_controller' => 'App\\Controller\\StandortController::index'], [], [['text', '/standort']], [], []],
+    'app_standort_post_get_firma_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/betrieb']], [], []],
     'user' => [[], ['_controller' => 'App\\Controller\\UserController::index'], [], [['text', '/user']], [], []],
     'show_user' => [[], ['_controller' => 'App\\Controller\\UserController::showUser'], [], [['text', '/user/show']], [], []],
     'new_user_Form' => [[], ['_controller' => 'App\\Controller\\UserController::addUser'], [], [['text', '/user/new']], [], []],
