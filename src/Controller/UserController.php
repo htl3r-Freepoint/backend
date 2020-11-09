@@ -93,10 +93,6 @@ class UserController extends AbstractController {
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password) {
-        if ($username == "ADD_HERE" || isset($username) || $username == "undefined" || $username == "null") return false;
-        if ($email == "ADD_HERE" || isset($email) || $email == "undefined" || $email == "null") return false;
-
-
         $entityManager = $this->getDoctrine()->getManager();
 
         $Firma = new User();

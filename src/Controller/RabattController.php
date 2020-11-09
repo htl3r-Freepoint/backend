@@ -20,27 +20,57 @@ class RabattController extends AbstractController {
         ]);
     }
 
+    private function saveRabatt($fk_firma_id, $beschreibung, $datei, $XEuro, $rabttbeschreibung) {
+        if ($datei == "null" || $datei == "ADD_HERE") $datei = null;
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $Firma = new Rabatt();
+        $Firma->setFKFirmaID($fk_firma_id);
+        $Firma->setBeschreibung($beschreibung);
+        $Firma->setDatei($datei);
+        $Firma->setRabattbeschreibung($rabttbeschreibung);
+        $Firma->setXPunkteFuer1Rabatt($XEuro);
+
+        $entityManager->persist($Firma);
+        $entityManager->flush();
+
+        return true;
+    }
+
     /**
-     * @Route(
-     *     "/api/rabatt/{id}.{_format}",
-     *     format="html",
-     *     name="show_rabatt_json",
-     *     requirements={
-     *         "_format": "html|json|xml",
-     *     }
-     * )
+     * @Route("/api/{id}/rabatt.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @param Request $request
+     * @return Response
      */
-    public function Rabatt_API(Firma $firma, string $_format, SerializerInterface $serializer, Request $request): Response {
+    public function GET_Rabatt_API(int $id, Request $request, SerializerInterface $serializer): Response {
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'GET') {
+                if ($id < 0) {
+                    $data = $this->getDoctrine()->getRepository(Rabatt::class)->findAll();
+                    return new Response($serializer->serialize($data, 'json'));
+                } else {
+                    $data = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $id]); //Hier umändern
+                    return new Response($serializer->serialize($data, 'json'));
+                }
+            }
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
 
-        $tournament = $this->getDoctrine()->getRepository(Rabatt::class);
-        $rabatt = $tournament->findBy(['FK_Firma_ID' => $firma->getId()]);
+                $fk_firma_id = $data["fk_firma_id"];
+                $beschreibung = $data["beschreibung"];
+                $rabttbeschreibung = $data["rabattBeschreibung"];
+                $datei = $data["datei"];
+                $XEuro = $data["XEuro"];
 
 
-        $request->getAcceptableContentTypes();
-        if ($_format == 'json') {
-            $jsonContent = $serializer->serialize($firma, 'json');
-            return new Response($jsonContent);
+                if ($this->saveRabatt($fk_firma_id, $beschreibung, $datei, $XEuro, $rabttbeschreibung) == true) {
+                    return new Response("1");
+                }
+            }
         }
-        return new Response('Easily found tournament entry with flying distance ' . $rabatt->getID());
+        return new Response(
+            '<html><body>Some HTML Response</body></html>'
+        );
     }
 }

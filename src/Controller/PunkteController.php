@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Punkte;
-use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,27 +20,29 @@ class PunkteController extends AbstractController {
     }
 
     /**
-     * @Route(
-     *     "/api/punkte/{id}.{_format}",
-     *     format="html",
-     *     name="show_punkte_json",
-     *     requirements={
-     *         "_format": "html|json|xml",
-     *     }
-     * )
+     * @Route("/api/{id}/punkte.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @param Request $request
+     * @return Response
      */
-    public function Punkte_API(User $user, string $_format, SerializerInterface $serializer, Request $request): Response {
+    public function GET_Punkte_API(int $id, Request $request, SerializerInterface $serializer): Response {
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'GET') {
 
-        $tournament = $this->getDoctrine()->getRepository(Punkte::class);
-        $punkte = $tournament->findBy(['FK_User_ID' => $user->getId()]);
-
-
-        $request->getAcceptableContentTypes();
-        if ($_format == 'json') {
-            $jsonContent = $serializer->serialize($punkte, 'json');
-            return new Response($jsonContent);
+                if ($id < 0) {
+                    $data = $this->getDoctrine()->getRepository(Punkte::class)->findAll();
+                    return new Response($serializer->serialize($data, 'json'));
+                } else {
+                    $data = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
+                    return new Response($serializer->serialize($data, 'json'));
+                }
+            }
+            if ($request->getMethod() == 'POST') {
+                return new Response('-1');
+            }
         }
-        return new Response('Easily found tournament entry with flying distance ' . $punkte->getPunkte());
+        return new Response(
+            '<html><body>Some HTML Response</body></html>'
+        );
     }
 
 }
