@@ -30,4 +30,6 @@ return [
     'show_user' => [[], ['_controller' => 'App\\Controller\\UserController::showUser'], [], [['text', '/user/show']], [], []],
     'new_user_Form' => [[], ['_controller' => 'App\\Controller\\UserController::addUser'], [], [['text', '/user/new']], [], []],
     'app_user_post_get_user_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/user']], [], []],
+    'user_rabatt' => [[], ['_controller' => 'App\\Controller\\UserRabattController::index'], [], [['text', '/user/rabatt']], [], []],
+    'app_userrabatt_get_userrabatte_api' => [['id', '_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/Userrabatte'], ['variable', '/', '[^/]++', 'id', true], ['text', '/api']], [], []],
 ];

@@ -23,6 +23,7 @@ return [
         '/user' => [[['_route' => 'user', '_controller' => 'App\\Controller\\UserController::index'], null, null, null, false, false, null]],
         '/user/show' => [[['_route' => 'show_user', '_controller' => 'App\\Controller\\UserController::showUser'], null, null, null, false, false, null]],
         '/user/new' => [[['_route' => 'new_user_Form', '_controller' => 'App\\Controller\\UserController::addUser'], null, null, null, false, false, null]],
+        '/user/rabatt' => [[['_route' => 'user_rabatt', '_controller' => 'App\\Controller\\UserRabattController::index'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
@@ -47,6 +48,7 @@ return [
                     .'|AddQrCode(?:\\.(html|json))?(*:276)'
                     .'|([^/]++)/rabatt(?:\\.(html|json))?(*:317)'
                     .'|user(?:\\.(html|json))?(*:347)'
+                    .'|([^/]++)/Userrabatte(?:\\.(html|json))?(*:393)'
                 .')'
             .')/?$}sDu',
     ],
@@ -62,8 +64,9 @@ return [
         241 => [[['_route' => 'app_punkte_get_punkte_api', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], ['id', '_format'], null, null, false, true, null]],
         276 => [[['_route' => 'app_qrcode_add_qrcode_api', '_format' => 'html', '_controller' => 'App\\Controller\\QrcodeController::Add_QrCode_API'], ['_format'], null, null, false, true, null]],
         317 => [[['_route' => 'app_rabatt_get_rabatt_api', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['id', '_format'], null, null, false, true, null]],
-        347 => [
-            [['_route' => 'app_user_post_get_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null],
+        347 => [[['_route' => 'app_user_post_get_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null]],
+        393 => [
+            [['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['id', '_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

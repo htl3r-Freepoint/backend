@@ -684,3 +684,13 @@ b2e1b6,127.0.0.1,GET,https://127.0.0.1:8000/api/1/rabatt.json,1604939698,9348aa,
 0436b4,127.0.0.1,GET,https://127.0.0.1:8000/api/1/rabatt.json,1604939712,,500
 05a189,127.0.0.1,GET,https://127.0.0.1:8000/api/1/rabatt.json,1604939737,,200
 3a4bfa,127.0.0.1,GET,https://127.0.0.1:8000/api/1/rabatt.json,1604939788,,200
+367037,127.0.0.1,GET,https://127.0.0.1:8000/GetUserRabatt.html,1604940240,dd75a3,404
+dd75a3,127.0.0.1,GET,https://127.0.0.1:8000/GetUserRabatt.html,1604940240,,404
+108d3a,127.0.0.1,GET,https://127.0.0.1:8000/api/1/Userrabatte.json,1604940245,f05bcc,404
+f05bcc,127.0.0.1,GET,https://127.0.0.1:8000/api/1/Userrabatte.json,1604940245,,404
+2c11e6,127.0.0.1,GET,https://127.0.0.1:8000/api/1/Userrabatte.json,1604940265,5810ab,500
+5810ab,127.0.0.1,GET,https://127.0.0.1:8000/api/1/Userrabatte.json,1604940265,,500
+51c74b,127.0.0.1,GET,https://127.0.0.1:8000/api/342dfsqt4/Userrabatte.json,1604940304,10da9d,500
+10da9d,127.0.0.1,GET,https://127.0.0.1:8000/api/342dfsqt4/Userrabatte.json,1604940304,,500
+738c50,127.0.0.1,GET,https://127.0.0.1:8000/api/342dfsqt4/Userrabatte.json,1604940318,,200
+6e3be2,127.0.0.1,GET,https://127.0.0.1:8000/api/342dfsqt4/Userrabatte.json,1604940325,,200
