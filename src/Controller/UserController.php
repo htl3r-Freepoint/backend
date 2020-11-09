@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Entity\User;
 use \Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use App\Form\UserType;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController {
     /**
@@ -89,6 +90,74 @@ class UserController extends AbstractController {
             }
         }
         return $this->render('user/newForm.html.twig', ['form' => $form->createView()]);
+    }
+
+    private function saveUser($username, $email, $vorname, $nachname, $password) {
+        if ($username == "ADD_HERE" || isset($username) || $username == "undefined" || $username == "null") return false;
+        if ($email == "ADD_HERE" || isset($email) || $email == "undefined" || $email == "null") return false;
+
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $Firma = new User();
+        $Firma->setUsername($username);
+        $Firma->setEmail($email);
+        $Firma->setVorname($vorname);
+        $Firma->setNachname($nachname);
+        $Firma->setPassword($password);
+
+        $entityManager->persist($Firma);
+        $entityManager->flush();
+
+        return true;
+    }
+
+    /**
+     * @Route("/api/user.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @param Request $request
+     * @return Response
+     */
+    public function POST_GET_User_API(Request $request, SerializerInterface $serializer): Response {
+        // Return JSON
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'GET') {
+                $data = $this->getDoctrine()->getRepository(User::class)->findAll();
+                return new Response($serializer->serialize($data, 'json'));
+//                return new Response("GET");
+            }
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
+
+                $username = $data["username"];
+                $email = $data["email"];
+                $vorname = $data["vorname"];
+                $nachname = $data["nachname"];
+                $password = $data["passwort"];
+
+
+                $Users = $this->getDoctrine()->getRepository(User::class)->findAll();
+                $exists = 0;
+                foreach ($Users as $IsUser) {
+                    if ($IsUser->getUsername() == $username) $exists = "-1";
+                    if ($IsUser->getEmail() == $email) $exists = "-1";
+                }
+
+                if ($exists != 0) {
+                    return new Response("-1");
+                } else {
+                    if ($this->saveUser($username, $email, $vorname, $nachname, $password) == true) {
+                        return new Response("1");
+                    } else {
+                        return new Response("-1");
+                    }
+                }
+            }
+
+            // Return HTML
+            return new Response(
+                '<html><body>Some HTML Response</body></html>'
+            );
+        }
     }
 
 }

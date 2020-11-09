@@ -29,4 +29,5 @@ return [
     'user' => [[], ['_controller' => 'App\\Controller\\UserController::index'], [], [['text', '/user']], [], []],
     'show_user' => [[], ['_controller' => 'App\\Controller\\UserController::showUser'], [], [['text', '/user/show']], [], []],
     'new_user_Form' => [[], ['_controller' => 'App\\Controller\\UserController::addUser'], [], [['text', '/user/new']], [], []],
+    'app_user_post_get_user_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/user']], [], []],
 ];

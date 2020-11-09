@@ -46,6 +46,7 @@ return [
                     .'|punkte/([^/\\.]++)(?:\\.(html|json|xml))?(*:247)'
                     .'|AddQrCode(?:\\.(html|json))?(*:282)'
                     .'|rabatt/([^/\\.]++)(?:\\.(html|json|xml))?(*:329)'
+                    .'|user(?:\\.(html|json))?(*:359)'
                 .')'
             .')/?$}sDu',
     ],
@@ -60,8 +61,9 @@ return [
         200 => [[['_route' => 'app_firma_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\FirmaController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
         247 => [[['_route' => 'show_punkte_json', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::Punkte_API'], ['id', '_format'], null, null, false, true, null]],
         282 => [[['_route' => 'app_qrcode_add_qrcode_api', '_format' => 'html', '_controller' => 'App\\Controller\\QrcodeController::Add_QrCode_API'], ['_format'], null, null, false, true, null]],
-        329 => [
-            [['_route' => 'show_rabatt_json', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::Rabatt_API'], ['id', '_format'], null, null, false, true, null],
+        329 => [[['_route' => 'show_rabatt_json', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::Rabatt_API'], ['id', '_format'], null, null, false, true, null]],
+        359 => [
+            [['_route' => 'app_user_post_get_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],
