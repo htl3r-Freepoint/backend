@@ -10,10 +10,10 @@ class KasseController extends AbstractController
     /**
      * @Route("/kasse", name="kasse")
      */
-    public function index()
-    {
-        return $this->render('kasse/index.html.twig', [
-            'controller_name' => 'KasseController',
-        ]);
-    }
+//    public function index()
+//    {
+//        return $this->render('kasse/index.html.twig', [
+//            'controller_name' => 'KasseController',
+//        ]);
+//    }
 }

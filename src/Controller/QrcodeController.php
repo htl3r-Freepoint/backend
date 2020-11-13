@@ -25,61 +25,62 @@ class QrcodeController extends AbstractController {
     /**
      * @Route("/qrcode", name="qrcode")
      */
-    public function index() {
-        return $this->render('qrcode/index.html.twig', [
-            'controller_name' => 'QrcodeController',
-        ]);
-    }
+//    public function index() {
+//        return $this->render('qrcode/index.html.twig', [
+//            'controller_name' => 'QrcodeController',
+//        ]);
+//    }
 
     /**
      * @Route("/qrcode/showAll/", name="showAll_qrcodes")
      */
-    public function showAll() {
-        $codeFINISH = $this->getDoctrine()->getRepository(Qrcode::class);
-        return $this->render("qrcode/success.html.twig", ["menus" => $codeFINISH->findAll()]);
-    }
+//    public function showAll() {
+//        $codeFINISH = $this->getDoctrine()->getRepository(Qrcode::class);
+//        return $this->render("qrcode/success.html.twig", ["menus" => $codeFINISH->findAll()]);
+//    }
 
     /**
      * @Route("/qrcode/new", name="new_qrcode_form")
      */
-    public function add(Request $request) {
-        $QRCODE = new Qrcode();
-        $form = $this->createForm(QRCodeType::class, $QRCODE)
-            ->add('FK_User_ID', NumberType::class, ['label' => 'User ID: '])
-            ->add('Klartext', TextType::class, ['label' => 'Klartext: '])
-            ->add('ScannDatum', DateType::class, ['label' => 'Scanndatum: '])
-            ->add('save', SubmitType::class, ['label' => 'Create QRCode']);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $task = $form->getData();
-            ////////////////////////////////////////////
-            $OGCode = $task->getKlartext();
-
-            $exists = $this->checkCode($OGCode);
-
-            if ($exists == "true") {
-//                echo "Fehler! QR-Code wurde schon eingelöst!";
-                return $this->render("qrcode/failed.html.twig", ["code" => $OGCode]);
-            } else {
-
-                $this->saveCode($OGCode, 1);
-
-                ////////////////////////////////////////////
-                $codeFINISH = $this->getDoctrine()->getRepository(Qrcode::class);
-                return $this->render("qrcode/success.html.twig", ["menus" => $codeFINISH->findAll()]);
-            }
-        }
-
-        return $this->render('qrcode/newForm.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
+//    public function add(Request $request) {
+//        $QRCODE = new Qrcode();
+//        $form = $this->createForm(QRCodeType::class, $QRCODE)
+//            ->add('FK_User_ID', NumberType::class, ['label' => 'User ID: '])
+//            ->add('Klartext', TextType::class, ['label' => 'Klartext: '])
+//            ->add('ScannDatum', DateType::class, ['label' => 'Scanndatum: '])
+//            ->add('save', SubmitType::class, ['label' => 'Create QRCode']);
+//
+//        $form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $task = $form->getData();
+//            ////////////////////////////////////////////
+//            $OGCode = $task->getKlartext();
+//
+//            $exists = $this->checkCode($OGCode);
+//
+//            if ($exists == "true") {
+////                echo "Fehler! QR-Code wurde schon eingelöst!";
+//                return $this->render("qrcode/failed.html.twig", ["code" => $OGCode]);
+//            } else {
+//
+//                $this->saveCode($OGCode, 1);
+//
+//                ////////////////////////////////////////////
+//                $codeFINISH = $this->getDoctrine()->getRepository(Qrcode::class);
+//                return $this->render("qrcode/success.html.twig", ["menus" => $codeFINISH->findAll()]);
+//            }
+//        }
+//
+//        return $this->render('qrcode/newForm.html.twig', [
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
     protected function saveCode($OGCode, $FKUserId) {
         $entityManager = $this->getDoctrine()->getManager();
         $kasse = mb_split("_", $OGCode)[2];
         $firmen = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['Bezeichnung' => $kasse]);
+        if (count($firmen) == 0) return "-1 Kassa";
 
         $QRCODE = new Qrcode();
         $QRCODE->setKlartext($OGCode);
@@ -100,7 +101,7 @@ class QrcodeController extends AbstractController {
         $entityManager->persist($PUNKTE);
         $entityManager->flush();
 
-        return true;
+        return 0;
     }
 
     protected function getPointsFromCode($OGCode, $firmaID): int {
@@ -135,7 +136,7 @@ class QrcodeController extends AbstractController {
             array_push($allCodes, $code->getKlartext());
         }
 
-        $exists = "false";
+        $exists = 0;
         foreach ($allCodes as $code) {
 
             $parts = mb_split("_", $code);
@@ -143,15 +144,16 @@ class QrcodeController extends AbstractController {
             $length2 = count($qrcodes);
 
             if ($code == $OGCode) {
-                return "true";
+                return "vorhanden";
             }
             if ($parts[$length - 1] == $qrcodes[$length2 - 1]) {
-                return "true";
+                return "vorhanden";
             }
             if ($OGCode == "ADD_CODE_HERE") {
-                return "true";
+                return "vorhanden";
             }
         }
+        return 0;
     }
 
     /**
@@ -173,12 +175,13 @@ class QrcodeController extends AbstractController {
                 $UserID = $data["UserId"];
 
 
+                $exists = 0;
                 $exists = $this->checkCode($OGCode);
 
-                if ($exists == "true") {
-                    return new Response("-1");
+                if ($exists == "vorhanden") {
+                    return new Response("-1 vorhanden");
                 } else {
-                    $this->saveCode($OGCode, $UserID);
+                    if ($this->saveCode($OGCode, $UserID) == "-1 Kassa") return new Response("-1 Kassa");
                     return new Response("1");
                 }
 //                return new Response(mb_split("_", $OGCode)[2]);

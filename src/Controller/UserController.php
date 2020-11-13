@@ -21,11 +21,11 @@ class UserController extends AbstractController {
     /**
      * @Route("/user", name="user")
      */
-    public function index() {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
+//    public function index() {
+//        return $this->render('user/index.html.twig', [
+//            'controller_name' => 'UserController',
+//        ]);
+//    }
 
     /**
      * @Route("/user/show", name="show_user")
@@ -134,12 +134,13 @@ class UserController extends AbstractController {
                 $Users = $this->getDoctrine()->getRepository(User::class)->findAll();
                 $exists = 0;
                 foreach ($Users as $IsUser) {
-                    if ($IsUser->getUsername() == $username) $exists = "-1";
-                    if ($IsUser->getEmail() == $email) $exists = "-1";
+                    if ($IsUser->getUsername() == $username) $exists = "-1 Username";
+                    if ($IsUser->getEmail() == $email) $exists = "-1 Email";
                 }
 
                 if ($exists != 0) {
-                    return new Response("-1");
+                    if ($exists == "-1 Username") return new Response("-1 Username");
+                    if ($exists == "-1 Username") return new Response("-1 Username");
                 } else {
                     if ($this->saveUser($username, $email, $vorname, $nachname, $password) == true) {
                         return new Response("1");

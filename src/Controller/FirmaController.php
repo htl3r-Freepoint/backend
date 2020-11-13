@@ -21,10 +21,6 @@ class FirmaController extends AbstractController {
         ]);
     }
 
-    private function check() {
-
-    }
-
     private function save($owner, $name, $kontakt, $XEuro, $datei, $domain) {
         if ($owner == "ADD_HERE" || isset($owner) || $owner == "undefined" || $owner == "null") $owner = null;
         if ($name == "ADD_HERE" || isset($name) || $name == "undefined" || $name == "null") $name = null;
@@ -78,25 +74,26 @@ class FirmaController extends AbstractController {
                 $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
                 $exists = 0;
                 foreach ($Firmen as $firm) {
-                    if ($firm->getFirmanname() == $name) $exists = "-1";
-                    if ($firm->getDomain() == $domain) $exists = "-1";
+                    if ($firm->getFirmanname() == $name) $exists = "-1 Firmenname";
+                    if ($firm->getDomain() == $domain) $exists = "-1 Domain";
 
                 }
 
                 if ($exists != 0) {
-                    return new Response("-1");
+                    if ($exists == "-1 Firmenname") return new Response("-1 Firmenname");
+                    if ($exists == "-1 Domain") return new Response("-1 Domain");
                 } else {
                     if ($this->save($owner, $name, $kontakt, $XEuro, $datei, $domain) == true) {
                         return new Response("1");
                     } else {
-                        return new Response("-1");
+                        return new Response("-1 Missing");
                     }
                 }
             }
 
             // Return HTML
             return new Response(
-                '<html><body>Some HTML Response</body></html>'
+                '<html><body>Not Accessable with HTML</body></html>'
             );
         }
     }

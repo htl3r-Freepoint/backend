@@ -14,11 +14,11 @@ class RabattController extends AbstractController {
     /**
      * @Route("/rabatt", name="rabatt")
      */
-    public function index() {
-        return $this->render('rabatt/index.html.twig', [
-            'controller_name' => 'RabattController',
-        ]);
-    }
+//    public function index() {
+//        return $this->render('rabatt/index.html.twig', [
+//            'controller_name' => 'RabattController',
+//        ]);
+//    }
 
     private function saveRabatt($fk_firma_id, $beschreibung, $datei, $XEuro, $rabttbeschreibung) {
         if ($datei == "null" || $datei == "ADD_HERE") $datei = null;

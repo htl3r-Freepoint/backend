@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Betrieb;
+use App\Entity\Firma;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +22,10 @@ class StandortController extends AbstractController {
 
     private function save($firmaID, $addresse, $Ort, $PLZ) {
         $entityManager = $this->getDoctrine()->getManager();
+        if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $firmaID])) != 1) return false;
 
         $Firma = new Betrieb();
-        $Firma->setFKFirmaID($firmaID); //TODO !!!!!!!!!!
+        $Firma->setFKFirmaID($firmaID);
         $Firma->setAddresse($addresse);
         $Firma->setOrt($Ort);
         $Firma->setPLZ($PLZ);
@@ -58,7 +60,7 @@ class StandortController extends AbstractController {
                 if ($this->save($firmaID, $addresse, $Ort, $PLZ) == true) {
                     return new Response("1");
                 } else {
-                    return new Response("-1");
+                    return new Response("-1 Firma");
                 }
             }
         }

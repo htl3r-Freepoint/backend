@@ -13,11 +13,11 @@ class UserRabattController extends AbstractController {
     /**
      * @Route("/user/rabatt", name="user_rabatt")
      */
-    public function index() {
-        return $this->render('user_rabatt/index.html.twig', [
-            'controller_name' => 'UserRabattController',
-        ]);
-    }
+//    public function index() {
+//        return $this->render('user_rabatt/index.html.twig', [
+//            'controller_name' => 'UserRabattController',
+//        ]);
+//    }
 
     /**
      * @Route("/api/{id}/Userrabatte.{_format}", format="html", requirements={ "_format": "html|json" })

@@ -13,11 +13,11 @@ class PunkteController extends AbstractController {
     /**
      * @Route("/punkte", name="punkte")
      */
-    public function index() {
-        return $this->render('punkte/index.html.twig', [
-            'controller_name' => 'PunkteController',
-        ]);
-    }
+//    public function index() {
+//        return $this->render('punkte/index.html.twig', [
+//            'controller_name' => 'PunkteController',
+//        ]);
+//    }
 
     /**
      * @Route("/api/{id}/punkte.{_format}", format="html", requirements={ "_format": "html|json" })
