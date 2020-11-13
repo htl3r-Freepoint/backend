@@ -15,6 +15,7 @@ return [
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
         '/design' => [[['_route' => 'design', '_controller' => 'App\\Controller\\DesignController::index'], null, null, null, false, false, null]],
         '/firma' => [[['_route' => 'firma', '_controller' => 'App\\Controller\\FirmaController::index'], null, null, null, false, false, null]],
+        '/kasse' => [[['_route' => 'kasse', '_controller' => 'App\\Controller\\KasseController::index'], null, null, null, false, false, null]],
         '/punkte' => [[['_route' => 'punkte', '_controller' => 'App\\Controller\\PunkteController::index'], null, null, null, false, false, null]],
         '/qrcode' => [[['_route' => 'qrcode', '_controller' => 'App\\Controller\\QrcodeController::index'], null, null, null, false, false, null]],
         '/qrcode/showAll' => [[['_route' => 'showAll_qrcodes', '_controller' => 'App\\Controller\\QrcodeController::showAll'], null, null, null, true, false, null]],

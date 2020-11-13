@@ -375,6 +375,13 @@
         <argument type="service" id=".service_locator.g9CqTPp.App\Controller\FirmaController"/>
       </call>
     </service>
+    <service id="App\Controller\KasseController" class="App\Controller\KasseController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.g9CqTPp.App\Controller\KasseController"/>
+      </call>
+    </service>
     <service id="App\Controller\PunkteController" class="App\Controller\PunkteController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -443,6 +450,10 @@
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\FirmaRepository" class="App\Repository\FirmaRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\KasseRepository" class="App\Repository\KasseRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -3360,7 +3371,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory" public="false">
-      <argument type="service" id=".service_locator.0UkE2g4"/>
+      <argument type="service" id=".service_locator.L_4IqwS"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -5042,6 +5053,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\FirmaController" class="App\Controller\FirmaController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\FirmaController" class="App\Controller\FirmaController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\FirmaController" class="App\Controller\FirmaController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\KasseController" class="App\Controller\KasseController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\KasseController" class="App\Controller\KasseController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\KasseController" class="App\Controller\KasseController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\PunkteController" class="App\Controller\PunkteController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\PunkteController" class="App\Controller\PunkteController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\PunkteController" class="App\Controller\PunkteController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -5076,6 +5090,8 @@
     <service id=".abstract.instanceof.App\Repository\DesignZuweisungRepository" class="App\Repository\DesignZuweisungRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\FirmaRepository" class="App\Repository\FirmaRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\FirmaRepository" class="App\Repository\FirmaRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\KasseRepository" class="App\Repository\KasseRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\KasseRepository" class="App\Repository\KasseRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PasswordRepository" class="App\Repository\PasswordRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\PasswordRepository" class="App\Repository\PasswordRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PunkteRepository" class="App\Repository\PunkteRepository" autowire="true" abstract="true"/>
@@ -5458,7 +5474,7 @@
         <argument key="doctrine.orm.default_listeners.attach_entity_listeners" type="service" id="doctrine.orm.default_listeners.attach_entity_listeners"/>
       </argument>
     </service>
-    <service id=".service_locator.0UkE2g4" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.L_4IqwS" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\AngestellteRepository" type="service" id="App\Repository\AngestellteRepository"/>
@@ -5466,6 +5482,7 @@
         <argument key="App\Repository\DesignRepository" type="service" id="App\Repository\DesignRepository"/>
         <argument key="App\Repository\DesignZuweisungRepository" type="service" id="App\Repository\DesignZuweisungRepository"/>
         <argument key="App\Repository\FirmaRepository" type="service" id="App\Repository\FirmaRepository"/>
+        <argument key="App\Repository\KasseRepository" type="service" id="App\Repository\KasseRepository"/>
         <argument key="App\Repository\PasswordRepository" type="service" id="App\Repository\PasswordRepository"/>
         <argument key="App\Repository\PunkteRepository" type="service" id="App\Repository\PunkteRepository"/>
         <argument key="App\Repository\QrcodeRepository" type="service" id="App\Repository\QrcodeRepository"/>
@@ -5683,6 +5700,12 @@
     <service id=".service_locator.g9CqTPp.App\Controller\FirmaController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator_context" id="App\Controller\FirmaController"/>
       <argument>App\Controller\FirmaController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.g9CqTPp" method="withContext"/>
+    </service>
+    <service id=".service_locator.g9CqTPp.App\Controller\KasseController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator_context" id="App\Controller\KasseController"/>
+      <argument>App\Controller\KasseController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.g9CqTPp" method="withContext"/>
     </service>

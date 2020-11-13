@@ -18,6 +18,7 @@ return [
     'design' => [[], ['_controller' => 'App\\Controller\\DesignController::index'], [], [['text', '/design']], [], []],
     'firma' => [[], ['_controller' => 'App\\Controller\\FirmaController::index'], [], [['text', '/firma']], [], []],
     'app_firma_post_get_firma_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\FirmaController::POST_GET_FIRMA_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/firma']], [], []],
+    'kasse' => [[], ['_controller' => 'App\\Controller\\KasseController::index'], [], [['text', '/kasse']], [], []],
     'punkte' => [[], ['_controller' => 'App\\Controller\\PunkteController::index'], [], [['text', '/punkte']], [], []],
     'app_punkte_get_punkte_api' => [['id', '_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/punkte'], ['variable', '/', '[^/]++', 'id', true], ['text', '/api']], [], []],
     'qrcode' => [[], ['_controller' => 'App\\Controller\\QrcodeController::index'], [], [['text', '/qrcode']], [], []],

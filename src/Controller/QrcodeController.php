@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Firma;
+use App\Entity\Kasse;
 use App\Entity\Punkte;
 use App\Entity\User;
 use Doctrine\DBAL\Types\IntegerType;
@@ -76,6 +78,8 @@ class QrcodeController extends AbstractController {
 
     protected function saveCode($OGCode, $FKUserId) {
         $entityManager = $this->getDoctrine()->getManager();
+        $kasse = mb_split("_", $OGCode)[2];
+        $firmen = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['Bezeichnung' => $kasse]);
 
         $QRCODE = new Qrcode();
         $QRCODE->setKlartext($OGCode);
@@ -83,10 +87,34 @@ class QrcodeController extends AbstractController {
         $QRCODE->setScannDatum(new \DateTime());
 
         $entityManager->persist($QRCODE);
+        $entityManager->flush();
 
+        $firma_id = $firmen[0]->getFkFirmaId();
+        $punkte = $this->getPointsFromCode($OGCode, $firma_id);
+
+        $PUNKTE = new Punkte();
+        $PUNKTE->setFKFirmaID($firma_id);
+        $PUNKTE->setFKUserID($FKUserId);
+        $PUNKTE->setPunkte($punkte);
+
+        $entityManager->persist($PUNKTE);
         $entityManager->flush();
 
         return true;
+    }
+
+    protected function getPointsFromCode($OGCode, $firmaID): int {
+        $euro = floatval(mb_split("_", $OGCode)[5])
+            + floatval(mb_split("_", $OGCode)[6])
+            + floatval(mb_split("_", $OGCode)[7])
+            + floatval(mb_split("_", $OGCode)[8])
+            + floatval(mb_split("_", $OGCode)[9]);
+        $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $firmaID]);
+        $XEuro = $firma[0]->getXEuroFuer1Punkt();
+        $result = $euro / $XEuro;
+
+
+        return intval(round($result));
     }
 
     protected function checkCode($OGCode) {
@@ -144,6 +172,7 @@ class QrcodeController extends AbstractController {
                 $OGCode = $data["code"];
                 $UserID = $data["UserId"];
 
+
                 $exists = $this->checkCode($OGCode);
 
                 if ($exists == "true") {
@@ -152,6 +181,7 @@ class QrcodeController extends AbstractController {
                     $this->saveCode($OGCode, $UserID);
                     return new Response("1");
                 }
+//                return new Response(mb_split("_", $OGCode)[2]);
             }
 
             // Return HTML
