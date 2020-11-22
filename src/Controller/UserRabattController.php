@@ -20,11 +20,11 @@ class UserRabattController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/{id}/Userrabatte.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/{id}/Userrabatte.{_format}", format="html", requirements={ "_format": "html|json"})
      * @param Request $request
      * @return Response
      */
-    public function GET_Userrabatte_API(String $id, Request $request, SerializerInterface $serializer): Response {
+    public function GET_Userrabatte_API(string $id, Request $request, SerializerInterface $serializer): Response {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
 
@@ -38,6 +38,36 @@ class UserRabattController extends AbstractController {
             }
             if ($request->getMethod() == 'POST') {
                 return new Response('-1');
+            }
+        }
+        return new Response(
+            '<html><body>Some HTML Response</body></html>'
+        );
+    }
+
+    /**
+     * @Route("/api/Userrabatte/use.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @param Request $request
+     * @return Response
+     */
+    public function Use_Userrabatte_API(Request $request, SerializerInterface $serializer): Response {
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'PUT') {
+                $data = json_decode($request->getContent(), true);
+                $code = $data["code"];
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $Rabatt = $this->getDoctrine()->getRepository(UserRabatte::class)->find(["Rabatt_Code" => $code]);
+                if ($Rabatt == 0) return new Response("-1 NotFound");
+                if ($Rabatt >= 2) return new Response("-1 tooMany");
+                if ($Rabatt->getUsed() == true) return new Response("-1 used");
+
+                $Rabatt->setUsed(true);
+
+                $entityManager->persist($Rabatt);
+                $entityManager->flush();
+
+                return new Response('1');
             }
         }
         return new Response(

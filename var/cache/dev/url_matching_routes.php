@@ -13,14 +13,9 @@ return [
         '/_profiler/search_bar' => [[['_route' => '_profiler_search_bar', '_controller' => 'web_profiler.controller.profiler::searchBarAction'], null, null, null, false, false, null]],
         '/_profiler/phpinfo' => [[['_route' => '_profiler_phpinfo', '_controller' => 'web_profiler.controller.profiler::phpinfoAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
-        '/design' => [[['_route' => 'design', '_controller' => 'App\\Controller\\DesignController::index'], null, null, null, false, false, null]],
         '/firma' => [[['_route' => 'firma', '_controller' => 'App\\Controller\\FirmaController::index'], null, null, null, false, false, null]],
-        '/kasse' => [[['_route' => 'kasse', '_controller' => 'App\\Controller\\KasseController::index'], null, null, null, false, false, null]],
-        '/punkte' => [[['_route' => 'punkte', '_controller' => 'App\\Controller\\PunkteController::index'], null, null, null, false, false, null]],
-        '/qrcode' => [[['_route' => 'qrcode', '_controller' => 'App\\Controller\\QrcodeController::index'], null, null, null, false, false, null]],
-        '/qrcode/showAll' => [[['_route' => 'showAll_qrcodes', '_controller' => 'App\\Controller\\QrcodeController::showAll'], null, null, null, true, false, null]],
-        '/qrcode/new' => [[['_route' => 'new_qrcode_form', '_controller' => 'App\\Controller\\QrcodeController::add'], null, null, null, false, false, null]],
-        '/rabatt' => [[['_route' => 'rabatt', '_controller' => 'App\\Controller\\RabattController::index'], null, null, null, false, false, null]],
+        '/qrcode/new' => [[['_route' => 'new_qrcode_form', '_controller' => 'App\\Controller\\QrcodeController::saveCode'], null, null, null, false, false, null]],
+        '/rabatt' => [[['_route' => 'rabatt', '_controller' => 'App\\Controller\\RabattController::saveRabatt'], null, null, null, false, false, null]],
         '/standort' => [[['_route' => 'standort', '_controller' => 'App\\Controller\\StandortController::index'], null, null, null, false, false, null]],
         '/user/show' => [[['_route' => 'show_user', '_controller' => 'App\\Controller\\UserController::showUser'], null, null, null, false, false, null]],
         '/user/new' => [[['_route' => 'new_user_Form', '_controller' => 'App\\Controller\\UserController::addUser'], null, null, null, false, false, null]],
@@ -50,6 +45,7 @@ return [
                     .'|betrieb(?:\\.(html|json))?(*:350)'
                     .'|user(?:\\.(html|json))?(*:380)'
                     .'|([^/]++)/Userrabatte(?:\\.(html|json))?(*:426)'
+                    .'|Userrabatte/use(?:\\.(html|json))?(*:467)'
                 .')'
             .')/?$}sDu',
     ],
@@ -67,8 +63,9 @@ return [
         317 => [[['_route' => 'app_rabatt_get_rabatt_api', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['id', '_format'], null, null, false, true, null]],
         350 => [[['_route' => 'app_standort_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
         380 => [[['_route' => 'app_user_post_get_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null]],
-        426 => [
-            [['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['id', '_format'], null, null, false, true, null],
+        426 => [[['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['id', '_format'], null, null, false, true, null]],
+        467 => [
+            [['_route' => 'app_userrabatt_use_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::Use_Userrabatte_API'], ['_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

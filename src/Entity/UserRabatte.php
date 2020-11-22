@@ -27,6 +27,25 @@ class UserRabatte {
     private $FK_Rabatt_ID;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $used;
+
+    /**
+     * @return mixed
+     */
+    public function getUsed() {
+        return $this->used;
+    }
+
+    /**
+     * @param mixed $used
+     */
+    public function setUsed($used): void {
+        $this->used = $used;
+    }
+
+    /**
      * @return mixed
      */
     public function getRabattCode() {

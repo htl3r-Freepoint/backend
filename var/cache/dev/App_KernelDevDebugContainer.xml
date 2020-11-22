@@ -5363,7 +5363,7 @@
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.gw2Q9xo" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.PfKgy_r" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\FirmaController::POST_GET_FIRMA_API" type="service" id=".service_locator.jGCCKtX"/>
@@ -5373,6 +5373,7 @@
         <argument key="App\Controller\StandortController::POST_GET_FIRMA_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Controller\UserController::POST_GET_User_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Controller\UserRabattController::GET_Userrabatte_API" type="service" id=".service_locator.jGCCKtX"/>
+        <argument key="App\Controller\UserRabattController::Use_Userrabatte_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Kernel::loadRoutes" type="service" id=".service_locator.C9JCBPC"/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service" id=".service_locator.C9JCBPC"/>
         <argument key="App\Kernel::terminate" type="service" id=".service_locator.beq5mCo"/>
@@ -5386,6 +5387,7 @@
         <argument key="App\Controller\StandortController:POST_GET_FIRMA_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Controller\UserController:POST_GET_User_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="App\Controller\UserRabattController:GET_Userrabatte_API" type="service" id=".service_locator.jGCCKtX"/>
+        <argument key="App\Controller\UserRabattController:Use_Userrabatte_API" type="service" id=".service_locator.jGCCKtX"/>
         <argument key="kernel:loadRoutes" type="service" id=".service_locator.C9JCBPC"/>
         <argument key="kernel:registerContainerConfiguration" type="service" id=".service_locator.C9JCBPC"/>
         <argument key="kernel:terminate" type="service" id=".service_locator.beq5mCo"/>
@@ -5906,12 +5908,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.gw2Q9xo"/>
+      <argument type="service" id=".service_locator.PfKgy_r"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.gw2Q9xo"/>
+      <argument type="service" id=".service_locator.PfKgy_r"/>
     </service>
     <service id=".debug.http_client.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface" public="false">
       <argument type="collection"/>
@@ -6309,7 +6311,7 @@
     <service id="Twig\Environment" alias="twig" public="false"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.WaGDpDt" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.gw2Q9xo"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.PfKgy_r"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
     <service id="Psr\Log\LoggerInterface $cacheLogger" alias="monolog.logger.cache"/>

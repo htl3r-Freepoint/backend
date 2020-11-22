@@ -8,4 +8,5 @@
 .phpunit.result.cache
 /phpunit.xml
 .env
+z_upload_CMS_APP
 ###< symfony/phpunit-bridge ###
