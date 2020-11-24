@@ -24,7 +24,6 @@ return [
     'app_rabatt_get_rabatt_api' => [['id', '_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/rabatt'], ['variable', '/', '[^/]++', 'id', true], ['text', '/api']], [], []],
     'standort' => [[], ['_controller' => 'App\\Controller\\StandortController::index'], [], [['text', '/standort']], [], []],
     'app_standort_post_get_firma_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/betrieb']], [], []],
-    'show_user' => [[], ['_controller' => 'App\\Controller\\UserController::showUser'], [], [['text', '/user/show']], [], []],
     'new_user_Form' => [[], ['_controller' => 'App\\Controller\\UserController::addUser'], [], [['text', '/user/new']], [], []],
     'app_user_post_get_user_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/user']], [], []],
     'app_userrabatt_get_userrabatte_api' => [['id', '_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/Userrabatte'], ['variable', '/', '[^/]++', 'id', true], ['text', '/api']], [], []],

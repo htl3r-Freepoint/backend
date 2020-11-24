@@ -90,6 +90,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/security-csrf" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/security-guard" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/security-http" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/sendgrid-mailer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/serializer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/service-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/stopwatch" />

@@ -6,6 +6,8 @@ use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,11 +32,11 @@ class UserController extends AbstractController {
     /**
      * @Route("/user/show", name="show_user")
      */
-    public function showUser(): Response {
-        $userFINISH = $this->getDoctrine()->getRepository(User::class)->findAll();
-
-        return $this->render('user/Userprofile.html.twig', ["menus" => $userFINISH]);
-    }
+//    public function showUser(): Response {
+//        $userFINISH = $this->getDoctrine()->getRepository(User::class)->findAll();
+//
+//        return $this->render('user/Userprofile.html.twig', ["menus" => $userFINISH]);
+//    }
 
 
     /**
@@ -92,18 +94,34 @@ class UserController extends AbstractController {
         return $this->render('user/newForm.html.twig', ['form' => $form->createView()]);
     }
 
-    private function saveUser($username, $email, $vorname, $nachname, $password) {
+    private function sendEmail(User $user, $mailer) {
+        $email = (new Email())
+            ->from('no-reply@freepoint.at')
+            ->to('christopher.scherling@gmail.com')
+            ->subject('Time for Symfony Mailer!')
+            ->text('Sending emails is fun again!');
+
+//        $mailer->send($email);
+    }
+
+    private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) {
         $entityManager = $this->getDoctrine()->getManager();
 
-        $Firma = new User();
-        $Firma->setUsername($username);
-        $Firma->setEmail($email);
-        $Firma->setVorname($vorname);
-        $Firma->setNachname($nachname);
-        $Firma->setPassword($password);
+        $USER = new User();
+        $USER->setUsername($username);
+        $USER->setEmail($email);
+        $USER->setVorname($vorname);
+        $USER->setNachname($nachname);
+        $USER->setPassword($password);
+        $USER->setVerified(false);
+        if ($loginType != null) {
+            $USER->setLoginType($loginType);
+        }
 
-        $entityManager->persist($Firma);
-        $entityManager->flush();
+        $entityManager->persist($USER);
+//        $entityManager->flush();
+
+        $this->sendEmail($USER, $mailer);
 
         return true;
     }
@@ -113,7 +131,7 @@ class UserController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_GET_User_API(Request $request, SerializerInterface $serializer): Response {
+    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
@@ -129,24 +147,31 @@ class UserController extends AbstractController {
                 $vorname = $data["vorname"];
                 $nachname = $data["nachname"];
                 $password = $data["passwort"];
+                $loginType = $data['type'];
+
+                if ($loginType == "" || $loginType == "google" || $loginType == "null" || !isset($loginType)) {
 
 
-                $Users = $this->getDoctrine()->getRepository(User::class)->findAll();
-                $exists = 0;
-                foreach ($Users as $IsUser) {
-                    if ($IsUser->getUsername() == $username) $exists = "-1 Username";
-                    if ($IsUser->getEmail() == $email) $exists = "-1 Email";
-                }
-
-                if ($exists != 0) {
-                    if ($exists == "-1 Username") return new Response("-1 Username");
-                    if ($exists == "-1 Username") return new Response("-1 Username");
-                } else {
-                    if ($this->saveUser($username, $email, $vorname, $nachname, $password) == true) {
-                        return new Response("1");
-                    } else {
-                        return new Response("-1");
+                    $Users = $this->getDoctrine()->getRepository(User::class)->findAll();
+                    $exists = 0;
+                    foreach ($Users as $IsUser) {
+                        if ($IsUser->getUsername() == $username) $exists = "-1 Username";
+                        if ($IsUser->getEmail() == $email) $exists = "-1 Email";
                     }
+
+                    if ($exists != 0) {
+                        if ($exists == "-1 Username") return new Response("-1 Username");
+                        if ($exists == "-1 Username") return new Response("-1 Username");
+                    } else {
+                        if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) == true) {
+                            return new Response("1");
+                        } else {
+                            return new Response("-1");
+                        }
+                    }
+
+                } else {
+                    return new Response("-1 Login not Accepted");
                 }
             }
 
@@ -155,6 +180,18 @@ class UserController extends AbstractController {
                 '<html><body>Some HTML Response</body></html>'
             );
         }
+    }
+
+    /**
+     * @Route("/api/login.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @param Request $request
+     * @return Response
+     */
+    public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+        }
+        return new Response("RIP");
     }
 
 }

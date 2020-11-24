@@ -70,6 +70,7 @@ class ComposerStaticInit022b3500c7ec106782ce8f32f4100e65
             'Symfony\\Component\\OptionsResolver\\' => 34,
             'Symfony\\Component\\Notifier\\' => 27,
             'Symfony\\Component\\Mime\\' => 23,
+            'Symfony\\Component\\Mailer\\Bridge\\Sendgrid\\' => 41,
             'Symfony\\Component\\Mailer\\' => 25,
             'Symfony\\Component\\Intl\\' => 23,
             'Symfony\\Component\\HttpKernel\\' => 29,
@@ -307,6 +308,10 @@ class ComposerStaticInit022b3500c7ec106782ce8f32f4100e65
         'Symfony\\Component\\Mime\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/mime',
+        ),
+        'Symfony\\Component\\Mailer\\Bridge\\Sendgrid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/sendgrid-mailer',
         ),
         'Symfony\\Component\\Mailer\\' => 
         array (
@@ -568,15 +573,19 @@ class ComposerStaticInit022b3500c7ec106782ce8f32f4100e65
     public static $classMap = array (
         'App\\Controller\\DesignController' => __DIR__ . '/../..' . '/src/Controller/DesignController.php',
         'App\\Controller\\FirmaController' => __DIR__ . '/../..' . '/src/Controller/FirmaController.php',
+        'App\\Controller\\KasseController' => __DIR__ . '/../..' . '/src/Controller/KasseController.php',
         'App\\Controller\\PunkteController' => __DIR__ . '/../..' . '/src/Controller/PunkteController.php',
         'App\\Controller\\QrcodeController' => __DIR__ . '/../..' . '/src/Controller/QrcodeController.php',
         'App\\Controller\\RabattController' => __DIR__ . '/../..' . '/src/Controller/RabattController.php',
+        'App\\Controller\\StandortController' => __DIR__ . '/../..' . '/src/Controller/StandortController.php',
         'App\\Controller\\UserController' => __DIR__ . '/../..' . '/src/Controller/UserController.php',
+        'App\\Controller\\UserRabattController' => __DIR__ . '/../..' . '/src/Controller/UserRabattController.php',
         'App\\Entity\\Angestellte' => __DIR__ . '/../..' . '/src/Entity/Angestellte.php',
         'App\\Entity\\Betrieb' => __DIR__ . '/../..' . '/src/Entity/Betrieb.php',
         'App\\Entity\\Design' => __DIR__ . '/../..' . '/src/Entity/Design.php',
         'App\\Entity\\DesignZuweisung' => __DIR__ . '/../..' . '/src/Entity/DesignZuweisung.php',
         'App\\Entity\\Firma' => __DIR__ . '/../..' . '/src/Entity/Firma.php',
+        'App\\Entity\\Kasse' => __DIR__ . '/../..' . '/src/Entity/Kasse.php',
         'App\\Entity\\Punkte' => __DIR__ . '/../..' . '/src/Entity/Punkte.php',
         'App\\Entity\\Qrcode' => __DIR__ . '/../..' . '/src/Entity/Qrcode.php',
         'App\\Entity\\Rabatt' => __DIR__ . '/../..' . '/src/Entity/Rabatt.php',
@@ -591,6 +600,7 @@ class ComposerStaticInit022b3500c7ec106782ce8f32f4100e65
         'App\\Repository\\DesignRepository' => __DIR__ . '/../..' . '/src/Repository/DesignRepository.php',
         'App\\Repository\\DesignZuweisungRepository' => __DIR__ . '/../..' . '/src/Repository/DesignZuweisungRepository.php',
         'App\\Repository\\FirmaRepository' => __DIR__ . '/../..' . '/src/Repository/FirmaRepository.php',
+        'App\\Repository\\KasseRepository' => __DIR__ . '/../..' . '/src/Repository/KasseRepository.php',
         'App\\Repository\\PasswordRepository' => __DIR__ . '/../..' . '/src/Repository/PasswordRepository.php',
         'App\\Repository\\PunkteRepository' => __DIR__ . '/../..' . '/src/Repository/PunkteRepository.php',
         'App\\Repository\\QrcodeRepository' => __DIR__ . '/../..' . '/src/Repository/QrcodeRepository.php',
@@ -3902,6 +3912,9 @@ class ComposerStaticInit022b3500c7ec106782ce8f32f4100e65
         'Symfony\\Component\\Intl\\Util\\IcuVersion' => __DIR__ . '/..' . '/symfony/intl/Util/IcuVersion.php',
         'Symfony\\Component\\Intl\\Util\\IntlTestHelper' => __DIR__ . '/..' . '/symfony/intl/Util/IntlTestHelper.php',
         'Symfony\\Component\\Intl\\Util\\Version' => __DIR__ . '/..' . '/symfony/intl/Util/Version.php',
+        'Symfony\\Component\\Mailer\\Bridge\\Sendgrid\\Transport\\SendgridApiTransport' => __DIR__ . '/..' . '/symfony/sendgrid-mailer/Transport/SendgridApiTransport.php',
+        'Symfony\\Component\\Mailer\\Bridge\\Sendgrid\\Transport\\SendgridSmtpTransport' => __DIR__ . '/..' . '/symfony/sendgrid-mailer/Transport/SendgridSmtpTransport.php',
+        'Symfony\\Component\\Mailer\\Bridge\\Sendgrid\\Transport\\SendgridTransportFactory' => __DIR__ . '/..' . '/symfony/sendgrid-mailer/Transport/SendgridTransportFactory.php',
         'Symfony\\Component\\Mailer\\DataCollector\\MessageDataCollector' => __DIR__ . '/..' . '/symfony/mailer/DataCollector/MessageDataCollector.php',
         'Symfony\\Component\\Mailer\\DelayedEnvelope' => __DIR__ . '/..' . '/symfony/mailer/DelayedEnvelope.php',
         'Symfony\\Component\\Mailer\\Envelope' => __DIR__ . '/..' . '/symfony/mailer/Envelope.php',

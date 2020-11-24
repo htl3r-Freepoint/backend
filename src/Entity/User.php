@@ -42,6 +42,43 @@ class User {
      */
     private $password;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $verified;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $loginType;
+
+    /**
+     * @return mixed
+     */
+    public function getLoginType() {
+        return $this->loginType;
+    }
+
+    /**
+     * @param mixed $loginType
+     */
+    public function setLoginType($loginType): void {
+        $this->loginType = $loginType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVerified() {
+        return $this->verified;
+    }
+
+    /**
+     * @param mixed $verified
+     */
+    public function setVerified($verified): void {
+        $this->verified = $verified;
+    }
 
     public function getPassword() {
         return $this->password;

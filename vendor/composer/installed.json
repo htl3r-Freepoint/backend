@@ -1422,7 +1422,8 @@
         "keywords": [
             "reflection",
             "static"
-        ]
+        ],
+        "abandoned": "roave/better-reflection"
     },
     {
         "name": "doctrine/sql-formatter",
@@ -6714,6 +6715,70 @@
             }
         ],
         "description": "Symfony Security Component - HTTP Integration",
+        "homepage": "https://symfony.com",
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
+        ]
+    },
+    {
+        "name": "symfony/sendgrid-mailer",
+        "version": "v5.1.8",
+        "version_normalized": "5.1.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/sendgrid-mailer.git",
+            "reference": "972869b036f1d9eebd4991c5363e0c15335e78f4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/sendgrid-mailer/zipball/972869b036f1d9eebd4991c5363e0c15335e78f4",
+            "reference": "972869b036f1d9eebd4991c5363e0c15335e78f4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.2.5",
+            "symfony/mailer": "^4.4|^5.0"
+        },
+        "require-dev": {
+            "symfony/http-client": "^4.4|^5.0"
+        },
+        "time": "2020-10-24T12:01:57+00:00",
+        "type": "symfony-bridge",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Mailer\\Bridge\\Sendgrid\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Sendgrid Mailer Bridge",
         "homepage": "https://symfony.com",
         "funding": [
             {
