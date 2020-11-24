@@ -126,7 +126,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/user.{_format}", format="json", requirements={ "_format": "json" })
+     * @Route("/api/RegisterUser.{_format}", format="json", requirements={ "_format": "json" })
      * @param Request $request
      * @return JsonResponse
      */
@@ -170,12 +170,12 @@ class UserController extends AbstractController {
                     }
 
                 } else {
-                    $data = [
-                        'type' => 'validation_error',
-                        'title' => 'There was a validation error',
-                        'errors' => "Not Valid"
-                    ];
-                    return new JsonResponse($data, 400);
+//                    $data = [
+//                        'type' => 'validation_error',
+//                        'title' => 'There was a validation error',
+//                        'errors' => "Not Valid"
+//                    ];
+                    return new JsonResponse("-1 Login not Accepted", 400);
 //                    return new Response("-1 Login not Accepted");
                 }
             }
@@ -183,13 +183,27 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/login.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/loginUser.{_format}", format="html", requirements={ "_format": "html|json" })
      * @param Request $request
      * @return Response
      */
     public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): JsonResponse {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
+
+            $email = $data["email"];
+            $password = $data["passwort"];
+            $loginType = $data['type'];
+
+            $user = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'password' => $password, 'loginType' => $loginType]);
+
+            if (count($user) != 1) return new JsonResponse("-1 Not found", 400);
+            $data = [
+                'email' => $email,
+                'username' => $user->getUsername(),
+                'verified' => $user->getVerified()
+            ];
+            return new JsonResponse($data, 200);
         }
         return new JsonResponse("RIP", 400);
     }

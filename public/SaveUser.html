@@ -33,7 +33,7 @@
     function send() {
 
         console.log(
-            postData('https://127.0.0.1:8000/api/user.json', {
+            postData('https://127.0.0.1:8000/api/RegisterUser.json', {
                 "username": "YESS",
                 "email": "YESS",
                 "vorname": "YESS",
@@ -67,7 +67,7 @@
     }
 
     function get() {
-        getData('https://127.0.0.1:8000/api/user.json').then(data => {
+        getData('https://127.0.0.1:8000/api/RegisterUser.json').then(data => {
             console.log(data);
         })
     }
