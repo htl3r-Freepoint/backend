@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\UserRabatte;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,25 +25,22 @@ class UserRabattController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function GET_Userrabatte_API(string $id, Request $request, SerializerInterface $serializer): Response {
+    public function GET_Userrabatte_API(string $id, Request $request, SerializerInterface $serializer): JsonResponse {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
 
                 if ($id < 0) {
                     $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findAll();
-                    return new Response($serializer->serialize($data, 'json'));
+                    return new JsonResponse($serializer->serialize($data, 'json'), 200);
                 } else {
                     $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['Rabatt_Code' => $id]); //Hier umändern
-                    return new Response($serializer->serialize($data, 'json'));
+                    return new JsonResponse($serializer->serialize($data, 'json'), 200);
                 }
             }
             if ($request->getMethod() == 'POST') {
-                return new Response('-1');
+                return new JsonResponse('-1', 403);
             }
         }
-        return new Response(
-            '<html><body>Some HTML Response</body></html>'
-        );
     }
 
     /**
@@ -50,7 +48,7 @@ class UserRabattController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function Use_Userrabatte_API(Request $request, SerializerInterface $serializer): Response {
+    public function Use_Userrabatte_API(Request $request, SerializerInterface $serializer): JsonResponse {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'PUT') {
                 $data = json_decode($request->getContent(), true);
@@ -58,20 +56,17 @@ class UserRabattController extends AbstractController {
 
                 $entityManager = $this->getDoctrine()->getManager();
                 $Rabatt = $this->getDoctrine()->getRepository(UserRabatte::class)->find(["Rabatt_Code" => $code]);
-                if ($Rabatt == 0) return new Response("-1 NotFound");
-                if ($Rabatt >= 2) return new Response("-1 tooMany");
-                if ($Rabatt->getUsed() == true) return new Response("-1 used");
+                if ($Rabatt == 0) return new JsonResponse("-1 NotFound", 400);
+                if ($Rabatt >= 2) return new JsonResponse("-1 tooMany", 400);
+                if ($Rabatt->getUsed() == true) return new JsonResponse("-1 used", 400);
 
                 $Rabatt->setUsed(true);
 
                 $entityManager->persist($Rabatt);
                 $entityManager->flush();
 
-                return new Response('1');
+                return new JsonResponse('1', 200);
             }
         }
-        return new Response(
-            '<html><body>Some HTML Response</body></html>'
-        );
     }
 }

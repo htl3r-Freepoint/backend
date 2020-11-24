@@ -10,6 +10,7 @@ use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -161,7 +162,7 @@ class QrcodeController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function Add_QrCode_API(Request $request, SerializerInterface $serializer): Response {
+    public function Add_QrCode_API(Request $request, SerializerInterface $serializer): JsonResponse {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
 //            if ($request->getMethod() == 'GET') {
@@ -179,18 +180,13 @@ class QrcodeController extends AbstractController {
                 $exists = $this->checkCode($OGCode);
 
                 if ($exists == "vorhanden") {
-                    return new Response("-1 vorhanden");
+                    return new JsonResponse("-1 vorhanden", 400);
                 } else {
-                    if ($this->saveCode($OGCode, $UserID) == "-1 Kassa") return new Response("-1 Kassa");
-                    return new Response("1");
+                    if ($this->saveCode($OGCode, $UserID) == "-1 Kassa") return new JsonResponse("-1 Kassa", 400);
+                    return new JsonResponse("1", 200);
                 }
 //                return new Response(mb_split("_", $OGCode)[2]);
             }
-
-            // Return HTML
-            return new Response(
-                '<html><body>Some HTML Response</body></html>'
-            );
         }
     }
 }

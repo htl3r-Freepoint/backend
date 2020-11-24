@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,10 +40,8 @@ class UserController extends AbstractController {
 //    }
 
 
-    /**
-     * @Route("/user/new", name="new_user_Form")
-     */
-    public function addUser(Request $request): Response {
+    // @Route("/user/new", name="new_user_Form")
+    private function addUser(Request $request): Response {
         $USER = new User();
         $form = $this->createForm(UserType::class, $USER)
             ->add('Username', TextType::class)
@@ -94,14 +93,14 @@ class UserController extends AbstractController {
         return $this->render('user/newForm.html.twig', ['form' => $form->createView()]);
     }
 
-    private function sendEmail(User $user, $mailer) {
+    private function sendEmail($email, $mailer) {
         $email = (new Email())
             ->from('no-reply@freepoint.at')
             ->to('christopher.scherling@gmail.com')
             ->subject('Time for Symfony Mailer!')
             ->text('Sending emails is fun again!');
 
-//        $mailer->send($email);
+//        $mailer->send($email); //TODO
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) {
@@ -119,24 +118,24 @@ class UserController extends AbstractController {
         }
 
         $entityManager->persist($USER);
-//        $entityManager->flush();
+//        $entityManager->flush();  //TODO
 
-        $this->sendEmail($USER, $mailer);
+        $this->sendEmail($email, $mailer);
 
         return true;
     }
 
     /**
-     * @Route("/api/user.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/user.{_format}", format="json", requirements={ "_format": "json" })
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): Response {
+    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): JsonResponse {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
                 $data = $this->getDoctrine()->getRepository(User::class)->findAll();
-                return new Response($serializer->serialize($data, 'json'));
+                return new JsonResponse($serializer->serialize($data, 'json'), 200);
 //                return new Response("GET");
             }
             if ($request->getMethod() == 'POST') {
@@ -160,25 +159,26 @@ class UserController extends AbstractController {
                     }
 
                     if ($exists != 0) {
-                        if ($exists == "-1 Username") return new Response("-1 Username");
-                        if ($exists == "-1 Username") return new Response("-1 Username");
+                        if ($exists == "-1 Username") return new JsonResponse("-1 Username", 400);
+                        if ($exists == "-1 Username") return new JsonResponse("-1 Username", 400);
                     } else {
                         if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) == true) {
-                            return new Response("1");
+                            return new JsonResponse("1", 200);
                         } else {
-                            return new Response("-1");
+                            return new JsonResponse("-1", 400);
                         }
                     }
 
                 } else {
-                    return new Response("-1 Login not Accepted");
+                    $data = [
+                        'type' => 'validation_error',
+                        'title' => 'There was a validation error',
+                        'errors' => "Not Valid"
+                    ];
+                    return new JsonResponse($data, 400);
+//                    return new Response("-1 Login not Accepted");
                 }
             }
-
-            // Return HTML
-            return new Response(
-                '<html><body>Some HTML Response</body></html>'
-            );
         }
     }
 
@@ -187,11 +187,11 @@ class UserController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): Response {
+    public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): JsonResponse {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
         }
-        return new Response("RIP");
+        return new JsonResponse("RIP", 400);
     }
 
 }

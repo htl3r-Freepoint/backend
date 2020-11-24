@@ -33,18 +33,18 @@
     function send() {
 
         console.log(
-        postData('https://127.0.0.1:8000/api/user.json', {
-            "username": "YESS",
-            "email": "YESS",
-            "vorname": "YESS",
-            "nachname": "YESS",
-            "passwort": "YESS",
-            "type": null
-        })
-            .then(data => {
-                console.log(data); // JSON data parsed by `data.json()` call
+            postData('https://127.0.0.1:8000/api/user.json', {
+                "username": "YESS",
+                "email": "YESS",
+                "vorname": "YESS",
+                "nachname": "YESS",
+                "passwort": "YESS",
+                "type": null
             })
-    );
+                .then(data => {
+                    console.log(data); // JSON data parsed by `data.json()` call
+                })
+        );
     }
 
     // Example POST method implementation:
