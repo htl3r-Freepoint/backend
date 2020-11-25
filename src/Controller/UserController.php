@@ -194,10 +194,21 @@ class UserController extends AbstractController {
             $email = $data["email"];
             $password = $data["passwort"];
             $loginType = $data['type'];
+            //TODO: password_hash($password, PASSWORD_DEFAULT);
 
-            $user = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'password' => $password, 'loginType' => $loginType]);
+            $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
 
-            if (count($user) != 1) return new JsonResponse("-1 Not found", 400);
+            $anz = 0;
+            foreach ($users as $u) {
+                if (password_verify($password, $u->getPassword()) && $email == $u->getEmail() && $loginType == $u->getLoginType()) {
+                    $user = $u;
+                    $anz++;
+                }
+            }
+
+
+            if ($anz > 1) return new JsonResponse("-1 Too Many:" . $anz, 400);
+            if ($anz < 1) return new JsonResponse("-1 Not found", 400);
             $data = [
                 'email' => $email,
                 'username' => $user->getUsername(),
