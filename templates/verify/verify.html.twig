@@ -1,0 +1,4 @@
+{% for menu in menus %}
+    <td><a href="http://127.0.0.1:8000/participants/{{ menu.participantName }}">{{ menu.participantName }}</a></td>
+{% endfor %}
+<p><a href="http://127.0.0.1:8000/results">Show All</a></p>

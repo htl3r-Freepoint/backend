@@ -424,6 +424,13 @@
         <argument type="service" id=".service_locator.g9CqTPp.App\Controller\UserRabattController"/>
       </call>
     </service>
+    <service id="App\Controller\VerifyController" class="App\Controller\VerifyController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.g9CqTPp.App\Controller\VerifyController"/>
+      </call>
+    </service>
     <service id="App\Form\PasswordType" class="App\Form\PasswordType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
@@ -478,6 +485,10 @@
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\VerifyRepository" class="App\Repository\VerifyRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -3377,7 +3388,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory" public="false">
-      <argument type="service" id=".service_locator.L_4IqwS"/>
+      <argument type="service" id=".service_locator.H5_N3Qg"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -5080,6 +5091,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\UserRabattController" class="App\Controller\UserRabattController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\UserRabattController" class="App\Controller\UserRabattController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\UserRabattController" class="App\Controller\UserRabattController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\VerifyController" class="App\Controller\VerifyController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\VerifyController" class="App\Controller\VerifyController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\VerifyController" class="App\Controller\VerifyController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\PasswordType" class="App\Form\PasswordType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\PasswordType" class="App\Form\PasswordType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\QRCodeType" class="App\Form\QRCodeType" autowire="true" abstract="true"/>
@@ -5110,6 +5124,8 @@
     <service id=".abstract.instanceof.App\Repository\UserRabatteRepository" class="App\Repository\UserRabatteRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\VerifyRepository" class="App\Repository\VerifyRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\VerifyRepository" class="App\Repository\VerifyRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.WaGDpDt" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5491,7 +5507,7 @@
         <argument key="doctrine.orm.default_listeners.attach_entity_listeners" type="service" id="doctrine.orm.default_listeners.attach_entity_listeners"/>
       </argument>
     </service>
-    <service id=".service_locator.L_4IqwS" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.H5_N3Qg" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\AngestellteRepository" type="service" id="App\Repository\AngestellteRepository"/>
@@ -5506,6 +5522,7 @@
         <argument key="App\Repository\RabattRepository" type="service" id="App\Repository\RabattRepository"/>
         <argument key="App\Repository\UserRabatteRepository" type="service" id="App\Repository\UserRabatteRepository"/>
         <argument key="App\Repository\UserRepository" type="service" id="App\Repository\UserRepository"/>
+        <argument key="App\Repository\VerifyRepository" type="service" id="App\Repository\VerifyRepository"/>
       </argument>
     </service>
     <service id="monolog.logger.request" class="Symfony\Bridge\Monolog\Logger">
@@ -5759,6 +5776,12 @@
     <service id=".service_locator.g9CqTPp.App\Controller\UserRabattController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator_context" id="App\Controller\UserRabattController"/>
       <argument>App\Controller\UserRabattController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.g9CqTPp" method="withContext"/>
+    </service>
+    <service id=".service_locator.g9CqTPp.App\Controller\VerifyController" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator_context" id="App\Controller\VerifyController"/>
+      <argument>App\Controller\VerifyController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.g9CqTPp" method="withContext"/>
     </service>

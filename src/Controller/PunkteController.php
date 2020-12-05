@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Punkte;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,20 +24,20 @@ class PunkteController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function GET_Punkte_API(int $id, Request $request, SerializerInterface $serializer): JsonResponse {
+    public function GET_Punkte_API(int $id, Request $request, SerializerInterface $serializer): Response {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
 
                 if ($id < 0) {
                     $data = $this->getDoctrine()->getRepository(Punkte::class)->findAll();
-                    return new JsonResponse($serializer->serialize($data, 'json'), 200);
+                    return new Response($serializer->serialize($data, 'json'), 200);
                 } else {
                     $data = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
-                    return new JsonResponse($serializer->serialize($data, 'json'), 200);
+                    return new Response($serializer->serialize($data, 'json'), 200);
                 }
             }
             if ($request->getMethod() == 'POST') {
-                return new JsonResponse('-1', 403);
+                return new Response('-1', 403);
             }
         }
     }

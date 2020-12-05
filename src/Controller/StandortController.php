@@ -5,9 +5,8 @@ namespace App\Controller;
 use App\Entity\Betrieb;
 use App\Entity\Firma;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -42,12 +41,12 @@ class StandortController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer): JsonResponse {
+    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
                 $data = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
-                return new JsonResponse($serializer->serialize($data, 'json'), 200);
+                return new Response($serializer->serialize($data, 'json'), 200);
 //                return new Response("GET");
             }
             if ($request->getMethod() == 'POST') {
@@ -59,9 +58,9 @@ class StandortController extends AbstractController {
                 $PLZ = $data["PLZ"];
 
                 if ($this->save($firmaID, $addresse, $Ort, $PLZ) == true) {
-                    return new JsonResponse("1", 200);
+                    return new Response("1", 200);
                 } else {
-                    return new JsonResponse("-1 Firma", 400);
+                    return new Response("-1 Firma", 400);
                 }
             }
         }

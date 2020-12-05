@@ -28,347 +28,393 @@
     </table>
     <table id="18" parent="2" name="user"/>
     <table id="19" parent="2" name="user_rabatte"/>
-    <column id="20" parent="6" name="id">
+    <table id="20" parent="2" name="verify"/>
+    <column id="21" parent="6" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="21" parent="6" name="fk_user_id">
+    <column id="22" parent="6" name="fk_user_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="22" parent="6" name="fk_fimra_id">
+    <column id="23" parent="6" name="fk_fimra_id">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="23" parent="6" name="rechte">
+    <column id="24" parent="6" name="rechte">
       <Position>4</Position>
       <DataType>INTEGER|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <key id="24" parent="6">
+    <key id="25" parent="6">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="25" parent="7" name="id">
+    <column id="26" parent="7" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="26" parent="7" name="fk_firma_id">
+    <column id="27" parent="7" name="fk_firma_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="27" parent="7" name="addresse">
+    <column id="28" parent="7" name="addresse">
       <Position>3</Position>
       <DataType>VARCHAR(1024)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="28" parent="7" name="plz">
+    <column id="29" parent="7" name="plz">
       <Position>4</Position>
       <DataType>VARCHAR(128)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="29" parent="7" name="ort">
+    <column id="30" parent="7" name="ort">
       <Position>5</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <key id="30" parent="7">
+    <key id="31" parent="7">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="31" parent="8" name="id">
+    <column id="32" parent="8" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="32" parent="8" name="name">
+    <column id="33" parent="8" name="name">
       <Position>2</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="33" parent="8" name="datei">
+    <column id="34" parent="8" name="datei">
       <Position>3</Position>
       <DataType>BLOB|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="34" parent="8">
+    <key id="35" parent="8">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="35" parent="9" name="id">
+    <column id="36" parent="9" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="36" parent="9" name="fk_firma_id">
+    <column id="37" parent="9" name="fk_firma_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="37" parent="9" name="fk_design_id">
+    <column id="38" parent="9" name="fk_design_id">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="38" parent="9">
+    <key id="39" parent="9">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="39" parent="10" name="version">
+    <column id="40" parent="10" name="version">
       <Position>1</Position>
       <DataType>VARCHAR(191)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="40" parent="10" name="executed_at">
+    <column id="41" parent="10" name="executed_at">
       <Position>2</Position>
       <DataType>DATETIME|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="41" parent="10" name="execution_time">
+    <column id="42" parent="10" name="execution_time">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <index id="42" parent="10" name="sqlite_autoindex_doctrine_migration_versions_1">
+    <index id="43" parent="10" name="sqlite_autoindex_doctrine_migration_versions_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>version</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="43" parent="10">
+    <key id="44" parent="10">
       <ColNames>version</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_doctrine_migration_versions_1</UnderlyingIndexName>
     </key>
-    <column id="44" parent="11" name="id">
+    <column id="45" parent="11" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="45" parent="11" name="fk_user_id__owner">
+    <column id="46" parent="11" name="fk_user_id__owner">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="46" parent="11" name="firmanname">
+    <column id="47" parent="11" name="firmanname">
       <Position>3</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="47" parent="11" name="kontakt_email">
+    <column id="48" parent="11" name="kontakt_email">
       <Position>4</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="48" parent="11" name="xeuro_fuer1_punkt">
+    <column id="49" parent="11" name="xeuro_fuer1_punkt">
       <Position>5</Position>
       <DataType>DOUBLE PRECISION|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="49" parent="11" name="datei">
+    <column id="50" parent="11" name="datei">
       <Position>6</Position>
       <DataType>BLOB|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="50" parent="11" name="domain">
+    <column id="51" parent="11" name="domain">
       <Position>7</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <key id="51" parent="11">
+    <key id="52" parent="11">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="52" parent="12" name="id">
+    <column id="53" parent="12" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="53" parent="12" name="fk_firma_id">
+    <column id="54" parent="12" name="fk_firma_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="54" parent="12" name="bezeichnung">
+    <column id="55" parent="12" name="bezeichnung">
       <Position>3</Position>
       <DataType>VARCHAR(1024)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="55" parent="12">
+    <key id="56" parent="12">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="56" parent="13" name="id">
+    <column id="57" parent="13" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="57" parent="13" name="fk_user_id">
+    <column id="58" parent="13" name="fk_user_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="58" parent="13" name="fk_firma_id">
+    <column id="59" parent="13" name="fk_firma_id">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="59" parent="13" name="punkte">
+    <column id="60" parent="13" name="punkte">
       <Position>4</Position>
       <DataType>DOUBLE PRECISION|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <key id="60" parent="13">
+    <key id="61" parent="13">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="61" parent="14" name="id">
+    <column id="62" parent="14" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="62" parent="14" name="fk_user_id">
+    <column id="63" parent="14" name="fk_user_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="63" parent="14" name="scann_datum">
+    <column id="64" parent="14" name="scann_datum">
       <Position>3</Position>
       <DataType>DATE|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="64" parent="14" name="klartext">
+    <column id="65" parent="14" name="klartext">
       <Position>4</Position>
       <DataType>CLOB|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="65" parent="14">
+    <key id="66" parent="14">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="66" parent="15" name="id">
+    <column id="67" parent="15" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="67" parent="15" name="fk_firma_id">
+    <column id="68" parent="15" name="fk_firma_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="68" parent="15" name="x_punkte_fuer_1_rabatt">
+    <column id="69" parent="15" name="x_punkte_fuer_1_rabatt">
       <Position>3</Position>
       <DataType>DOUBLE PRECISION|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="69" parent="15" name="datei">
+    <column id="70" parent="15" name="datei">
       <Position>4</Position>
       <DataType>BLOB|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="70" parent="15" name="beschreibung">
+    <column id="71" parent="15" name="beschreibung">
       <Position>5</Position>
       <DataType>CLOB|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="71" parent="15" name="rabattbeschreibung">
+    <column id="72" parent="15" name="rabattbeschreibung">
       <Position>6</Position>
       <DataType>CLOB|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <key id="72" parent="15">
+    <key id="73" parent="15">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="73" parent="16" name="type">
+    <column id="74" parent="16" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="74" parent="16" name="name">
+    <column id="75" parent="16" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="75" parent="16" name="tbl_name">
+    <column id="76" parent="16" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="76" parent="16" name="rootpage">
+    <column id="77" parent="16" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="77" parent="16" name="sql">
+    <column id="78" parent="16" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="78" parent="17" name="name">
+    <column id="79" parent="17" name="name">
       <Position>1</Position>
     </column>
-    <column id="79" parent="17" name="seq">
+    <column id="80" parent="17" name="seq">
       <Position>2</Position>
     </column>
-    <column id="80" parent="18" name="id">
+    <column id="81" parent="18" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="81" parent="18" name="username">
+    <column id="82" parent="18" name="username">
       <Position>2</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="82" parent="18" name="email">
+    <column id="83" parent="18" name="email">
       <Position>3</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="83" parent="18" name="vorname">
+    <column id="84" parent="18" name="vorname">
       <Position>4</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="84" parent="18" name="nachname">
+    <column id="85" parent="18" name="nachname">
       <Position>5</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <column id="85" parent="18" name="password">
+    <column id="86" parent="18" name="password">
       <Position>6</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <DefaultExpression>NULL</DefaultExpression>
     </column>
-    <key id="86" parent="18">
+    <column id="87" parent="18" name="verified">
+      <Position>7</Position>
+      <DataType>BOOLEAN|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="88" parent="18" name="login_type">
+      <Position>8</Position>
+      <DataType>VARCHAR(255)|0s</DataType>
+      <DefaultExpression>NULL</DefaultExpression>
+    </column>
+    <key id="89" parent="18">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="87" parent="19" name="rabatt_code">
+    <column id="90" parent="19" name="rabatt_code">
       <Position>1</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="88" parent="19" name="fk_user_id">
+    <column id="91" parent="19" name="fk_user_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="89" parent="19" name="fk_rabatt_id">
+    <column id="92" parent="19" name="fk_rabatt_id">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
+    <column id="93" parent="19" name="used">
+      <Position>4</Position>
+      <DataType>BOOLEAN|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="94" parent="20" name="id">
+      <Position>1</Position>
+      <DataType>INTEGER|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="95" parent="20" name="register_date">
+      <Position>2</Position>
+      <DataType>DATE|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="96" parent="20" name="code">
+      <Position>3</Position>
+      <DataType>VARCHAR(1048)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="97" parent="20" name="verfiy_date">
+      <Position>4</Position>
+      <DataType>DATE|0s</DataType>
+      <DefaultExpression>NULL</DefaultExpression>
+    </column>
+    <column id="98" parent="20" name="fk_user_id">
+      <Position>5</Position>
+      <DataType>INTEGER|0s</DataType>
+      <DefaultExpression>NULL</DefaultExpression>
+    </column>
+    <key id="99" parent="20">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
   </database-model>
 </dataSource>

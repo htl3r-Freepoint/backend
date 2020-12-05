@@ -17,7 +17,8 @@ return [
         '/qrcode/new' => [[['_route' => 'new_qrcode_form', '_controller' => 'App\\Controller\\QrcodeController::saveCode'], null, null, null, false, false, null]],
         '/rabatt' => [[['_route' => 'rabatt', '_controller' => 'App\\Controller\\RabattController::saveRabatt'], null, null, null, false, false, null]],
         '/standort' => [[['_route' => 'standort', '_controller' => 'App\\Controller\\StandortController::index'], null, null, null, false, false, null]],
-        '/user/show' => [[['_route' => 'show_user', '_controller' => 'App\\Controller\\UserController::addUser'], null, null, null, false, false, null]],
+        '/user' => [[['_route' => 'user', '_controller' => 'App\\Controller\\UserController::index'], null, null, null, false, false, null]],
+        '/user/show' => [[['_route' => 'show_user', '_controller' => 'App\\Controller\\UserController::sendEmail'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

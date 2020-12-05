@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Verify;
 use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,11 +24,11 @@ class UserController extends AbstractController {
     /**
      * @Route("/user", name="user")
      */
-//    public function index() {
-//        return $this->render('user/index.html.twig', [
-//            'controller_name' => 'UserController',
-//        ]);
-//    }
+    public function index() {
+        return $this->render('user/index.html.twig', [
+            'controller_name' => 'UserController',
+        ]);
+    }
 
     /**
      * @Route("/user/show", name="show_user")
@@ -38,69 +38,69 @@ class UserController extends AbstractController {
 //
 //        return $this->render('user/Userprofile.html.twig', ["menus" => $userFINISH]);
 //    }
+//
+//
+//    // @Route("/user/new", name="new_user_Form")
+//    private function addUser(Request $request): Response {
+//        $USER = new User();
+//        $form = $this->createForm(UserType::class, $USER)
+//            ->add('Username', TextType::class)
+//            ->add('email', TextType::class)
+//            ->add('vorname', TextType::class)
+//            ->add('nachname', TextType::class)
+//            ->add('password', PasswordType::class)
+//            ->add('save', SubmitType::class, ['label' => 'Create Task']);
+//
+//        $form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $input = $form->getData();
+//
+//            $allUsers = $this->getDoctrine()
+//                ->getRepository(User::class)
+//                ->findAll();
+//
+//            $exists = "false";
+//            foreach ($allUsers as $us) {
+//                if ($us->getEmail() == $input->getEmail()) {
+//                    $exists = "true";
+//                }
+//            }
+//
+//            if ($exists == "true") {
+//                //User schon vorhanden
+//                return $this->render("user/failed.html.twig", ["mail" => $input->getEmail()]);
+//            } else {
+//
+//                $entityManager = $this->getDoctrine()->getManager();
+//
+//                $dbUser = new User();
+//                $dbUser->setEmail($input->getEmail());
+//                $dbUser->setNachname($input->getnachname());
+//                $dbUser->setVorname($input->getVorname());
+//                $dbUser->setUsername($input->getUsername());
+//                $dbUser->setPassword($input->getPassword());
+//
+//                $entityManager->persist($dbUser);
+//                $entityManager->flush();
+//
+//
+//                return $this->render('user/Userprofile.html.twig', [
+//                    "menus" => $this->getDoctrine()->getRepository(USER::class)
+//                        ->findBy(['email' => $input->getEmail()])
+//                ]);
+//            }
+//        }
+//        return $this->render('user/newForm.html.twig', ['form' => $form->createView()]);
+//    }
 
-
-    // @Route("/user/new", name="new_user_Form")
-    private function addUser(Request $request): Response {
-        $USER = new User();
-        $form = $this->createForm(UserType::class, $USER)
-            ->add('Username', TextType::class)
-            ->add('email', TextType::class)
-            ->add('vorname', TextType::class)
-            ->add('nachname', TextType::class)
-            ->add('password', PasswordType::class)
-            ->add('save', SubmitType::class, ['label' => 'Create Task']);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $input = $form->getData();
-
-            $allUsers = $this->getDoctrine()
-                ->getRepository(User::class)
-                ->findAll();
-
-            $exists = "false";
-            foreach ($allUsers as $us) {
-                if ($us->getEmail() == $input->getEmail()) {
-                    $exists = "true";
-                }
-            }
-
-            if ($exists == "true") {
-                //User schon vorhanden
-                return $this->render("user/failed.html.twig", ["mail" => $input->getEmail()]);
-            } else {
-
-                $entityManager = $this->getDoctrine()->getManager();
-
-                $dbUser = new User();
-                $dbUser->setEmail($input->getEmail());
-                $dbUser->setNachname($input->getnachname());
-                $dbUser->setVorname($input->getVorname());
-                $dbUser->setUsername($input->getUsername());
-                $dbUser->setPassword($input->getPassword());
-
-                $entityManager->persist($dbUser);
-                $entityManager->flush();
-
-
-                return $this->render('user/Userprofile.html.twig', [
-                    "menus" => $this->getDoctrine()->getRepository(USER::class)
-                        ->findBy(['email' => $input->getEmail()])
-                ]);
-            }
-        }
-        return $this->render('user/newForm.html.twig', ['form' => $form->createView()]);
-    }
-
-    private function sendEmail($email, $mailer) {
+    private function sendEmail($email, $mailer, $code) {
         $email = (new Email())
             ->from('no-reply@freepoint.at')
-            ->to('christopher.scherling@gmail.com')
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!');
+            ->to($email)
+            ->subject('Verify your FreePoint account')
+            ->text('Verification Link: https://127.0.0.1:8000/verify/' . $code);
 
-//        $mailer->send($email); //TODO
+        $mailer->send($email);
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) {
@@ -118,24 +118,35 @@ class UserController extends AbstractController {
         }
 
         $entityManager->persist($USER);
-//        $entityManager->flush();  //TODO
+        $entityManager->flush();
 
-        $this->sendEmail($email, $mailer);
+        $id = $USER->getId();
+        $code = $this->createRandomCode($id); //TODO: Auf doppelten Code überprüfen
 
+        $VERIFY = new Verify();
+        $VERIFY->setFKUserID($id);
+        $VERIFY->setCode($code);
+        $VERIFY->setRegisterDate(new \DateTime());
+
+        $entityManager->persist($VERIFY);
+        $entityManager->flush();
+
+        $this->sendEmail($email, $mailer, $code);
         return true;
     }
 
     /**
      * @Route("/api/RegisterUser.{_format}", format="json", requirements={ "_format": "json" })
      * @param Request $request
-     * @return JsonResponse
+     * @return Response
      */
-    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): JsonResponse {
+    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer) {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
                 $data = $this->getDoctrine()->getRepository(User::class)->findAll();
-                return new JsonResponse($serializer->serialize($data, 'json'), 200);
+                return new Response($serializer->serialize($data, 'json'), 200);
+                return new Response($serializer->serialize($data, 'json'), 200);
 //                return new Response("GET");
             }
             if ($request->getMethod() == 'POST') {
@@ -159,24 +170,18 @@ class UserController extends AbstractController {
                     }
 
                     if ($exists != 0) {
-                        if ($exists == "-1 Username") return new JsonResponse("-1 Username", 400);
-                        if ($exists == "-1 Username") return new JsonResponse("-1 Username", 400);
+                        if ($exists == "-1 Username") return new Response("-1 Username", 400);
+                        if ($exists == "-1 Username") return new Response("-1 Username", 400);
                     } else {
                         if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) == true) {
-                            return new JsonResponse("1", 200);
+                            return new Response("1", 200);
                         } else {
-                            return new JsonResponse("-1", 400);
+                            return new Response("-1", 400);
                         }
                     }
 
                 } else {
-//                    $data = [
-//                        'type' => 'validation_error',
-//                        'title' => 'There was a validation error',
-//                        'errors' => "Not Valid"
-//                    ];
-                    return new JsonResponse("-1 Login not Accepted", 400);
-//                    return new Response("-1 Login not Accepted");
+                    return new Response("-1 Login not Accepted", 400);
                 }
             }
         }
@@ -187,14 +192,13 @@ class UserController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): JsonResponse {
+    public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
 
             $email = $data["email"];
             $password = $data["passwort"];
             $loginType = $data['type'];
-            //TODO: password_hash($password, PASSWORD_DEFAULT);
 
             $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
 
@@ -207,16 +211,46 @@ class UserController extends AbstractController {
             }
 
 
-            if ($anz > 1) return new JsonResponse("-1 Too Many:" . $anz, 400);
-            if ($anz < 1) return new JsonResponse("-1 Not found", 400);
+            if ($anz > 1) return new Response("-1 Too Many:" . $anz, 400);
+            if ($anz < 1) return new Response("-1 Not found", 400);
             $data = [
                 'email' => $email,
                 'username' => $user->getUsername(),
                 'verified' => $user->getVerified()
             ];
-            return new JsonResponse($data, 200);
+            return new Response($serializer->serialize($data, 'json'), 200);
         }
-        return new JsonResponse("RIP", 400);
+        return new Response("RIP", 500);
+    }
+
+    private function createRandomCode($id) {
+
+        $chars = "abcdefghijkmnopqrstuvwxyz023456789";
+        srand((double)microtime() * 1000000);
+        $i = 0;
+        $pass = '';
+
+        while ($i <= 40) {
+            $num = rand() % 33;
+            $tmp = substr($chars, $num, 1);
+            $pass = $pass . $tmp;
+            $i++;
+        }
+
+        $idStr = ($id * 37) . "";
+        $part1 = substr($pass, 0, 13);
+        $part2 = substr($pass, 13, strlen($pass));
+
+        $hash = password_hash($part1 . strrev($idStr) . $part2, PASSWORD_DEFAULT);
+
+        $noSpaces = str_replace(' ', '-', $hash); // Replaces all spaces with hyphens.
+        $noSpecialChars = preg_replace('/[^A-Za-z0-9\-]/', '', $noSpaces); // Removes special chars.
+        $erg = substr($noSpecialChars, 0, 3);
+
+        if (strlen($erg) >= 1000) $erg = substr($erg, 0, 800);
+
+
+        return $erg;
     }
 
 }

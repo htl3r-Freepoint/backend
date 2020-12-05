@@ -6,7 +6,6 @@ use App\Entity\Firma;
 use App\Entity\Punkte;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,12 +52,12 @@ class FirmaController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer): JsonResponse {
+    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
                 $data = $this->getDoctrine()->getRepository(Firma::class)->findAll();
-                return new JsonResponse($serializer->serialize($data, 'json'), 200);
+                return new Response($serializer->serialize($data, 'json'), 200);
 //                return new Response("GET");
             }
             if ($request->getMethod() == 'POST') {
@@ -81,13 +80,13 @@ class FirmaController extends AbstractController {
                 }
 
                 if ($exists != 0) {
-                    if ($exists == "-1 Firmenname") return new JsonResponse("-1 Firmenname", 400);
-                    if ($exists == "-1 Domain") return new JsonResponse("-1 Domain", 400);
+                    if ($exists == "-1 Firmenname") return new Response("-1 Firmenname", 400);
+                    if ($exists == "-1 Domain") return new Response("-1 Domain", 400);
                 } else {
                     if ($this->save($owner, $name, $kontakt, $XEuro, $datei, $domain) == true) {
-                        return new JsonResponse("1", 200);
+                        return new Response("1", 200);
                     } else {
-                        return new JsonResponse("-1 Missing", 100);
+                        return new Response("-1 Missing", 100);
                     }
                 }
             }

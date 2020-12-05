@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Firma;
 use App\Entity\Rabatt;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,15 +43,15 @@ class RabattController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function GET_Rabatt_API(int $id, Request $request, SerializerInterface $serializer): JsonResponse {
+    public function GET_Rabatt_API(int $id, Request $request, SerializerInterface $serializer): Response {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
                 if ($id < 0) {
                     $data = $this->getDoctrine()->getRepository(Rabatt::class)->findAll();
-                    return new JsonResponse($serializer->serialize($data, 'json'), 200);
+                    return new Response($serializer->serialize($data, 'json'), 200);
                 } else {
                     $data = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $id]); //Hier umändern
-                    return new JsonResponse($serializer->serialize($data, 'json'), 200);
+                    return new Response($serializer->serialize($data, 'json'), 200);
                 }
             }
             if ($request->getMethod() == 'POST') {
@@ -66,7 +65,7 @@ class RabattController extends AbstractController {
 
 
                 if ($this->saveRabatt($fk_firma_id, $beschreibung, $datei, $XEuro, $rabttbeschreibung) == true) {
-                    return new JsonResponse("1", 200);
+                    return new Response("1", 200);
                 }
             }
         }
