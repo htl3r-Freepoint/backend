@@ -38,6 +38,8 @@ class RabattController extends AbstractController {
         return true;
     }
 
+    //TODO: {id} nach .json verschieben
+
     /**
      * @Route("/api/{id}/rabatt.{_format}", format="html", requirements={ "_format": "html|json" })
      * @param Request $request
