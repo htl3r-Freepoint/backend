@@ -1,4 +1,4 @@
-<?php //App_Entity_Punkte
+<?php //App_Entity_User
 
 return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
     $o = [
@@ -10,29 +10,35 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
         clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
     ],
     null,
     [
         'stdClass' => [
             'name' => [
-                'App\\Entity\\Punkte',
+                'App\\Entity\\User',
                 'id',
-                'FK_User_ID',
-                'FK_Firma_ID',
-                'Punkte',
-                'fKUserID',
-                'fKFirmaID',
-                'punkte',
+                'Username',
+                'email',
+                'vorname',
+                'nachname',
+                'password',
+                'verified',
+                'loginType',
+                'username',
             ],
             'attributesMetadata' => [
                 [
                     'id' => $o[1],
-                    'FK_User_ID' => $o[2],
-                    'FK_Firma_ID' => $o[3],
-                    'Punkte' => $o[4],
-                    'fKUserID' => $o[5],
-                    'fKFirmaID' => $o[6],
-                    'punkte' => $o[7],
+                    'Username' => $o[2],
+                    'email' => $o[3],
+                    'vorname' => $o[4],
+                    'nachname' => $o[5],
+                    'password' => $o[6],
+                    'verified' => $o[7],
+                    'loginType' => $o[8],
+                    'username' => $o[9],
                 ],
             ],
         ],

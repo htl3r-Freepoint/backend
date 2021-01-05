@@ -16,6 +16,6 @@ if (!\class_exists(App_KernelDevDebugContainer::class, false)) {
 
 return new \ContainerINgBMvr\App_KernelDevDebugContainer([
     'container.build_hash' => 'INgBMvr',
-    'container.build_id' => 'a83d5fc4',
-    'container.build_time' => 1606578141,
+    'container.build_id' => '9f345af2',
+    'container.build_time' => 1609847532,
 ], __DIR__.\DIRECTORY_SEPARATOR.'ContainerINgBMvr');

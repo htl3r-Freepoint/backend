@@ -100,7 +100,7 @@ class UserController extends AbstractController {
             ->subject('Verify your FreePoint account')
             ->text('Verification Link: https://127.0.0.1:8000/verify/' . $code);
 
-        $mailer->send($email);
+//        $mailer->send($email);
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) {
@@ -151,13 +151,15 @@ class UserController extends AbstractController {
             }
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
+                echo count($data);
 
                 $username = $data["username"];
                 $email = $data["email"];
-                $vorname = $data["vorname"];
-                $nachname = $data["nachname"];
-                $password = $data["passwort"];
-                $loginType = $data['type'];
+                $password = $data["password"];
+                if (isset($data["vorname"])) $vorname = $data["vorname"]; else $vorname = null;
+                if (isset($data["nachname"])) $nachname = $data["nachname"]; else $nachname = null;
+                if (isset($data['type'])) $loginType = $data['type']; else $loginType = null;
+
 
                 if ($loginType == "" || $loginType == "google" || $loginType == "null" || !isset($loginType)) {
 

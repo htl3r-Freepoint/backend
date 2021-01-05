@@ -14,6 +14,7 @@ return [
         '/_profiler/phpinfo' => [[['_route' => '_profiler_phpinfo', '_controller' => 'web_profiler.controller.profiler::phpinfoAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
         '/firma' => [[['_route' => 'firma', '_controller' => 'App\\Controller\\FirmaController::index'], null, null, null, false, false, null]],
+        '/qrcode' => [[['_route' => 'qrcode', '_controller' => 'App\\Controller\\QrcodeController::index'], null, null, null, false, false, null]],
         '/qrcode/new' => [[['_route' => 'new_qrcode_form', '_controller' => 'App\\Controller\\QrcodeController::saveCode'], null, null, null, false, false, null]],
         '/rabatt' => [[['_route' => 'rabatt', '_controller' => 'App\\Controller\\RabattController::saveRabatt'], null, null, null, false, false, null]],
         '/standort' => [[['_route' => 'standort', '_controller' => 'App\\Controller\\StandortController::index'], null, null, null, false, false, null]],
