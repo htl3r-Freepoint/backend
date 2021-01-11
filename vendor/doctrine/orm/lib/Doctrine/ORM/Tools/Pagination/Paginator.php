@@ -19,12 +19,14 @@
 
 namespace Doctrine\ORM\Tools\Pagination;
 
+use ArrayIterator;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use function array_map;
+use function array_sum;
 
 /**
  * The paginator can handle various complex scenarios with DQL.
@@ -32,6 +34,8 @@ use function array_map;
  * @author Pablo Díez <pablodip@gmail.com>
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @license New BSD
+ *
+ * @template T
  */
 class Paginator implements \Countable, \IteratorAggregate
 {
@@ -122,7 +126,7 @@ class Paginator implements \Countable, \IteratorAggregate
     {
         if ($this->count === null) {
             try {
-                $this->count = array_sum(array_map('current', $this->getCountQuery()->getScalarResult()));
+                $this->count = (int) array_sum(array_map('current', $this->getCountQuery()->getScalarResult()));
             } catch (NoResultException $e) {
                 $this->count = 0;
             }
@@ -133,6 +137,8 @@ class Paginator implements \Countable, \IteratorAggregate
 
     /**
      * {@inheritdoc}
+     *
+     * @return ArrayIterator<mixed, T>
      */
     public function getIterator()
     {
@@ -155,7 +161,7 @@ class Paginator implements \Countable, \IteratorAggregate
 
             // don't do this for an empty id array
             if ($foundIdRows === []) {
-                return new \ArrayIterator([]);
+                return new ArrayIterator([]);
             }
 
             $whereInQuery = $this->cloneQuery($this->query);
@@ -178,7 +184,7 @@ class Paginator implements \Countable, \IteratorAggregate
             ;
         }
 
-        return new \ArrayIterator($result);
+        return new ArrayIterator($result);
     }
 
     /**
@@ -190,7 +196,6 @@ class Paginator implements \Countable, \IteratorAggregate
      */
     private function cloneQuery(Query $query)
     {
-        /* @var $cloneQuery Query */
         $cloneQuery = clone $query;
 
         $cloneQuery->setParameters(clone $query->getParameters());
@@ -244,7 +249,6 @@ class Paginator implements \Countable, \IteratorAggregate
      */
     private function getCountQuery()
     {
-        /* @var $countQuery Query */
         $countQuery = $this->cloneQuery($this->query);
 
         if ( ! $countQuery->hasHint(CountWalker::HINT_DISTINCT)) {

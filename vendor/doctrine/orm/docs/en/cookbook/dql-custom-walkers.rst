@@ -1,4 +1,4 @@
-Extending DQL in Doctrine 2: Custom AST Walkers
+Extending DQL in Doctrine ORM: Custom AST Walkers
 ===============================================
 
 .. sectionauthor:: Benjamin Eberlei <kontakt@beberlei.de>
@@ -12,7 +12,7 @@ the Doctrine ORM.
 
 In Doctrine 1 the DQL language was not implemented using a real
 parser. This made modifications of the DQL by the user impossible.
-Doctrine 2 in contrast has a real parser for the DQL language,
+Doctrine ORM in contrast has a real parser for the DQL language,
 which transforms the DQL statement into an
 `Abstract Syntax Tree <http://en.wikipedia.org/wiki/Abstract_syntax_tree>`_
 and generates the appropriate SQL statement for it. Since this
@@ -167,7 +167,7 @@ can be set via ``Query::setHint($name, $value)`` as shown in the
 previous example with the ``HINT_CUSTOM_TREE_WALKERS`` query hint.
 
 We will implement a custom Output Walker that allows to specify the
-SQL\_NO\_CACHE query hint.
+``SQL_NO_CACHE`` query hint.
 
 .. code-block:: php
 
@@ -180,7 +180,7 @@ SQL\_NO\_CACHE query hint.
 
 Our ``MysqlWalker`` will extend the default ``SqlWalker``. We will
 modify the generation of the SELECT clause, adding the
-SQL\_NO\_CACHE on those queries that need it:
+``SQL_NO_CACHE`` on those queries that need it:
 
 .. code-block:: php
 

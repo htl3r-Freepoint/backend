@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function count;
 use function getcwd;
 use function in_array;
@@ -30,7 +31,7 @@ final class MigrateCommand extends DoctrineCommand
     /** @var string */
     protected static $defaultName = 'migrations:migrate';
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this
             ->setAliases(['migrate'])
@@ -116,12 +117,15 @@ EOT
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $migratorConfigurationFactory = $this->getDependencyFactory()->getConsoleInputMigratorConfigurationFactory();
         $migratorConfiguration        = $migratorConfigurationFactory->getMigratorConfiguration($input);
 
-        $question = 'WARNING! You are about to execute a database migration that could result in schema changes and data loss. Are you sure you wish to continue?';
+        $question = sprintf(
+            'WARNING! You are about to execute a migration in database "%s" that could result in schema changes and data loss. Are you sure you wish to continue?',
+            $this->getDependencyFactory()->getConnection()->getDatabase() ?? '<unnamed>'
+        );
         if (! $migratorConfiguration->isDryRun() && ! $this->canExecute($question, $input)) {
             $this->io->error('Migration cancelled!');
 
@@ -167,7 +171,7 @@ EOT
             ));
 
             return 1;
-        } catch (NoMigrationsToExecute|NoMigrationsFoundWithCriteria $e) {
+        } catch (NoMigrationsToExecute | NoMigrationsFoundWithCriteria $e) {
             return $this->exitForAlias($versionAlias);
         }
 
@@ -209,7 +213,7 @@ EOT
     private function checkExecutedUnavailableMigrations(
         ExecutedMigrationsList $executedUnavailableMigrations,
         InputInterface $input
-    ) : bool {
+    ): bool {
         if (count($executedUnavailableMigrations) !== 0) {
             $this->io->warning(sprintf(
                 'You have %s previously executed migrations in the database that are not registered migrations.',
@@ -238,7 +242,7 @@ EOT
         return true;
     }
 
-    private function exitForAlias(string $versionAlias) : int
+    private function exitForAlias(string $versionAlias): int
     {
         $version = $this->getDependencyFactory()->getVersionAliasResolver()->resolveVersionAlias('current');
 

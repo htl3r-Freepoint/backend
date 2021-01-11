@@ -18,6 +18,10 @@ final class HierarchyDiscriminatorResolver
     /**
      * This method is needed to make INSTANCEOF work correctly with inheritance: if the class at hand has inheritance,
      * it extracts all the discriminators from the child classes and returns them
+     *
+     * @return null[]
+     *
+     * @psalm-return array<array-key, null>
      */
     public static function resolveDiscriminatorsForClass(
         ClassMetadata $rootClassMetadata,
@@ -40,5 +44,3 @@ final class HierarchyDiscriminatorResolver
         return $discriminators;
     }
 }
-
-interface_exists(ClassMetadata::class);

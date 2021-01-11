@@ -1,0 +1,54 @@
+<?php //App_Entity_Betrieb
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Symfony\\Component\\Serializer\\Mapping\\ClassMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\ClassMetadata')),
+        clone ($p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata')),
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+        clone $p['Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata'],
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                'App\\Entity\\Betrieb',
+                'id',
+                'FK_Firma_ID',
+                'Addresse',
+                'PLZ',
+                'Ort',
+                'laengengrad',
+                'breitengrad',
+                'fKFirmaID',
+                'addresse',
+                'pLZ',
+                'ort',
+            ],
+            'attributesMetadata' => [
+                [
+                    'id' => $o[1],
+                    'FK_Firma_ID' => $o[2],
+                    'Addresse' => $o[3],
+                    'PLZ' => $o[4],
+                    'Ort' => $o[5],
+                    'laengengrad' => $o[6],
+                    'breitengrad' => $o[7],
+                    'fKFirmaID' => $o[8],
+                    'addresse' => $o[9],
+                    'pLZ' => $o[10],
+                    'ort' => $o[11],
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

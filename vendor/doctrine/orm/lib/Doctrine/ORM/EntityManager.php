@@ -31,6 +31,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Persistence\Mapping\MappingException;
 use Doctrine\Persistence\ObjectRepository;
 use Throwable;
+use function ltrim;
 use const E_USER_DEPRECATED;
 use function trigger_error;
 
@@ -327,7 +328,7 @@ use function trigger_error;
      */
     public function createNamedNativeQuery($name)
     {
-        list($sql, $rsm) = $this->config->getNamedNativeQuery($name);
+        [$sql, $rsm] = $this->config->getNamedNativeQuery($name);
 
         return $this->createNativeQuery($sql, $rsm);
     }
@@ -373,7 +374,7 @@ use function trigger_error;
     /**
      * Finds an Entity by its identifier.
      *
-     * @param string       $entityName  The class name of the entity to find.
+     * @param string       $className   The class name of the entity to find.
      * @param mixed        $id          The identity of the entity to find.
      * @param integer|null $lockMode    One of the \Doctrine\DBAL\LockMode::* constants
      *                                  or NULL if no specific lock mode should be used
@@ -387,10 +388,14 @@ use function trigger_error;
      * @throws ORMInvalidArgumentException
      * @throws TransactionRequiredException
      * @throws ORMException
+     *
+     * @template T
+     * @psalm-param class-string<T> $entityName
+     * @psalm-return ?T
      */
-    public function find($entityName, $id, $lockMode = null, $lockVersion = null)
+    public function find($className, $id, $lockMode = null, $lockVersion = null)
     {
-        $class = $this->metadataFactory->getMetadataFor(ltrim($entityName, '\\'));
+        $class = $this->metadataFactory->getMetadataFor(ltrim($className, '\\'));
 
         if ($lockMode !== null) {
             $this->checkLockRequirements($lockMode, $class);
@@ -732,6 +737,10 @@ use function trigger_error;
      * @param string $entityName The name of the entity.
      *
      * @return ObjectRepository|EntityRepository The repository class.
+     *
+     * @template T
+     * @psalm-param class-string<T> $entityName
+     * @psalm-return EntityRepository<T>
      */
     public function getRepository($entityName)
     {

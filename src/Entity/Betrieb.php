@@ -36,6 +36,16 @@ class Betrieb {
      */
     private $Ort;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $laengengrad;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $breitengrad;
+
     public function getId(): ?int {
         return $this->id;
     }

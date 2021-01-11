@@ -185,7 +185,7 @@ Class Table Inheritance
 is an inheritance mapping strategy where each class in a hierarchy
 is mapped to several tables: its own table and the tables of all
 parent classes. The table of a child class is linked to the table
-of a parent class through a foreign key constraint. Doctrine 2
+of a parent class through a foreign key constraint. Doctrine ORM
 implements this strategy through the use of a discriminator column
 in the topmost table of the hierarchy because this is the easiest
 way to achieve polymorphic queries with Class Table Inheritance.
@@ -289,9 +289,15 @@ column and cascading on delete.
 
 Overrides
 ---------
-Used to override a mapping for an entity field or relationship.
-May be applied to an entity that extends a mapped superclass
-to override a relationship or field mapping defined by the mapped superclass.
+
+Used to override a mapping for an entity field or relationship.  Can only be
+applied to an entity that extends a mapped superclass or uses a trait to
+override a relationship or field mapping defined by the mapped superclass or
+trait.
+
+It is not possible to override attributes or associations in entity to entity
+inheritance scenarios, because this can cause unforseen edge case behavior and
+increases complexity in ORM internal classes.
 
 
 Association Override
@@ -584,7 +590,7 @@ Things to note:
 
 -  The "attribute override" specifies the overrides base on the property name.
 -  The column type *CANNOT* be changed. If the column type is not equal you get a ``MappingException``
--  The override can redefine all the columns except the type.
+-  The override can redefine all the attributes except the type.
 
 Query the Type
 --------------

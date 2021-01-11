@@ -23,8 +23,7 @@ use Composer\Package\Version\VersionSelector;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositorySet;
-use Composer\Semver\Constraint\MultiConstraint;
-use Composer\Semver\Intervals;
+use Composer\Semver\VersionParser;
 use Symfony\Flex\Unpack\Operation;
 use Symfony\Flex\Unpack\Result;
 
@@ -33,12 +32,14 @@ class Unpacker
     private $composer;
     private $resolver;
     private $dryRun;
+    private $versionParser;
 
     public function __construct(Composer $composer, PackageResolver $resolver, bool $dryRun)
     {
         $this->composer = $composer;
         $this->resolver = $resolver;
         $this->dryRun = $dryRun;
+        $this->versionParser = new VersionParser();
     }
 
     public function unpack(Operation $op, Result $result = null, &$links = []): Result
@@ -99,6 +100,7 @@ class Unpacker
 
                 $linkName = $link->getTarget();
                 $linkType = $package['dev'] ? 'require-dev' : 'require';
+                $constraint = $this->versionParser->parseConstraints($constraint);
 
                 if (isset($links[$linkName])) {
                     $links[$linkName]['constraints'][] = $constraint;
@@ -138,16 +140,13 @@ class Unpacker
 
                 // removes package from "require-dev", because it will be moved to "require"
                 // save stored constraint
-                $link['constraints'][] = $jsonStored['require-dev'][$link['name']];
+                $link['constraints'][] = $this->versionParser->parseConstraints($jsonStored['require-dev'][$link['name']]);
                 $jsonManipulator->removeSubNode('require-dev', $link['name']);
             }
 
-            $constraint = class_exists(Intervals::class, false)
-                ? Intervals::compactConstraint(MultiConstraint::create($link['constraints']))->getPrettyString()
-                : end($link['constraints'])
-            ;
+            $constraint = end($link['constraints']);
 
-            if (!$jsonManipulator->addLink($link['type'], $link['name'], $constraint, $op->shouldSort())) {
+            if (!$jsonManipulator->addLink($link['type'], $link['name'], $constraint->getPrettyString(), $op->shouldSort())) {
                 throw new \RuntimeException(sprintf('Unable to unpack package "%s".', $link['name']));
             }
         }

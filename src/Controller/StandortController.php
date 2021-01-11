@@ -65,4 +65,35 @@ class StandortController extends AbstractController {
             }
         }
     }
+
+    /**
+     * @Route("/api/GetBetrieb.{_format}", format="html", requirements={ "_format": "json" })
+     * @param Request $request
+     * @return Response
+     */
+    public function GET_Betrieb_From_Firma_API(Request $request, SerializerInterface $serializer): Response {
+        // Return JSON
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'GET') {
+                $data = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
+                return new Response($serializer->serialize($data, 'json'), 200);
+//                return new Response("GET");
+            }
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
+
+                $firmaID = $data["name"];
+//                $dataDB = $this->getDoctrine()->getRepository(Firma::class)->findAll();
+                $dataDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $data]);
+                if (count($dataDB) < 1) return new Response("-1 Firma nicht gefunden", 404);
+                if (count($dataDB) > 1) return new Response("-1 zu viele Firmen gefunden", 400);
+
+                $id = $dataDB[0]->getID();
+                $betriebe = $this->getDoctrine()->getRepository(Betrieb::class)->findBy(['FK_Firma_ID' => $id]);
+
+                return new Response($serializer->serialize($betriebe, 'json'), 200);
+            }
+        }
+    }
+
 }

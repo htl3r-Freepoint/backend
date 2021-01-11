@@ -20,11 +20,16 @@ Metadata and Query caches
 
 As already mentioned earlier in the chapter about configuring
 Doctrine, it is strongly discouraged to use Doctrine without a
-Metadata and Query cache (preferably with APC or Memcache as the
-cache driver). Operating Doctrine without these caches means
+Metadata and Query cache.
+
+Operating Doctrine without these caches means
 Doctrine will need to load your mapping information on every single
 request and has to parse each DQL query on every single request.
 This is a waste of resources.
+
+The preferred cache driver for metadata and query caches is ``PhpFileCache``. 
+This driver serializes cache items and writes them to a file. 
+This allows for opcode caching to be used and provides high performance in most scenarios.
 
 See :ref:`integrating-with-the-orm`
 
@@ -38,7 +43,7 @@ in scenarios where data is loaded for read-only purposes.
 Read-Only Entities
 ------------------
 
-Starting with Doctrine 2.1 you can mark entities as read only (See metadata mapping
+You can mark entities as read only (See metadata mapping
 references for details). This means that the entity marked as read only is never considered
 for updates, which means when you call flush on the EntityManager these entities are skipped
 even if properties changed. Read-Only allows to persist new entities of a kind and remove existing

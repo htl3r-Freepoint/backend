@@ -21,9 +21,13 @@ namespace Doctrine\ORM;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ObjectRepository;
+use const E_USER_DEPRECATED;
+use function lcfirst;
+use function trigger_error;
 
 /**
  * An EntityRepository serves as a repository for entities with generic as well as
@@ -37,6 +41,10 @@ use Doctrine\Persistence\ObjectRepository;
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
+ *
+ * @template T
+ * @template-implements Selectable<int,T>
+ * @template-implements ObjectRepository<T>
  */
 class EntityRepository implements ObjectRepository, Selectable
 {
@@ -55,8 +63,13 @@ class EntityRepository implements ObjectRepository, Selectable
      */
     protected $_class;
 
+    /** @var Inflector */
+    private static $inflector;
+
     /**
      * Initializes a new <tt>EntityRepository</tt>.
+     *
+     * @psalm-param Mapping\ClassMetadata<T>
      */
     public function __construct(EntityManagerInterface $em, Mapping\ClassMetadata $class)
     {
@@ -129,9 +142,13 @@ class EntityRepository implements ObjectRepository, Selectable
      * Clears the repository, causing all managed entities to become detached.
      *
      * @return void
+     *
+     * @deprecated 2.8 This method is being removed from the ORM and won't have any replacement
      */
     public function clear()
     {
+        @trigger_error('Method ' . __METHOD__ . '() is deprecated and will be removed in Doctrine ORM 3.0.', E_USER_DEPRECATED);
+
         $this->_em->clear($this->_class->rootEntityName);
     }
 
@@ -145,6 +162,8 @@ class EntityRepository implements ObjectRepository, Selectable
      * @param int|null $lockVersion The lock version.
      *
      * @return object|null The entity instance or NULL if the entity can not be found.
+     *
+     * @psalm-return ?T
      */
     public function find($id, $lockMode = null, $lockVersion = null)
     {
@@ -155,6 +174,8 @@ class EntityRepository implements ObjectRepository, Selectable
      * Finds all entities in the repository.
      *
      * @return array The entities.
+     *
+     * @psalm-return list<T>
      */
     public function findAll()
     {
@@ -170,6 +191,8 @@ class EntityRepository implements ObjectRepository, Selectable
      * @param int|null   $offset
      *
      * @return array The objects.
+     *
+     * @psalm-return list<T>
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
@@ -185,6 +208,8 @@ class EntityRepository implements ObjectRepository, Selectable
      * @param array|null $orderBy
      *
      * @return object|null The entity instance or NULL if the entity can not be found.
+     *
+     * @psalm-return ?T
      */
     public function findOneBy(array $criteria, array $orderBy = null)
     {
@@ -277,6 +302,8 @@ class EntityRepository implements ObjectRepository, Selectable
      * @param \Doctrine\Common\Collections\Criteria $criteria
      *
      * @return \Doctrine\Common\Collections\Collection
+     *
+     * @psalm-return \Doctrine\Common\Collections\Collection<int, T>
      */
     public function matching(Criteria $criteria)
     {
@@ -302,7 +329,11 @@ class EntityRepository implements ObjectRepository, Selectable
             throw ORMException::findByRequiresParameter($method . $by);
         }
 
-        $fieldName = lcfirst(Inflector::classify($by));
+        if (self::$inflector === null) {
+            self::$inflector = InflectorFactory::create()->build();
+        }
+
+        $fieldName = lcfirst(self::$inflector->classify($by));
 
         if (! ($this->_class->hasField($fieldName) || $this->_class->hasAssociation($fieldName))) {
             throw ORMException::invalidMagicCall($this->_entityName, $fieldName, $method . $by);

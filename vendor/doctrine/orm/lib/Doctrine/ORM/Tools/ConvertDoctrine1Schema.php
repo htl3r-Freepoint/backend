@@ -20,8 +20,8 @@
 namespace Doctrine\ORM\Tools;
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\Common\Inflector\Inflector;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\Inflector\InflectorFactory;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -68,7 +68,9 @@ class ConvertDoctrine1Schema
      * Gets an array of ClassMetadataInfo instances from the passed
      * Doctrine 1 schema.
      *
-     * @return array An array of ClassMetadataInfo instances
+     * @return ClassMetadataInfo[] An array of ClassMetadataInfo instances
+     *
+     * @psalm-return list<ClassMetadataInfo>
      */
     public function getMetadata()
     {
@@ -170,7 +172,7 @@ class ConvertDoctrine1Schema
      * @param string|array      $column
      * @param ClassMetadataInfo $metadata
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws ToolsException
      */
@@ -291,6 +293,8 @@ class ConvertDoctrine1Schema
             return;
         }
 
+        $inflector = InflectorFactory::create()->build();
+
         foreach ($model['relations'] as $name => $relation) {
             if ( ! isset($relation['alias'])) {
                 $relation['alias'] = $name;
@@ -299,7 +303,7 @@ class ConvertDoctrine1Schema
                 $relation['class'] = $name;
             }
             if ( ! isset($relation['local'])) {
-                $relation['local'] = Inflector::tableize($relation['class']);
+                $relation['local'] = $inflector->tableize($relation['class']);
             }
             if ( ! isset($relation['foreign'])) {
                 $relation['foreign'] = 'id';

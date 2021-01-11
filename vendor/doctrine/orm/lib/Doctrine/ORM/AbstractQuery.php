@@ -19,14 +19,30 @@
 
 namespace Doctrine\ORM;
 
-use Doctrine\Common\Util\ClassUtils;
+use Countable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\ORM\Mapping\MappingException as ORMMappingException;
+use Doctrine\Persistence\Mapping\MappingException;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\Cache\QueryCacheKey;
-use Doctrine\Persistence\Mapping\MappingException;
+use Traversable;
+use function array_map;
+use function array_shift;
+use function count;
+use function is_array;
+use function is_numeric;
+use function is_object;
+use function is_scalar;
+use function iterator_count;
+use function iterator_to_array;
+use function ksort;
+use function reset;
+use function serialize;
+use function sha1;
+use function trigger_error;
+use const E_USER_DEPRECATED;
 
 /**
  * Base contract for ORM queries. Base class for Query and NativeQuery.
@@ -72,6 +88,7 @@ abstract class AbstractQuery
      * The parameter map of this query.
      *
      * @var ArrayCollection|Parameter[]
+     * @psalm-var ArrayCollection<int, Parameter>
      */
     protected $parameters;
 
@@ -240,7 +257,7 @@ abstract class AbstractQuery
      *
      * @param integer $lifetime
      *
-     * @return \Doctrine\ORM\AbstractQuery This query instance.
+     * @return static This query instance.
      */
     public function setLifetime($lifetime)
     {
@@ -260,7 +277,7 @@ abstract class AbstractQuery
     /**
      * @param integer $cacheMode
      *
-     * @return \Doctrine\ORM\AbstractQuery This query instance.
+     * @return static This query instance.
      */
     public function setCacheMode($cacheMode)
     {
@@ -321,11 +338,13 @@ abstract class AbstractQuery
      */
     public function getParameter($key)
     {
+        $key = Query\Parameter::normalizeName($key);
+
         $filteredParameters = $this->parameters->filter(
             function (Query\Parameter $parameter) use ($key) : bool {
                 $parameterName = $parameter->getName();
 
-                return $key === $parameterName || (string) $key === (string) $parameterName;
+                return $key === $parameterName;
             }
         );
 
@@ -338,11 +357,14 @@ abstract class AbstractQuery
      * @param ArrayCollection|mixed[] $parameters
      *
      * @return static This query instance.
+     *
+     * @psalm-param ArrayCollection<int, Parameter>|mixed[] $parameters
      */
     public function setParameters($parameters)
     {
         // BC compatibility with 2.3-
         if (is_array($parameters)) {
+            /** @psalm-var ArrayCollection<int, Parameter> $parameterCollection */
             $parameterCollection = new ArrayCollection();
 
             foreach ($parameters as $key => $value) {
@@ -388,9 +410,11 @@ abstract class AbstractQuery
      *
      * @param mixed $value
      *
-     * @return array|string
+     * @return mixed[]|string|int|float|bool
      *
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     *
+     * @psalm-return array|scalar
      */
     public function processParameterValue($value)
     {
@@ -399,14 +423,11 @@ abstract class AbstractQuery
         }
 
         if ($value instanceof Collection) {
-            $value = $value->toArray();
+            $value = iterator_to_array($value);
         }
 
         if (is_array($value)) {
-            foreach ($value as $key => $paramValue) {
-                $paramValue  = $this->processParameterValue($paramValue);
-                $value[$key] = is_array($paramValue) ? reset($paramValue) : $paramValue;
-            }
+            $value = $this->processArrayParameterValue($value);
 
             return $value;
         }
@@ -425,10 +446,51 @@ abstract class AbstractQuery
             if ($value === null) {
                 throw ORMInvalidArgumentException::invalidIdentifierBindingEntity();
             }
-        } catch (MappingException | ORMMappingException $e) {
+        } catch (ORMMappingException $e) {
             // Silence any mapping exceptions. These can occur if the object in
             // question is not a mapped entity, in which case we just don't do
             // any preparation on the value.
+
+            $value = $this->potentiallyProcessIterable($value);
+        } catch (MappingException $e) {
+            // as previous, but depending on MappingDriver this exception from Persistence
+            // is thrown and not the ORM one.
+
+            $value = $this->potentiallyProcessIterable($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * If no mapping is detected, trying to resolve the value as a Traversable
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    private function potentiallyProcessIterable($value)
+    {
+        if ($value instanceof Traversable) {
+            $value = iterator_to_array($value);
+            $value = $this->processArrayParameterValue($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Process a parameter value which was previously identified as an array
+     *
+     * @param mixed[] $value
+     *
+     * @return mixed[]
+     */
+    private function processArrayParameterValue(array $value): array
+    {
+        foreach ($value as $key => $paramValue) {
+            $paramValue  = $this->processParameterValue($paramValue);
+            $value[$key] = is_array($paramValue) ? reset($paramValue) : $paramValue;
         }
 
         return $value;
@@ -468,7 +530,7 @@ abstract class AbstractQuery
      */
     private function translateNamespaces(Query\ResultSetMapping $rsm)
     {
-        $translate = function ($alias) {
+        $translate = function ($alias) : string {
             return $this->_em->getClassMetadata($alias)->getName();
         };
 
@@ -629,7 +691,7 @@ abstract class AbstractQuery
     /**
      * Defines how long the result cache will be active before expire.
      *
-     * @param integer $lifetime How long the cache entry is valid.
+     * @param int|null $lifetime How long the cache entry is valid.
      *
      * @return static This query instance.
      */
@@ -908,6 +970,8 @@ abstract class AbstractQuery
      * Executes the query and returns an IterableResult that can be used to incrementally
      * iterate over the result.
      *
+     * @deprecated
+     *
      * @param ArrayCollection|array|null $parameters    The query parameters.
      * @param string|int|null            $hydrationMode The hydration mode to use.
      *
@@ -915,6 +979,11 @@ abstract class AbstractQuery
      */
     public function iterate($parameters = null, $hydrationMode = null)
     {
+        @trigger_error(
+            'Method ' . __METHOD__ . '() is deprecated and will be removed in Doctrine ORM 3.0. Use toIterable() instead.',
+            E_USER_DEPRECATED
+        );
+
         if ($hydrationMode !== null) {
             $this->setHydrationMode($hydrationMode);
         }
@@ -927,6 +996,33 @@ abstract class AbstractQuery
         $stmt = $this->_doExecute();
 
         return $this->_em->newHydrator($this->_hydrationMode)->iterate($stmt, $rsm, $this->_hints);
+    }
+
+    /**
+     * Executes the query and returns an iterable that can be used to incrementally
+     * iterate over the result.
+     *
+     * @param ArrayCollection|mixed[] $parameters    The query parameters.
+     * @param string|int|null         $hydrationMode The hydration mode to use.
+     *
+     * @return iterable<mixed>
+     */
+    public function toIterable(iterable $parameters = [], $hydrationMode = null) : iterable
+    {
+        if ($hydrationMode !== null) {
+            $this->setHydrationMode($hydrationMode);
+        }
+
+        if (($this->isCountable($parameters) && count($parameters) !== 0)
+            || ($parameters instanceof Traversable && iterator_count($parameters) !== 0)
+        ) {
+            $this->setParameters($parameters);
+        }
+
+        $rsm  = $this->getResultSetMapping();
+        $stmt = $this->_doExecute();
+
+        return $this->_em->newHydrator($this->_hydrationMode)->toIterable($stmt, $rsm, $this->_hints);
     }
 
     /**
@@ -964,10 +1060,11 @@ abstract class AbstractQuery
             $this->setParameters($parameters);
         }
 
-        $setCacheEntry = function() {};
+        $setCacheEntry = static function () : void {
+        };
 
         if ($this->_hydrationCacheProfile !== null) {
-            list($cacheKey, $realCacheKey) = $this->getHydrationCacheId();
+            [$cacheKey, $realCacheKey] = $this->getHydrationCacheId();
 
             $queryCacheProfile = $this->getHydrationCacheProfile();
             $cache             = $queryCacheProfile->getResultCacheDriver();
@@ -981,7 +1078,7 @@ abstract class AbstractQuery
                 $result = [];
             }
 
-            $setCacheEntry = function($data) use ($cache, $result, $cacheKey, $realCacheKey, $queryCacheProfile) {
+            $setCacheEntry = static function ($data) use ($cache, $result, $cacheKey, $realCacheKey, $queryCacheProfile) : void {
                 $result[$realCacheKey] = $data;
 
                 $cache->save($cacheKey, $result, $queryCacheProfile->getLifetime());
@@ -1068,7 +1165,7 @@ abstract class AbstractQuery
      * Will return the configured id if it exists otherwise a hash will be
      * automatically generated for you.
      *
-     * @return array ($key, $hash)
+     * @return array<string, string> ($key, $hash)
      */
     protected function getHydrationCacheId()
     {
@@ -1160,5 +1257,11 @@ abstract class AbstractQuery
         ksort($hints);
 
         return sha1($query . '-' . serialize($params) . '-' . serialize($hints));
+    }
+
+    /** @param iterable<mixed> $subject */
+    private function isCountable(iterable $subject) : bool
+    {
+        return $subject instanceof Countable || is_array($subject);
     }
 }

@@ -458,8 +458,6 @@ Get all users that have no phonenumber
 Get all instances of a specific type, for use with inheritance
 hierarchies:
 
-.. versionadded:: 2.1
-
 .. code-block:: php
 
     <?php
@@ -469,29 +467,25 @@ hierarchies:
 
 Get all users visible on a given website that have chosen certain gender:
 
-.. versionadded:: 2.2
-
 .. code-block:: php
 
     <?php
     $query = $em->createQuery('SELECT u FROM User u WHERE u.gender IN (SELECT IDENTITY(agl.gender) FROM Site s JOIN s.activeGenderList agl WHERE s.id = ?1)');
 
-.. versionadded:: 2.4
-
-Starting with 2.4, the IDENTITY() DQL function also works for composite primary keys:
+The IDENTITY() DQL function also works for composite primary keys
 
 .. code-block:: php
 
     <?php
     $query = $em->createQuery("SELECT IDENTITY(c.location, 'latitude') AS latitude, IDENTITY(c.location, 'longitude') AS longitude FROM Checkpoint c WHERE c.user = ?1");
 
-Joins between entities without associations were not possible until version
-2.4, where you can generate an arbitrary join with the following syntax:
+Joins between entities without associations are available,
+where you can generate an arbitrary join with the following syntax:
 
 .. code-block:: php
 
     <?php
-    $query = $em->createQuery('SELECT u FROM User u JOIN Blacklist b WITH u.email = b.email');
+    $query = $em->createQuery('SELECT u FROM User u JOIN Banlist b WITH u.email = b.email');
 
 .. note::
     The differences between WHERE, WITH and HAVING clauses may be
@@ -533,8 +527,6 @@ You use the partial syntax when joining as well:
 
 "NEW" Operator Syntax
 ^^^^^^^^^^^^^^^^^^^^^
-
-.. versionadded:: 2.4
 
 Using the ``NEW`` operator you can construct Data Transfer Objects (DTOs) directly from DQL queries.
 
@@ -657,6 +649,16 @@ The same restrictions apply for the reference of related entities.
     of the query. Additionally Deletes of specified entities are *NOT*
     cascaded to related entities even if specified in the metadata.
 
+Comments in queries
+-------------------
+
+We can use comments with the SQL syntax of comments.
+
+.. code-block:: sql
+
+    SELECT u FROM MyProject\Model\User u
+    -- my comment
+    WHERE u.age > 20 -- comment at the end of a line
 
 Functions, Operators, Aggregates
 --------------------------------
@@ -900,7 +902,7 @@ Class Table Inheritance
 is an inheritance mapping strategy where each class in a hierarchy
 is mapped to several tables: its own table and the tables of all
 parent classes. The table of a child class is linked to the table
-of a parent class through a foreign key constraint. Doctrine 2
+of a parent class through a foreign key constraint. Doctrine ORM
 implements this strategy through the use of a discriminator column
 in the topmost table of the hierarchy because this is the easiest
 way to achieve polymorphic queries with Class Table Inheritance.

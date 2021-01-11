@@ -12,6 +12,9 @@
 namespace Symfony\Bridge\PhpUnit\DeprecationErrorHandler;
 
 use PHPUnit\Util\Test;
+use Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerFor;
+use Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
+use Symfony\Component\ErrorHandler\DebugClassLoader;
 
 /**
  * @internal
@@ -38,7 +41,7 @@ class Deprecation
 
     /**
      * @var string[] Absolute paths to source or tests of the project, cache
-     *               directories exlcuded because it is based on autoloading
+     *               directories excluded because it is based on autoloading
      *               rules and cache systems typically do not use those
      */
     private static $internalPaths = [];
@@ -57,6 +60,18 @@ class Deprecation
         }
 
         $this->trace = $trace;
+
+        if ('trigger_error' === (isset($trace[1]['function']) ? $trace[1]['function'] : null)
+            && (DebugClassLoader::class === ($class = (isset($trace[2]['class']) ? $trace[2]['class'] : null)) || LegacyDebugClassLoader::class === $class)
+            && 'checkClass' === (isset($trace[2]['function']) ? $trace[2]['function'] : null)
+            && null !== ($extraFile = (isset($trace[2]['args'][1]) ? $trace[2]['args'][1] : null))
+            && '' !== $extraFile
+            && false !== $extraFile = realpath($extraFile)
+        ) {
+            $this->getOriginalFilesStack();
+            array_splice($this->originalFilesStack, 2, 1, $extraFile);
+        }
+
         $this->message = $message;
         $i = \count($this->trace);
         while (1 < $i && $this->lineShouldBeSkipped($this->trace[--$i])) {
@@ -83,6 +98,11 @@ class Deprecation
 
                 return;
             }
+
+            if (isset($line['class']) && 0 === strpos($line['class'], SymfonyTestsListenerFor::class)) {
+                return;
+            }
+
             $this->originClass = isset($line['object']) ? \get_class($line['object']) : $line['class'];
             $this->originMethod = $line['function'];
         }
