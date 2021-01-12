@@ -20,7 +20,7 @@ class StandortController extends AbstractController {
         ]);
     }
 
-    private function save($firmaID, $addresse, $Ort, $PLZ) {
+    private function save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad) {
         $entityManager = $this->getDoctrine()->getManager();
         if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $firmaID])) != 1) return false;
 
@@ -29,6 +29,8 @@ class StandortController extends AbstractController {
         $Firma->setAddresse($addresse);
         $Firma->setOrt($Ort);
         $Firma->setPLZ($PLZ);
+        $Firma->setLaengengrad($laengengrad);
+        $Firma->setBreitengrad($breitengrad);
 
         $entityManager->persist($Firma);
         $entityManager->flush();
@@ -56,8 +58,11 @@ class StandortController extends AbstractController {
                 $addresse = $data["addresse"];
                 $Ort = $data["Ort"];
                 $PLZ = $data["PLZ"];
+                if (isset($data["lengengrad"])) $laengengrad = $data["lengengrad"]; else $laengengrad = null;
+                if (isset($data["breitengrad"])) $breitengrad = $data["breitengrad"]; else $breitengrad = null;
 
-                if ($this->save($firmaID, $addresse, $Ort, $PLZ) == true) {
+
+                if ($this->save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad) == true) {
                     return new Response("1", 200);
                 } else {
                     return new Response("-1 Firma", 400);

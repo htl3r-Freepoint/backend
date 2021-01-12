@@ -46,6 +46,35 @@ class Betrieb {
      */
     private $breitengrad;
 
+    /**
+     * @return mixed
+     */
+    public function getLaengengrad() {
+        return $this->laengengrad;
+    }
+
+    /**
+     * @param mixed $laengengrad
+     */
+    public function setLaengengrad($laengengrad): void {
+        $this->laengengrad = $laengengrad;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBreitengrad() {
+        return $this->breitengrad;
+    }
+
+    /**
+     * @param mixed $breitengrad
+     */
+    public function setBreitengrad($breitengrad): void {
+        $this->breitengrad = $breitengrad;
+    }
+
+
     public function getId(): ?int {
         return $this->id;
     }
