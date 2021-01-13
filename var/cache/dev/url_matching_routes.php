@@ -39,16 +39,17 @@ return [
                     .')'
                 .')'
                 .'|/api/(?'
-                    .'|firma(?:\\.(html|json))?(*:200)'
-                    .'|([^/]++)/punkte(?:\\.(html|json))?(*:241)'
-                    .'|AddQrCode(?:\\.(html|json))?(*:276)'
-                    .'|([^/]++)/rabatt(?:\\.(html|json))?(*:317)'
-                    .'|betrieb(?:\\.(html|json))?(*:350)'
-                    .'|GetBetrieb(?:\\.(json))?(*:381)'
-                    .'|RegisterUser(?:\\.(json))?(*:414)'
-                    .'|loginUser(?:\\.(html|json))?(*:449)'
-                    .'|([^/]++)/Userrabatte(?:\\.(html|json))?(*:495)'
-                    .'|Userrabatte/use(?:\\.(html|json))?(*:536)'
+                    .'|design(?:\\.(html|json))?(*:201)'
+                    .'|firma(?:\\.(html|json))?(*:232)'
+                    .'|([^/]++)/punkte(?:\\.(html|json))?(*:273)'
+                    .'|AddQrCode(?:\\.(html|json))?(*:308)'
+                    .'|([^/]++)/rabatt(?:\\.(html|json))?(*:349)'
+                    .'|betrieb(?:\\.(html|json))?(*:382)'
+                    .'|GetBetrieb(?:\\.(json))?(*:413)'
+                    .'|RegisterUser(?:\\.(json))?(*:446)'
+                    .'|loginUser(?:\\.(html|json))?(*:481)'
+                    .'|([^/]++)/Userrabatte(?:\\.(html|json))?(*:527)'
+                    .'|Userrabatte/use(?:\\.(html|json))?(*:568)'
                 .')'
             .')/?$}sDu',
     ],
@@ -60,16 +61,17 @@ return [
         136 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
         149 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
         159 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
-        200 => [[['_route' => 'app_firma_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\FirmaController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
-        241 => [[['_route' => 'app_punkte_get_punkte_api', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], ['id', '_format'], null, null, false, true, null]],
-        276 => [[['_route' => 'app_qrcode_add_qrcode_api', '_format' => 'html', '_controller' => 'App\\Controller\\QrcodeController::Add_QrCode_API'], ['_format'], null, null, false, true, null]],
-        317 => [[['_route' => 'app_rabatt_get_rabatt_api', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['id', '_format'], null, null, false, true, null]],
-        350 => [[['_route' => 'app_standort_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
-        381 => [[['_route' => 'app_standort_get_betrieb_from_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::GET_Betrieb_From_Firma_API'], ['_format'], null, null, false, true, null]],
-        414 => [[['_route' => 'app_user_post_get_user_api', '_format' => 'json', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null]],
-        449 => [[['_route' => 'app_user_login_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::Login_User_API'], ['_format'], null, null, false, true, null]],
-        495 => [[['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['id', '_format'], null, null, false, true, null]],
-        536 => [
+        201 => [[['_route' => 'app_design_save_design', '_format' => 'html', '_controller' => 'App\\Controller\\DesignController::Save_Design'], ['_format'], null, null, false, true, null]],
+        232 => [[['_route' => 'app_firma_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\FirmaController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
+        273 => [[['_route' => 'app_punkte_get_punkte_api', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], ['id', '_format'], null, null, false, true, null]],
+        308 => [[['_route' => 'app_qrcode_add_qrcode_api', '_format' => 'html', '_controller' => 'App\\Controller\\QrcodeController::Add_QrCode_API'], ['_format'], null, null, false, true, null]],
+        349 => [[['_route' => 'app_rabatt_get_rabatt_api', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['id', '_format'], null, null, false, true, null]],
+        382 => [[['_route' => 'app_standort_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
+        413 => [[['_route' => 'app_standort_get_betrieb_from_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::GET_Betrieb_From_Firma_API'], ['_format'], null, null, false, true, null]],
+        446 => [[['_route' => 'app_user_post_get_user_api', '_format' => 'json', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null]],
+        481 => [[['_route' => 'app_user_login_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::Login_User_API'], ['_format'], null, null, false, true, null]],
+        527 => [[['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['id', '_format'], null, null, false, true, null]],
+        568 => [
             [['_route' => 'app_userrabatt_use_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::Use_Userrabatte_API'], ['_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

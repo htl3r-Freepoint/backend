@@ -107,6 +107,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/friendsofphp/proxy-manager-lts" />
+      <excludeFolder url="file://$MODULE_DIR$/var/cache/dev/profiler/0b/60" />
+      <excludeFolder url="file://$MODULE_DIR$/var/cache/dev/profiler/0a" />
+      <excludeFolder url="file://$MODULE_DIR$/var/cache/dev/profiler/d0" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/friendsofphp" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/nelmio" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -9,8 +9,8 @@
 /phpunit.xml
 .env
 z_upload_CMS_APP
-./vendor
-./var/cache
-./var/log
+vendor
+var/cache
+var/log
 .idea
 ###< symfony/phpunit-bridge ###

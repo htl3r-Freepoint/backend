@@ -5447,9 +5447,10 @@
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.6UTZ_7F" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.dpHpSSU" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Controller\DesignController::Save_Design" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\FirmaController::POST_GET_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\PunkteController::GET_Punkte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\QrcodeController::Add_QrCode_API" type="service" id=".service_locator.9wplPMA"/>
@@ -5466,6 +5467,7 @@
         <argument key="kernel::loadRoutes" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::registerContainerConfiguration" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::terminate" type="service" id=".service_locator.KfwZsne"/>
+        <argument key="App\Controller\DesignController:Save_Design" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\FirmaController:POST_GET_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\PunkteController:GET_Punkte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\QrcodeController:Add_QrCode_API" type="service" id=".service_locator.9wplPMA"/>
@@ -6003,12 +6005,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.6UTZ_7F"/>
+      <argument type="service" id=".service_locator.dpHpSSU"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.6UTZ_7F"/>
+      <argument type="service" id=".service_locator.dpHpSSU"/>
     </service>
     <service id=".debug.http_client.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface">
       <argument type="collection"/>
@@ -6410,7 +6412,7 @@
     <service id="Twig\Environment" alias="twig"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.Kbr2i2X" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.6UTZ_7F"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.dpHpSSU"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
     <service id="Psr\Log\LoggerInterface $cacheLogger" alias="monolog.logger.cache"/>
