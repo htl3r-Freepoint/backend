@@ -69,7 +69,6 @@ class DesignController extends AbstractController {
 
                 return new Response("1", 200);
             }
-            //TODO: GITHUB Doku
 
             if ($request->getMethod() == 'GET') {
                 $data = json_decode($request->getContent(), true);

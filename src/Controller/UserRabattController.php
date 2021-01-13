@@ -20,13 +20,15 @@ class UserRabattController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/{id}/Userrabatte.{_format}", format="html", requirements={ "_format": "html|json"})
+     * @Route("/api/Userrabatte.{_format}", format="html", requirements={ "_format": "html|json"})
      * @param Request $request
      * @return Response
      */
-    public function GET_Userrabatte_API(string $id, Request $request, SerializerInterface $serializer): Response {
+    public function GET_Userrabatte_API(Request $request, SerializerInterface $serializer): Response {
         if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'GET') {
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
+                $id = $data['id'];
 
                 if ($id < 0) {
                     $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findAll();
@@ -35,9 +37,6 @@ class UserRabattController extends AbstractController {
                     $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
                     return new Response($serializer->serialize($data, 'json'), 200);
                 }
-            }
-            if ($request->getMethod() == 'POST') {
-                return new Response('-1', 403);
             }
         }
     }
