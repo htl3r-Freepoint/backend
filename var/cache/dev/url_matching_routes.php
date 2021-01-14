@@ -48,8 +48,10 @@ return [
                     .'|GetBetrieb(?:\\.(json))?(*:413)'
                     .'|RegisterUser(?:\\.(json))?(*:446)'
                     .'|loginUser(?:\\.(html|json))?(*:481)'
-                    .'|([^/]++)/Userrabatte(?:\\.(html|json))?(*:527)'
-                    .'|Userrabatte/use(?:\\.(html|json))?(*:568)'
+                    .'|Userrabatte(?'
+                        .'|(?:\\.(html|json))?(*:521)'
+                        .'|/use(?:\\.(html|json))?(*:551)'
+                    .')'
                 .')'
             .')/?$}sDu',
     ],
@@ -70,8 +72,8 @@ return [
         413 => [[['_route' => 'app_standort_get_betrieb_from_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::GET_Betrieb_From_Firma_API'], ['_format'], null, null, false, true, null]],
         446 => [[['_route' => 'app_user_post_get_user_api', '_format' => 'json', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null]],
         481 => [[['_route' => 'app_user_login_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::Login_User_API'], ['_format'], null, null, false, true, null]],
-        527 => [[['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['id', '_format'], null, null, false, true, null]],
-        568 => [
+        521 => [[['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['_format'], null, null, false, true, null]],
+        551 => [
             [['_route' => 'app_userrabatt_use_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::Use_Userrabatte_API'], ['_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

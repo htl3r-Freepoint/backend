@@ -86,12 +86,14 @@ class QrcodeController extends AbstractController {
         $QRCODE->setKlartext($OGCode);
         $QRCODE->setFKUserID($FKUserId);
         $QRCODE->setScannDatum(new \DateTime());
-        $entityManager->persist($QRCODE);
-        $entityManager->flush();
+//        $entityManager->persist($QRCODE);
+//        $entityManager->flush();
 
 
         $firma_id = $firmen[0]->getFkFirmaId();
+        $return = ['points' => 0, 'all_points' => 0];
         $punkte = $this->getPointsFromCode($OGCode, $firma_id);
+        $tmp = $punkte;
         $PunkteBeiFirma = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_User_ID' => $FKUserId, 'FK_Firma_ID' => $firma_id]);
         foreach ($PunkteBeiFirma as $pkt) {
             $punkte += $pkt->getPunkte();
@@ -104,8 +106,9 @@ class QrcodeController extends AbstractController {
         $PUNKTE->setPunkte($punkte);
         $entityManager->persist($PUNKTE);
         $entityManager->flush();
+        $punkte = ['points' => $tmp, 'all_points' => $PUNKTE->getPunkte()];
 
-        return $PUNKTE->getPunkte();
+        return $punkte;
     }
 
     protected function getPointsFromCode($OGCode, $firmaID): int {
@@ -169,21 +172,21 @@ class QrcodeController extends AbstractController {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             $data = json_decode($request->getContent(), true);
-            $OGCode = $data["code"];
-//            $OGCode = "_R1-AT1_ZELJKOMUS01A_27914_2020-09-26T16:26:38_3,20_110,00_0,00_0,00_0,00_IXkPErtUR1A=_13e8e502_ctENeqtyCtU=_tQlbGAaQyGiuUR7EhIOgHJlf4s/K9ykoDyacSTutgCrLbhm4/sHHGhSqdaRAnjHl1121Do1Oc5JVG/ftLhp5u+lTQg==";
-            $UserID = $data["UserId"];
-//            $UserID = 12;
+//            $OGCode = $data["code"];
+            $OGCode = "_R1-AT1_ZELJKOMUS01A_27914_2020-09-26T16:26:38_3,20_110,00_0,00_0,00_0,00_IXkPErtUR1A=_13e8e502_ctENeqtyCtU=_tQlbGAaQyGiuUR7EhIOgHJlf4s/K9ykoDyacSTutgCrLbhm4/sHHGhSqdaRAnjHl11121Do1Oc5JVG/ftLhp5u+lTQg==";
+//            $UserID = $data["UserId"];
+            $UserID = 12;
 
 
             $exists = 0;
-            $exists = $this->checkCode($OGCode);
+//            $exists = $this->checkCode($OGCode);
 
             if ($exists == "vorhanden") {
                 return new Response("-1 vorhanden", 400);
             } else {
                 $savedPoints = $this->saveCode($OGCode, $UserID);
                 if ($savedPoints == "-1 Kassa") return new Response("-1 Kassa", 400);
-                return new Response($savedPoints, 200);
+                return new Response($serializer->serialize($savedPoints, 'json'), 200);
             }
         }
     }

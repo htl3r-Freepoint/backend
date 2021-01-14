@@ -145,3 +145,15 @@ a00e4e,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610561247,,200
 ae07d7,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610561248,,200
 f25529,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610561262,,200
 5f1f1c,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610561263,,400
+8a5ccb,127.0.0.1,GET,http://127.0.0.1:8000/AddQrCode.json,1610624820,92ed76,404
+92ed76,127.0.0.1,GET,http://127.0.0.1:8000/AddQrCode.json,1610624820,,404
+9b2d3d,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610624831,945d2c,500
+945d2c,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610624831,,500
+30b851,127.0.0.1,GET,http://127.0.0.1:8000/favicon.ico,1610624832,3a4a16,404
+3a4a16,127.0.0.1,GET,http://127.0.0.1:8000/favicon.ico,1610624832,,404
+8d91ab,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610624853,,400
+cd87ee,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610624874,0fa6d4,500
+0fa6d4,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610624874,,500
+279353,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610624907,,200
+a35bfe,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610624959,,200
+3853c8,127.0.0.1,GET,http://127.0.0.1:8000/api/AddQrCode.json,1610624968,,200

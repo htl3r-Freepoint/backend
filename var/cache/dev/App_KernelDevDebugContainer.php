@@ -16,6 +16,6 @@ if (!\class_exists(App_KernelDevDebugContainer::class, false)) {
 
 return new \ContainerVTYS2h1\App_KernelDevDebugContainer([
     'container.build_hash' => 'VTYS2h1',
-    'container.build_id' => '556638e5',
-    'container.build_time' => 1610560498,
+    'container.build_id' => '278b202b',
+    'container.build_time' => 1610624816,
 ], __DIR__.\DIRECTORY_SEPARATOR.'ContainerVTYS2h1');
