@@ -172,10 +172,10 @@ class QrcodeController extends AbstractController {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             $data = json_decode($request->getContent(), true);
-//            $OGCode = $data["code"];
-            $OGCode = "_R1-AT1_ZELJKOMUS01A_27914_2020-09-26T16:26:38_3,20_110,00_0,00_0,00_0,00_IXkPErtUR1A=_13e8e502_ctENeqtyCtU=_tQlbGAaQyGiuUR7EhIOgHJlf4s/K9ykoDyacSTutgCrLbhm4/sHHGhSqdaRAnjHl11121Do1Oc5JVG/ftLhp5u+lTQg==";
-//            $UserID = $data["UserId"];
-            $UserID = 12;
+            $OGCode = $data["code"];
+//            $OGCode = "_R1-AT1_ZELJKOMUS01A_27914_2020-09-26T16:26:38_3,20_110,00_0,00_0,00_0,00_IXkPErtUR1A=_13e8e502_ctENeqtyCtU=_tQlbGAaQyGiuUR7EhIOgHJlf4s/K9ykoDyacSTutgCrLbhm4/sHHGhSqdaRAnjHl11121Do1Oc5JVG/ftLhp5u+lTQg==";
+            $UserID = $data["UserId"];
+//            $UserID = 12;
 
 
             $exists = 0;
