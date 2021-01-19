@@ -93,6 +93,28 @@ class UserController extends AbstractController {
 //        return $this->render('user/newForm.html.twig', ['form' => $form->createView()]);
 //    }
 
+    /**
+     * @Route("/api/sendMail.{_format}", format="json", requirements={ "_format": "json" })
+     * @param Request $request
+     * @return Response
+     */
+    public function sendMail(Request $request, SerializerInterface $serializer, MailerInterface $mailer) {
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
+
+                $UserID = $data['UserID'];
+                $email = $data['email'];
+                $VerifyDB = $this->getDoctrine()->getRepository(Verify::class)->findBy(['FK_User_ID' => $UserID]) ?? $this->createRandomCode($UserID);
+                $code = $VerifyDB[0]->getCode();
+
+                $this->sendMail($email, $mailer, $code);
+                return new Response("1");
+            }
+        }
+    }
+
+
     private function sendEmail($email, $mailer, $code) {
         $email = (new Email())
             ->from('no-reply@freepoint.at')
@@ -100,7 +122,7 @@ class UserController extends AbstractController {
             ->subject('Verify your FreePoint account')
             ->text('Verification Link: https://127.0.0.1:8000/verify/' . $code);
 
-//        $mailer->send($email);
+        $mailer->send($email);
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) {
