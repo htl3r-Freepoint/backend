@@ -38,7 +38,7 @@ class Hash extends UserController {
     }
 
 
-    public function checkJsonCode($userID, $hash): bool {
+    public function checkJsonCode($userID, $hash): bool { // Code wird überprüft
         $entityManager = $this->getDoctrine()->getManager();
         $DataDB = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findAll();
         $valid = 1;
@@ -55,7 +55,7 @@ class Hash extends UserController {
         return $valid == 1 ? true : false; //true: Code ist valid; false: Code ist invalid
     }
 
-    public function saveJsonCode($userID): string {
+    public function saveJsonCode($userID): string { //Code wird erstellt, gespeichert und zurück gegeben
         $code = $this->generateJsonCode();
         $entityManager = $this->getDoctrine()->getManager();
         $LOGINAUTHENTIFICATION = new LoginAuthentification();
@@ -70,7 +70,7 @@ class Hash extends UserController {
     }
 
 
-    public function generateJsonCode(): string {
+    public function generateJsonCode(): string { //Code wird nur erstellt
         $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         $pass = array(); //remember to declare $pass as an array
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache

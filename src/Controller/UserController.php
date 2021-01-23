@@ -106,10 +106,10 @@ class UserController extends AbstractController {
 
                 $UserID = $data['UserID'];
                 $email = $data['email'];
-                $VerifyDB = $this->getDoctrine()->getRepository(Verify::class)->findBy(['FK_User_ID' => $UserID]) ?? $jsonHash->generateCode($UserID);
+                $VerifyDB = $this->getDoctrine()->getRepository(Verify::class)->findBy(['FK_User_ID' => $UserID]) ?? $jsonHash->saveJsonCode($UserID);
                 $code = $VerifyDB[0]->getCode();
 
-                $this->sendMail($email, $mailer, $code);
+                $this->sendEmail($email, $mailer, $code);
                 return new Response("1");
             }
         }
@@ -144,7 +144,7 @@ class UserController extends AbstractController {
         $entityManager->flush();
 
         $id = $USER->getId();
-        $code = $jsonHash->generateCode($id); //TODO: Auf doppelten Code überprüfen
+        $code = $jsonHash->generateCode($id);
 
         $VERIFY = new Verify();
         $VERIFY->setFKUserID($id);
@@ -163,7 +163,7 @@ class UserController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonHash) { //TODO: Registrierungs Code
+    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonHash): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
