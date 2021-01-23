@@ -103,14 +103,24 @@ class UserController extends AbstractController {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
+                if (!$jsonHash->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
 
                 $UserID = $data['UserID'];
                 $email = $data['email'];
-                $VerifyDB = $this->getDoctrine()->getRepository(Verify::class)->findBy(['FK_User_ID' => $UserID]) ?? $jsonHash->saveJsonCode($UserID);
-                $code = $VerifyDB[0]->getCode();
+                $UserDB = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email]);
+                if (count($UserDB) == 1) {
+                    $VerifyDB = $this->getDoctrine()->getRepository(Verify::class)->findBy(['FK_User_ID' => $UserID]);
+                    if (count($VerifyDB) == 1) {
+                        $code = $VerifyDB[0]->getCode();
 
-                $this->sendEmail($email, $mailer, $code);
-                return new Response("1");
+                        $this->sendEmail($email, $mailer, $code);
+                        return new Response("1", 200);
+                    }else {
+                        return new Response("-1 Verification Code not found", 404);
+                    }
+                } else {
+                    return new Response("-1 not found", 404);
+                }
             }
         }
     }

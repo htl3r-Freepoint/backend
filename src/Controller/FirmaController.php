@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Firma;
 use App\Entity\Punkte;
 use App\Entity\User;
+use App\Service\Hash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,17 +53,17 @@ class FirmaController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
+    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'GET') {
-                $data = $this->getDoctrine()->getRepository(Firma::class)->findAll();
-                return new Response($serializer->serialize($data, 'json'), 200);
-//                return new Response("GET");
-            }
+            /*            if ($request->getMethod() == 'GET') {
+                            $data = $this->getDoctrine()->getRepository(Firma::class)->findAll();
+                            return new Response($serializer->serialize($data, 'json'), 200);
+                            return new Response("GET");
+                        }*/
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
-
+                if (!$jsonAuth->checkJsonCode($data['id'], $data['hash'])) return new Response('-1 invalid', 403);
                 $owner = $data["owner"];
                 $name = $data["Name"];
                 $kontakt = $data["kontakt"];

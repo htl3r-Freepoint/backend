@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Firma;
 use App\Entity\Rabatt;
+use App\Service\Hash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +46,7 @@ class RabattController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function GET_Rabatt_API(int $id, Request $request, SerializerInterface $serializer): Response {
+    public function GET_Rabatt_API(int $id, Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
                 if ($id < 0) {
@@ -58,6 +59,7 @@ class RabattController extends AbstractController {
             }
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
+                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
 
                 $fk_firma_id = $data["fk_firma_id"];
                 $beschreibung = $data["beschreibung"];

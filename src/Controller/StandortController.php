@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Betrieb;
 use App\Entity\Firma;
+use App\Service\Hash;
+use phpDocumentor\Reflection\Types\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +24,7 @@ class StandortController extends AbstractController {
 
     private function save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad) {
         $entityManager = $this->getDoctrine()->getManager();
+        $return = array();
         if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $firmaID])) != 1) return false;
 
         $Firma = new Betrieb();
@@ -35,22 +38,17 @@ class StandortController extends AbstractController {
         $entityManager->persist($Firma);
         $entityManager->flush();
 
-        return true;
+        return $Firma;
     }
 
     /**
-     * @Route("/api/betrieb.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/SaveBetrieb.{_format}", format="html", requirements={ "_format": "html|json" })
      * @param Request $request
      * @return Response
      */
     public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'GET') {
-                $data = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
-                return new Response($serializer->serialize($data, 'json'), 200);
-//                return new Response("GET");
-            }
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
 
@@ -58,12 +56,12 @@ class StandortController extends AbstractController {
                 $addresse = $data["addresse"];
                 $Ort = $data["Ort"];
                 $PLZ = $data["PLZ"];
-                if (isset($data["lengengrad"])) $laengengrad = $data["lengengrad"]; else $laengengrad = null;
+                if (isset($data["laengengrad"])) $laengengrad = $data["laengengrad"]; else $laengengrad = null;
                 if (isset($data["breitengrad"])) $breitengrad = $data["breitengrad"]; else $breitengrad = null;
 
-
-                if ($this->save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad) == true) {
-                    return new Response("1", 200);
+                $saved = $this->save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad);
+                if ($saved == false) {
+                    return new Response($saved, 200);
                 } else {
                     return new Response("-1 Firma", 400);
                 }
@@ -76,18 +74,19 @@ class StandortController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function GET_Betrieb_From_Firma_API(Request $request, SerializerInterface $serializer): Response {
+    public function GET_Betrieb_From_Firma_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'GET') {
+            /*if ($request->getMethod() == 'GET') {
                 $data = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
                 return new Response($serializer->serialize($data, 'json'), 200);
 //                return new Response("GET");
-            }
+            }*/
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
+                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
 
-                $firmaID = $data["name"];
+                $firmaID = $data["Firmenname"];
 //                $dataDB = $this->getDoctrine()->getRepository(Firma::class)->findAll();
                 $dataDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $data]);
                 if (count($dataDB) < 1) return new Response("-1 Firma nicht gefunden", 404);

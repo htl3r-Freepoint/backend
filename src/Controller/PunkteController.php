@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Punkte;
+use App\Service\Hash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,13 +21,18 @@ class PunkteController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/{id}/punkte.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/punkte.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @param int $id
      * @param Request $request
+     * @param SerializerInterface $serializer
+     * @param Hash $jsonAuth
      * @return Response
      */
-    public function GET_Punkte_API(int $id, Request $request, SerializerInterface $serializer): Response {
+    public function GET_Punkte_API(int $id, Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'GET') {
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
+                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
 
                 if ($id < 0) {
                     $data = $this->getDoctrine()->getRepository(Punkte::class)->findAll();

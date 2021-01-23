@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserRabatte;
+use App\Service\Hash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ class UserRabattController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/Userrabatte.{_format}", format="html", requirements={ "_format": "html|json"})
+     * @Route("/api/GetUserrabatte.{_format}", format="html", requirements={ "_format": "html|json"})
      * @param Request $request
      * @return Response
      */
@@ -42,14 +43,15 @@ class UserRabattController extends AbstractController {
     }
 
     /**
-     * @Route("/api/Userrabatte/use.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/UseUserrabatte.{_format}", format="html", requirements={ "_format": "html|json" })
      * @param Request $request
      * @return Response
      */
-    public function Use_Userrabatte_API(Request $request, SerializerInterface $serializer): Response {
+    public function Use_Userrabatte_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'PUT') {
                 $data = json_decode($request->getContent(), true);
+                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
                 $code = $data["code"];
 
                 $entityManager = $this->getDoctrine()->getManager();
