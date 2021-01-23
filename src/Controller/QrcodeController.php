@@ -134,9 +134,7 @@ class QrcodeController extends AbstractController {
 //        $OGCode = "_R1-AT1_ZELJKOMUS01A_76723_2020-06-21T22:16:54_0,00_12,90_0,00_0,00_0,00_SUkmhAbuE94=_ae5ac21_3qR9QcBE4Dk=_muFrby+N/TUw+Iq56Fa29wwumqvYU1k7pKV39axeSoB3kxJvbhgt2xM0+4nxkmndaLyOF6TAhCU0rSwJspCBmQ==";
         $qrcodes = mb_split("_", $OGCode);
 
-        $dbCode = $this->getDoctrine()
-            ->getRepository(Qrcode::class)
-            ->findAll();
+        $dbCode = $this->getDoctrine()->getRepository(Qrcode::class)->findAll();
 
         $allCodes = [];
         foreach ($dbCode as $code) {

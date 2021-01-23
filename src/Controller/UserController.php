@@ -19,6 +19,7 @@ use App\Entity\User;
 use \Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use App\Form\UserType;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Service\Hash;
 
 class UserController extends AbstractController {
     /**
@@ -98,14 +99,14 @@ class UserController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function sendMail(Request $request, SerializerInterface $serializer, MailerInterface $mailer) {
+    public function sendMail(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonHash) {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
 
                 $UserID = $data['UserID'];
                 $email = $data['email'];
-                $VerifyDB = $this->getDoctrine()->getRepository(Verify::class)->findBy(['FK_User_ID' => $UserID]) ?? $this->createRandomCode($UserID);
+                $VerifyDB = $this->getDoctrine()->getRepository(Verify::class)->findBy(['FK_User_ID' => $UserID]) ?? $jsonHash->generateCode($UserID);
                 $code = $VerifyDB[0]->getCode();
 
                 $this->sendMail($email, $mailer, $code);
@@ -125,7 +126,7 @@ class UserController extends AbstractController {
         $mailer->send($email);
     }
 
-    private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) {
+    private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) {
         $entityManager = $this->getDoctrine()->getManager();
 
         $USER = new User();
@@ -143,7 +144,7 @@ class UserController extends AbstractController {
         $entityManager->flush();
 
         $id = $USER->getId();
-        $code = $this->createRandomCode($id); //TODO: Auf doppelten Code überprüfen
+        $code = $jsonHash->generateCode($id); //TODO: Auf doppelten Code überprüfen
 
         $VERIFY = new Verify();
         $VERIFY->setFKUserID($id);
@@ -162,14 +163,14 @@ class UserController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer) {
+    public function POST_GET_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonHash) { //TODO: Registrierungs Code
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'GET') {
-                $data = $this->getDoctrine()->getRepository(User::class)->findAll();
-                return new Response($serializer->serialize($data, 'json'), 200);
-                return new Response($serializer->serialize($data, 'json'), 200);
-//                return new Response("GET");
+//                $data = $this->getDoctrine()->getRepository(User::class)->findAll();
+//                return new Response($serializer->serialize($data, 'json'), 200);
+//                return new Response($serializer->serialize($data, 'json'), 200);
+                return new Response("forbidden", 403);
             }
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
@@ -197,8 +198,19 @@ class UserController extends AbstractController {
                         if ($exists == "-1 Username") return new Response("-1 Username", 400);
                         if ($exists == "-1 Username") return new Response("-1 Username", 400);
                     } else {
-                        if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType) == true) {
-                            return new Response("1", 200);
+                        if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) == true) {
+                            $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email])[0];
+                            $hash = $jsonHash->saveJsonCode($Users->getID());
+//                            return new Response("1", 200);
+                            $data = [
+                                'email' => $email,
+                                'username' => $username,
+                                'verified' => false,
+                                'id' => $Users->getID(),
+                                'hash' => $hash
+                            ];
+                            return new Response($serializer->serialize($data, 'json'), 200);
+
                         } else {
                             return new Response("-1", 400);
                         }
@@ -216,13 +228,14 @@ class UserController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer): Response {
+    public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
 
             $email = $data["email"];
             $password = $data["passwort"];
             $loginType = $data['type'];
+            isset($data['hash']) ? $hash = $data['hash'] : $hash = $jsonAuth->generateJsonCode();
 
             $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
 
@@ -230,6 +243,7 @@ class UserController extends AbstractController {
             foreach ($users as $u) {
                 if (password_verify($password, $u->getPassword()) && $email == $u->getEmail() && $loginType == $u->getLoginType()) {
                     $user = $u;
+                    $id = $u->getID();
                     $anz++;
                 }
             }
@@ -237,44 +251,47 @@ class UserController extends AbstractController {
 
             if ($anz > 1) return new Response("-1 Too Many:" . $anz, 400);
             if ($anz < 1) return new Response("-1 Not found", 400);
+            if ($jsonAuth->checkJsonCode($id, $hash) == false) $hash = $jsonAuth->saveJsonCode($id);
             $data = [
                 'email' => $email,
                 'username' => $user->getUsername(),
-                'verified' => $user->getVerified()
+                'verified' => $user->getVerified(),
+                'id' => $id,
+                'hash' => $hash
             ];
             return new Response($serializer->serialize($data, 'json'), 200);
         }
         return new Response("RIP", 500);
     }
 
-    private function createRandomCode($id) {
-
-        $chars = "abcdefghijkmnopqrstuvwxyz023456789";
-        srand((double)microtime() * 1000000);
-        $i = 0;
-        $pass = '';
-
-        while ($i <= 40) {
-            $num = rand() % 33;
-            $tmp = substr($chars, $num, 1);
-            $pass = $pass . $tmp;
-            $i++;
-        }
-
-        $idStr = ($id * 37) . "";
-        $part1 = substr($pass, 0, 13);
-        $part2 = substr($pass, 13, strlen($pass));
-
-        $hash = password_hash($part1 . strrev($idStr) . $part2, PASSWORD_DEFAULT);
-
-        $noSpaces = str_replace(' ', '-', $hash); // Replaces all spaces with hyphens.
-        $noSpecialChars = preg_replace('/[^A-Za-z0-9\-]/', '', $noSpaces); // Removes special chars.
-        $erg = substr($noSpecialChars, 0, 3);
-
-        if (strlen($erg) >= 1000) $erg = substr($erg, 0, 800);
-
-
-        return $erg;
-    }
+//    private function createRandomCode($id) {
+//
+//        $chars = "abcdefghijkmnopqrstuvwxyz023456789";
+//        srand((double)microtime() * 1000000);
+//        $i = 0;
+//        $pass = '';
+//
+//        while ($i <= 40) {
+//            $num = rand() % 33;
+//            $tmp = substr($chars, $num, 1);
+//            $pass = $pass . $tmp;
+//            $i++;
+//        }
+//
+//        $idStr = ($id * 37) . "";
+//        $part1 = substr($pass, 0, 13);
+//        $part2 = substr($pass, 13, strlen($pass));
+//
+//        $hash = password_hash($part1 . strrev($idStr) . $part2, PASSWORD_DEFAULT);
+//
+//        $noSpaces = str_replace(' ', '-', $hash); // Replaces all spaces with hyphens.
+//        $noSpecialChars = preg_replace('/[^A-Za-z0-9\-]/', '', $noSpaces); // Removes special chars.
+//        $erg = substr($noSpecialChars, 0, 3);
+//
+//        if (strlen($erg) >= 1000) $erg = substr($erg, 0, 800);
+//
+//
+//        return $erg;
+//    }
 
 }

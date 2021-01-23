@@ -466,6 +466,10 @@
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
+    <service id="App\Repository\LoginAuthentificationRepository" class="App\Repository\LoginAuthentificationRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\PasswordRepository" class="App\Repository\PasswordRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -493,6 +497,13 @@
     <service id="App\Repository\VerifyRepository" class="App\Repository\VerifyRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Service\Hash" class="App\Service\Hash" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.5nX7ca3.App\Service\Hash"/>
+      </call>
     </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="response_listener" class="Symfony\Component\HttpKernel\EventListener\ResponseListener">
@@ -3418,7 +3429,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.hVSmdqr"/>
+      <argument type="service" id=".service_locator.v4JR0CW"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -5167,6 +5178,8 @@
     <service id=".abstract.instanceof.App\Repository\FirmaRepository" class="App\Repository\FirmaRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\KasseRepository" class="App\Repository\KasseRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\KasseRepository" class="App\Repository\KasseRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\LoginAuthentificationRepository" class="App\Repository\LoginAuthentificationRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\LoginAuthentificationRepository" class="App\Repository\LoginAuthentificationRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PasswordRepository" class="App\Repository\PasswordRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\PasswordRepository" class="App\Repository\PasswordRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PunkteRepository" class="App\Repository\PunkteRepository" autowire="true" abstract="true"/>
@@ -5181,6 +5194,9 @@
     <service id=".abstract.instanceof.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\VerifyRepository" class="App\Repository\VerifyRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\VerifyRepository" class="App\Repository\VerifyRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Service\Hash" class="App\Service\Hash" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Service\Hash" class="App\Service\Hash" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Service\Hash" class="App\Service\Hash" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.Kbr2i2X" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5440,44 +5456,70 @@
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.Q90h4E1" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.uYfMB_k" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="jsonAuthentification" type="service" id="App\Service\Hash"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
+    <service id=".service_locator.BtIsEwn" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="jsonHash" type="service" id="App\Service\Hash"/>
         <argument key="mailer" type="service" id="mailer.mailer"/>
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.dpHpSSU" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.pByTI9U" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="jsonAuth" type="service" id="App\Service\Hash"/>
+        <argument key="mailer" type="service" id="mailer.mailer"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
+    <service id=".service_locator.06VG7KV" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\DesignController::Save_Design" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\FirmaController::POST_GET_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
+        <argument key="App\Controller\KasseController::TestingGrounds" type="service" id=".service_locator.uYfMB_k"/>
         <argument key="App\Controller\PunkteController::GET_Punkte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\QrcodeController::Add_QrCode_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\RabattController::GET_Rabatt_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\StandortController::GET_Betrieb_From_Firma_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\StandortController::POST_GET_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
-        <argument key="App\Controller\UserController::Login_User_API" type="service" id=".service_locator.Q90h4E1"/>
-        <argument key="App\Controller\UserController::POST_GET_User_API" type="service" id=".service_locator.Q90h4E1"/>
+        <argument key="App\Controller\UserController::Login_User_API" type="service" id=".service_locator.pByTI9U"/>
+        <argument key="App\Controller\UserController::POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Controller\UserController::sendMail" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="App\Controller\UserRabattController::GET_Userrabatte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\UserRabattController::Use_Userrabatte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Kernel::loadRoutes" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="App\Kernel::terminate" type="service" id=".service_locator.KfwZsne"/>
+        <argument key="App\Service\Hash::Login_User_API" type="service" id=".service_locator.pByTI9U"/>
+        <argument key="App\Service\Hash::POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Service\Hash::sendMail" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="kernel::loadRoutes" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::registerContainerConfiguration" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::terminate" type="service" id=".service_locator.KfwZsne"/>
         <argument key="App\Controller\DesignController:Save_Design" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\FirmaController:POST_GET_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
+        <argument key="App\Controller\KasseController:TestingGrounds" type="service" id=".service_locator.uYfMB_k"/>
         <argument key="App\Controller\PunkteController:GET_Punkte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\QrcodeController:Add_QrCode_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\RabattController:GET_Rabatt_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\StandortController:GET_Betrieb_From_Firma_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\StandortController:POST_GET_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
-        <argument key="App\Controller\UserController:Login_User_API" type="service" id=".service_locator.Q90h4E1"/>
-        <argument key="App\Controller\UserController:POST_GET_User_API" type="service" id=".service_locator.Q90h4E1"/>
+        <argument key="App\Controller\UserController:Login_User_API" type="service" id=".service_locator.pByTI9U"/>
+        <argument key="App\Controller\UserController:POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Controller\UserController:sendMail" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="App\Controller\UserRabattController:GET_Userrabatte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\UserRabattController:Use_Userrabatte_API" type="service" id=".service_locator.9wplPMA"/>
+        <argument key="App\Service\Hash:Login_User_API" type="service" id=".service_locator.pByTI9U"/>
+        <argument key="App\Service\Hash:POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Service\Hash:sendMail" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="kernel:loadRoutes" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel:registerContainerConfiguration" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel:terminate" type="service" id=".service_locator.KfwZsne"/>
@@ -5566,7 +5608,7 @@
         <argument key="doctrine.orm.default_listeners.attach_entity_listeners" type="service" id="doctrine.orm.default_listeners.attach_entity_listeners"/>
       </argument>
     </service>
-    <service id=".service_locator.hVSmdqr" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.v4JR0CW" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\AngestellteRepository" type="service" id="App\Repository\AngestellteRepository"/>
@@ -5575,6 +5617,7 @@
         <argument key="App\Repository\DesignZuweisungRepository" type="service" id="App\Repository\DesignZuweisungRepository"/>
         <argument key="App\Repository\FirmaRepository" type="service" id="App\Repository\FirmaRepository"/>
         <argument key="App\Repository\KasseRepository" type="service" id="App\Repository\KasseRepository"/>
+        <argument key="App\Repository\LoginAuthentificationRepository" type="service" id="App\Repository\LoginAuthentificationRepository"/>
         <argument key="App\Repository\PasswordRepository" type="service" id="App\Repository\PasswordRepository"/>
         <argument key="App\Repository\PunkteRepository" type="service" id="App\Repository\PunkteRepository"/>
         <argument key="App\Repository\QrcodeRepository" type="service" id="App\Repository\QrcodeRepository"/>
@@ -5844,6 +5887,12 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.5nX7ca3" method="withContext"/>
     </service>
+    <service id=".service_locator.5nX7ca3.App\Service\Hash" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Service\Hash"/>
+      <argument>App\Service\Hash</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.5nX7ca3" method="withContext"/>
+    </service>
     <service id=".service_locator.J4b.DPX" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -6005,12 +6054,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.dpHpSSU"/>
+      <argument type="service" id=".service_locator.06VG7KV"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.dpHpSSU"/>
+      <argument type="service" id=".service_locator.06VG7KV"/>
     </service>
     <service id=".debug.http_client.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface">
       <argument type="collection"/>
@@ -6412,7 +6461,7 @@
     <service id="Twig\Environment" alias="twig"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.Kbr2i2X" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.dpHpSSU"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.06VG7KV"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
     <service id="Psr\Log\LoggerInterface $cacheLogger" alias="monolog.logger.cache"/>

@@ -52,8 +52,7 @@ use Twig\Environment;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class AbstractController implements ServiceSubscriberInterface
-{
+abstract class AbstractController implements ServiceSubscriberInterface {
     /**
      * @var ContainerInterface
      */
@@ -63,8 +62,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      * @internal
      * @required
      */
-    public function setContainer(ContainerInterface $container): ?ContainerInterface
-    {
+    public function setContainer(ContainerInterface $container): ?ContainerInterface {
         $previous = $this->container;
         $this->container = $container;
 
@@ -76,8 +74,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @return mixed
      */
-    protected function getParameter(string $name)
-    {
+    protected function getParameter(string $name) {
         if (!$this->container->has('parameter_bag')) {
             throw new ServiceNotFoundException('parameter_bag.', null, null, [], sprintf('The "%s::getParameter()" method is missing a parameter bag to work properly. Did you forget to register your controller as a service subscriber? This can be fixed either by using autoconfiguration or by manually wiring a "parameter_bag" in the service locator passed to the controller.', static::class));
         }
@@ -85,31 +82,29 @@ abstract class AbstractController implements ServiceSubscriberInterface
         return $this->container->get('parameter_bag')->get($name);
     }
 
-    public static function getSubscribedServices()
-    {
+    public static function getSubscribedServices() {
         return [
-            'router' => '?'.RouterInterface::class,
-            'request_stack' => '?'.RequestStack::class,
-            'http_kernel' => '?'.HttpKernelInterface::class,
-            'serializer' => '?'.SerializerInterface::class,
-            'session' => '?'.SessionInterface::class,
-            'security.authorization_checker' => '?'.AuthorizationCheckerInterface::class,
-            'twig' => '?'.Environment::class,
-            'doctrine' => '?'.ManagerRegistry::class,
-            'form.factory' => '?'.FormFactoryInterface::class,
-            'security.token_storage' => '?'.TokenStorageInterface::class,
-            'security.csrf.token_manager' => '?'.CsrfTokenManagerInterface::class,
-            'parameter_bag' => '?'.ContainerBagInterface::class,
-            'message_bus' => '?'.MessageBusInterface::class,
-            'messenger.default_bus' => '?'.MessageBusInterface::class,
+            'router' => '?' . RouterInterface::class,
+            'request_stack' => '?' . RequestStack::class,
+            'http_kernel' => '?' . HttpKernelInterface::class,
+            'serializer' => '?' . SerializerInterface::class,
+            'session' => '?' . SessionInterface::class,
+            'security.authorization_checker' => '?' . AuthorizationCheckerInterface::class,
+            'twig' => '?' . Environment::class,
+            'doctrine' => '?' . ManagerRegistry::class,
+            'form.factory' => '?' . FormFactoryInterface::class,
+            'security.token_storage' => '?' . TokenStorageInterface::class,
+            'security.csrf.token_manager' => '?' . CsrfTokenManagerInterface::class,
+            'parameter_bag' => '?' . ContainerBagInterface::class,
+            'message_bus' => '?' . MessageBusInterface::class,
+            'messenger.default_bus' => '?' . MessageBusInterface::class,
         ];
     }
 
     /**
      * Returns true if the service id is defined.
      */
-    protected function has(string $id): bool
-    {
+    protected function has(string $id): bool {
         return $this->container->has($id);
     }
 
@@ -118,8 +113,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @return object The service
      */
-    protected function get(string $id): object
-    {
+    protected function get(string $id): object {
         return $this->container->get($id);
     }
 
@@ -128,8 +122,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @see UrlGeneratorInterface
      */
-    protected function generateUrl(string $route, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
-    {
+    protected function generateUrl(string $route, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
@@ -138,8 +131,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @param string $controller The controller name (a string like Bundle\BlogBundle\Controller\PostController::indexAction)
      */
-    protected function forward(string $controller, array $path = [], array $query = []): Response
-    {
+    protected function forward(string $controller, array $path = [], array $query = []): Response {
         $request = $this->container->get('request_stack')->getCurrentRequest();
         $path['_controller'] = $controller;
         $subRequest = $request->duplicate($query, null, $path);
@@ -150,24 +142,21 @@ abstract class AbstractController implements ServiceSubscriberInterface
     /**
      * Returns a RedirectResponse to the given URL.
      */
-    protected function redirect(string $url, int $status = 302): RedirectResponse
-    {
+    protected function redirect(string $url, int $status = 302): RedirectResponse {
         return new RedirectResponse($url, $status);
     }
 
     /**
      * Returns a RedirectResponse to the given route with the given parameters.
      */
-    protected function redirectToRoute(string $route, array $parameters = [], int $status = 302): RedirectResponse
-    {
+    protected function redirectToRoute(string $route, array $parameters = [], int $status = 302): RedirectResponse {
         return $this->redirect($this->generateUrl($route, $parameters), $status);
     }
 
     /**
      * Returns a JsonResponse that uses the serializer component if enabled, or json_encode.
      */
-    protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse
-    {
+    protected function json($data, int $status = 200, array $headers = [], array $context = []): JsonResponse {
         if ($this->container->has('serializer')) {
             $json = $this->container->get('serializer')->serialize($data, 'json', array_merge([
                 'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
@@ -184,8 +173,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @param \SplFileInfo|string $file File object or path to file to be sent as response
      */
-    protected function file($file, string $fileName = null, string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT): BinaryFileResponse
-    {
+    protected function file($file, string $fileName = null, string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT): BinaryFileResponse {
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition($disposition, null === $fileName ? $response->getFile()->getFilename() : $fileName);
 
@@ -197,8 +185,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @throws \LogicException
      */
-    protected function addFlash(string $type, $message): void
-    {
+    protected function addFlash(string $type, $message): void {
         if (!$this->container->has('session')) {
             throw new \LogicException('You can not use the addFlash method if sessions are disabled. Enable them in "config/packages/framework.yaml".');
         }
@@ -211,8 +198,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @throws \LogicException
      */
-    protected function isGranted($attribute, $subject = null): bool
-    {
+    protected function isGranted($attribute, $subject = null): bool {
         if (!$this->container->has('security.authorization_checker')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
         }
@@ -226,8 +212,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @throws AccessDeniedException
      */
-    protected function denyAccessUnlessGranted($attribute, $subject = null, string $message = 'Access Denied.'): void
-    {
+    protected function denyAccessUnlessGranted($attribute, $subject = null, string $message = 'Access Denied.'): void {
         if (!$this->isGranted($attribute, $subject)) {
             $exception = $this->createAccessDeniedException($message);
             $exception->setAttributes($attribute);
@@ -240,8 +225,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
     /**
      * Returns a rendered view.
      */
-    protected function renderView(string $view, array $parameters = []): string
-    {
+    protected function renderView(string $view, array $parameters = []): string {
         if (!$this->container->has('twig')) {
             throw new \LogicException('You can not use the "renderView" method if the Twig Bundle is not available. Try running "composer require symfony/twig-bundle".');
         }
@@ -252,8 +236,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
     /**
      * Renders a view.
      */
-    protected function render(string $view, array $parameters = [], Response $response = null): Response
-    {
+    protected function render(string $view, array $parameters = [], Response $response = null): Response {
         $content = $this->renderView($view, $parameters);
 
         if (null === $response) {
@@ -268,8 +251,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
     /**
      * Streams a view.
      */
-    protected function stream(string $view, array $parameters = [], StreamedResponse $response = null): StreamedResponse
-    {
+    protected function stream(string $view, array $parameters = [], StreamedResponse $response = null): StreamedResponse {
         if (!$this->container->has('twig')) {
             throw new \LogicException('You can not use the "stream" method if the Twig Bundle is not available. Try running "composer require symfony/twig-bundle".');
         }
@@ -296,8 +278,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      *     throw $this->createNotFoundException('Page not found!');
      */
-    protected function createNotFoundException(string $message = 'Not Found', \Throwable $previous = null): NotFoundHttpException
-    {
+    protected function createNotFoundException(string $message = 'Not Found', \Throwable $previous = null): NotFoundHttpException {
         return new NotFoundHttpException($message, $previous);
     }
 
@@ -310,8 +291,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @throws \LogicException If the Security component is not available
      */
-    protected function createAccessDeniedException(string $message = 'Access Denied.', \Throwable $previous = null): AccessDeniedException
-    {
+    protected function createAccessDeniedException(string $message = 'Access Denied.', \Throwable $previous = null): AccessDeniedException {
         if (!class_exists(AccessDeniedException::class)) {
             throw new \LogicException('You can not use the "createAccessDeniedException" method if the Security component is not available. Try running "composer require symfony/security-bundle".');
         }
@@ -322,16 +302,14 @@ abstract class AbstractController implements ServiceSubscriberInterface
     /**
      * Creates and returns a Form instance from the type of the form.
      */
-    protected function createForm(string $type, $data = null, array $options = []): FormInterface
-    {
+    protected function createForm(string $type, $data = null, array $options = []): FormInterface {
         return $this->container->get('form.factory')->create($type, $data, $options);
     }
 
     /**
      * Creates and returns a form builder instance.
      */
-    protected function createFormBuilder($data = null, array $options = []): FormBuilderInterface
-    {
+    protected function createFormBuilder($data = null, array $options = []): FormBuilderInterface {
         return $this->container->get('form.factory')->createBuilder(FormType::class, $data, $options);
     }
 
@@ -340,8 +318,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @throws \LogicException If DoctrineBundle is not available
      */
-    protected function getDoctrine(): ManagerRegistry
-    {
+    protected function getDoctrine(): ManagerRegistry {
         if (!$this->container->has('doctrine')) {
             throw new \LogicException('The DoctrineBundle is not registered in your application. Try running "composer require symfony/orm-pack".');
         }
@@ -358,8 +335,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @see TokenInterface::getUser()
      */
-    protected function getUser()
-    {
+    protected function getUser() {
         if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
         }
@@ -379,11 +355,10 @@ abstract class AbstractController implements ServiceSubscriberInterface
     /**
      * Checks the validity of a CSRF token.
      *
-     * @param string      $id    The id used when generating the token
+     * @param string $id The id used when generating the token
      * @param string|null $token The actual token sent with the request that should be validated
      */
-    protected function isCsrfTokenValid(string $id, ?string $token): bool
-    {
+    protected function isCsrfTokenValid(string $id, ?string $token): bool {
         if (!$this->container->has('security.csrf.token_manager')) {
             throw new \LogicException('CSRF protection is not enabled in your application. Enable it with the "csrf_protection" key in "config/packages/framework.yaml".');
         }
@@ -396,11 +371,10 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @param object|Envelope $message The message or the message pre-wrapped in an envelope
      */
-    protected function dispatchMessage($message, array $stamps = []): Envelope
-    {
+    protected function dispatchMessage($message, array $stamps = []): Envelope {
         if (!$this->container->has('messenger.default_bus')) {
             $message = class_exists(Envelope::class) ? 'You need to define the "messenger.default_bus" configuration option.' : 'Try running "composer require symfony/messenger".';
-            throw new \LogicException('The message bus is not enabled in your application. '.$message);
+            throw new \LogicException('The message bus is not enabled in your application. ' . $message);
         }
 
         return $this->container->get('messenger.default_bus')->dispatch($message, $stamps);
@@ -411,8 +385,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
      *
      * @see https://tools.ietf.org/html/rfc5988
      */
-    protected function addLink(Request $request, LinkInterface $link): void
-    {
+    protected function addLink(Request $request, LinkInterface $link): void {
         if (!class_exists(AddLinkHeaderListener::class)) {
             throw new \LogicException('You can not use the "addLink" method if the WebLink component is not available. Try running "composer require symfony/web-link".');
         }
