@@ -20,10 +20,11 @@ class VerifyController extends AbstractController {
      */
     public function Verify_User(Request $request, SerializerInterface $serializer): Response {
         if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'GET') {
+            if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
                 $entityManager = $this->getDoctrine()->getManager();
-                $code = $data['code'] ?? 'XYRBUGnigcYC7Nbr0cNKvqIWtoCl7jzSVoIL99tdgyChsTG9f62HPaxznSMeBV4WGHtIoekJ55Rpv54kmWAr6JGR0TJSIxhwkFbn';
+                $code = $data['code'] ?? null;
+                if (!isset($code)) return new Response("-1 code", 400);
 
                 $verify = $this->getDoctrine()->getRepository(Verify::class)->findBy(['code' => $code]);
                 if (count($verify) != 1) return new Response("404 Code NOT FOUND", 400);
