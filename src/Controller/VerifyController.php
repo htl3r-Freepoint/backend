@@ -47,4 +47,10 @@ class VerifyController extends AbstractController {
 //            }
 //        }
 //    }
+    /**
+     * Überarbeiten:
+     * Punkte controller + doc
+     * Rabattcontroller + doc
+     * Standortcontroller + doc
+     */
 }

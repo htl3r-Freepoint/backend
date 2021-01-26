@@ -189,5 +189,8 @@ class QrcodeController extends AbstractController {
                 return new Response($serializer->serialize($savedPoints, 'json'), 200);
             }
         }
+        else {
+            return new Response("", 404);
+        }
     }
 }

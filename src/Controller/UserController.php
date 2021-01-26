@@ -115,13 +115,15 @@ class UserController extends AbstractController {
 
                         $this->sendEmail($email, $mailer, $code);
                         return new Response("1", 200);
-                    }else {
+                    } else {
                         return new Response("-1 Verification Code not found", 404);
                     }
                 } else {
                     return new Response("-1 not found", 404);
                 }
             }
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -230,6 +232,8 @@ class UserController extends AbstractController {
                     return new Response("-1 Login not Accepted", 400);
                 }
             }
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -270,8 +274,9 @@ class UserController extends AbstractController {
                 'hash' => $hash
             ];
             return new Response($serializer->serialize($data, 'json'), 200);
+        } else {
+            return new Response("", 404);
         }
-        return new Response("RIP", 500);
     }
 
 //    private function createRandomCode($id) {

@@ -8,7 +8,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
     [
         'Symfony\\Component\\Routing\\Annotation\\Route' => [
             'path' => [
-                '/api/design.{_format}',
+                '/api/SaveDesign.{_format}',
             ],
             'requirements' => [
                 [

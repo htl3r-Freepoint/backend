@@ -66,6 +66,8 @@ class StandortController extends AbstractController {
                     return new Response("-1 Firma", 400);
                 }
             }
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -97,6 +99,8 @@ class StandortController extends AbstractController {
 
                 return new Response($serializer->serialize($betriebe, 'json'), 200);
             }
+        } else {
+            return new Response("", 404);
         }
     }
 

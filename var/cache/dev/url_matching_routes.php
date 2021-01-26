@@ -39,20 +39,23 @@ return [
                     .')'
                 .')'
                 .'|/api/(?'
-                    .'|design(?:\\.(html|json))?(*:201)'
-                    .'|firma(?:\\.(html|json))?(*:232)'
-                    .'|([^/]++)/punkte(?:\\.(html|json))?(*:273)'
-                    .'|AddQrCode(?:\\.(html|json))?(*:308)'
-                    .'|([^/]++)/rabatt(?:\\.(html|json))?(*:349)'
-                    .'|betrieb(?:\\.(html|json))?(*:382)'
-                    .'|GetBetrieb(?:\\.(json))?(*:413)'
-                    .'|sendMail(?:\\.(json))?(*:442)'
-                    .'|RegisterUser(?:\\.(json))?(*:475)'
-                    .'|loginUser(?:\\.(html|json))?(*:510)'
-                    .'|Userrabatte(?'
-                        .'|(?:\\.(html|json))?(*:550)'
-                        .'|/use(?:\\.(html|json))?(*:580)'
+                    .'|SaveDesign(?:\\.(html|json))?(*:205)'
+                    .'|Get(?'
+                        .'|Design(?:\\.(html|json))?(*:243)'
+                        .'|Punkte(?:\\.(html|json))?(*:275)'
                     .')'
+                    .'|firma(?:\\.(html|json))?(*:307)'
+                    .'|AddQrCode(?:\\.(html|json))?(*:342)'
+                    .'|([^/]++)/rabatt(?:\\.(html|json))?(*:383)'
+                    .'|SaveBetrieb(?:\\.(html|json))?(*:420)'
+                    .'|Get(?'
+                        .'|Betrieb(?:\\.(json))?(*:454)'
+                        .'|Userrabatte(?:\\.(html|json))?(*:491)'
+                    .')'
+                    .'|sendMail(?:\\.(json))?(*:521)'
+                    .'|RegisterUser(?:\\.(json))?(*:554)'
+                    .'|loginUser(?:\\.(html|json))?(*:589)'
+                    .'|UseUserrabatte(?:\\.(html|json))?(*:629)'
                 .')'
             .')/?$}sDu',
     ],
@@ -64,18 +67,19 @@ return [
         136 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
         149 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
         159 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
-        201 => [[['_route' => 'app_design_save_design', '_format' => 'html', '_controller' => 'App\\Controller\\DesignController::Save_Design'], ['_format'], null, null, false, true, null]],
-        232 => [[['_route' => 'app_firma_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\FirmaController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
-        273 => [[['_route' => 'app_punkte_get_punkte_api', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], ['id', '_format'], null, null, false, true, null]],
-        308 => [[['_route' => 'app_qrcode_add_qrcode_api', '_format' => 'html', '_controller' => 'App\\Controller\\QrcodeController::Add_QrCode_API'], ['_format'], null, null, false, true, null]],
-        349 => [[['_route' => 'app_rabatt_get_rabatt_api', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['id', '_format'], null, null, false, true, null]],
-        382 => [[['_route' => 'app_standort_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
-        413 => [[['_route' => 'app_standort_get_betrieb_from_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::GET_Betrieb_From_Firma_API'], ['_format'], null, null, false, true, null]],
-        442 => [[['_route' => 'app_user_sendmail', '_format' => 'json', '_controller' => 'App\\Controller\\UserController::sendMail'], ['_format'], null, null, false, true, null]],
-        475 => [[['_route' => 'app_user_post_get_user_api', '_format' => 'json', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null]],
-        510 => [[['_route' => 'app_user_login_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::Login_User_API'], ['_format'], null, null, false, true, null]],
-        550 => [[['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['_format'], null, null, false, true, null]],
-        580 => [
+        205 => [[['_route' => 'app_design_save_design', '_format' => 'html', '_controller' => 'App\\Controller\\DesignController::Save_Design'], ['_format'], null, null, false, true, null]],
+        243 => [[['_route' => 'app_design_get_design', '_format' => 'html', '_controller' => 'App\\Controller\\DesignController::GET_Design'], ['_format'], null, null, false, true, null]],
+        275 => [[['_route' => 'app_punkte_get_punkte_api', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], ['_format'], null, null, false, true, null]],
+        307 => [[['_route' => 'app_firma_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\FirmaController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
+        342 => [[['_route' => 'app_qrcode_add_qrcode_api', '_format' => 'html', '_controller' => 'App\\Controller\\QrcodeController::Add_QrCode_API'], ['_format'], null, null, false, true, null]],
+        383 => [[['_route' => 'app_rabatt_get_rabatt_api', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['id', '_format'], null, null, false, true, null]],
+        420 => [[['_route' => 'app_standort_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
+        454 => [[['_route' => 'app_standort_get_betrieb_from_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::GET_Betrieb_From_Firma_API'], ['_format'], null, null, false, true, null]],
+        491 => [[['_route' => 'app_userrabatt_get_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['_format'], null, null, false, true, null]],
+        521 => [[['_route' => 'app_user_sendmail', '_format' => 'json', '_controller' => 'App\\Controller\\UserController::sendMail'], ['_format'], null, null, false, true, null]],
+        554 => [[['_route' => 'app_user_post_get_user_api', '_format' => 'json', '_controller' => 'App\\Controller\\UserController::POST_GET_User_API'], ['_format'], null, null, false, true, null]],
+        589 => [[['_route' => 'app_user_login_user_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserController::Login_User_API'], ['_format'], null, null, false, true, null]],
+        629 => [
             [['_route' => 'app_userrabatt_use_userrabatte_api', '_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::Use_Userrabatte_API'], ['_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
