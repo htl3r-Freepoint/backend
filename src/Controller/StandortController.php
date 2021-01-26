@@ -95,7 +95,15 @@ class StandortController extends AbstractController {
                         'id' => $db->getID(),
                         'address' => $db->getAddresse() . ", " . $db->getPLZ() . " " . $db->getOrt(),
                         'coords' => [$db->getLaengengrad(), $db->getBreitengrad()],
-                        'open' => array(null),
+                        'open' => [
+                            'Monday' => "XD",
+                            "Tuesday" => "XD",
+                            'Wednesday' => "XD,",
+                            'Thursday' => "XD",
+                            'Friday' => "XD",
+                            'Saturday' => "XD",
+                            'Sunday' => "XD"
+                        ],
                         'image' => null
                     ];
                     array_push($erg, $dataErg);
