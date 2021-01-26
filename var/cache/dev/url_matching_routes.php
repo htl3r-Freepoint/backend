@@ -20,6 +20,7 @@ return [
         '/rabatt' => [[['_route' => 'rabatt', '_controller' => 'App\\Controller\\RabattController::saveRabatt'], null, null, null, false, false, null]],
         '/standort' => [[['_route' => 'standort', '_controller' => 'App\\Controller\\StandortController::index'], null, null, null, false, false, null]],
         '/user' => [[['_route' => 'user', '_controller' => 'App\\Controller\\UserController::index'], null, null, null, false, false, null]],
+        '/verify' => [[['_route' => 'app_verify_verify_user', '_controller' => 'App\\Controller\\VerifyController::Verify_User'], null, null, null, true, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

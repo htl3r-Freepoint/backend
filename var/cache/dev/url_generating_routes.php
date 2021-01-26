@@ -36,4 +36,5 @@ return [
     'app_user_login_user_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserController::Login_User_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/loginUser']], [], []],
     'app_userrabatt_get_userrabatte_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/GetUserrabatte']], [], []],
     'app_userrabatt_use_userrabatte_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::Use_Userrabatte_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/UseUserrabatte']], [], []],
+    'app_verify_verify_user' => [[], ['_controller' => 'App\\Controller\\VerifyController::Verify_User'], [], [['text', '/verify/']], [], []],
 ];

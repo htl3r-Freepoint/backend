@@ -9,32 +9,33 @@ use Doctrine\ORM\EntityManager;
 
 class Hash extends UserController {
     public function generateCode($id) {
-        $chars = "abcdefghijkmnopqrstuvwxyz023456789";
-        srand((double)microtime() * 1000000);
-        $i = 0;
-        $pass = '';
-
-        while ($i <= 40) {
-            $num = rand() % 33;
-            $tmp = substr($chars, $num, 1);
-            $pass = $pass . $tmp;
-            $i++;
-        }
-
-        $idStr = ($id * 37) . "";
-        $part1 = substr($pass, 0, 13);
-        $part2 = substr($pass, 13, strlen($pass));
-
-        $hash = password_hash($part1 . strrev($idStr) . $part2, PASSWORD_DEFAULT);
-
-        $noSpaces = str_replace(' ', '-', $hash); // Replaces all spaces with hyphens.
-        $noSpecialChars = preg_replace('/[^A-Za-z0-9\-]/', '', $noSpaces); // Removes special chars.
-        $erg = substr($noSpecialChars, 0, 3);
-
-        if (strlen($erg) >= 1000) $erg = substr($erg, 0, 800);
-
-
-        return $erg;
+//        $chars = "abcdefghijkmnopqrstuvwxyz023456789";
+//        srand((double)microtime() * 1000000);
+//        $i = 0;
+//        $pass = '';
+//
+//        while ($i <= 40) {
+//            $num = rand() % 33;
+//            $tmp = substr($chars, $num, 1);
+//            $pass = $pass . $tmp;
+//            $i++;
+//        }
+//
+//        $idStr = ($id * 37) . "";
+//        $part1 = substr($pass, 0, 13);
+//        $part2 = substr($pass, 13, strlen($pass));
+//
+//        $hash = password_hash($part1 . strrev($idStr) . $part2, PASSWORD_DEFAULT);
+//
+//        $noSpaces = str_replace(' ', '-', $hash); // Replaces all spaces with hyphens.
+//        $noSpecialChars = preg_replace('/[^A-Za-z0-9\-]/', '', $noSpaces); // Removes special chars.
+//        $erg = substr($noSpecialChars, 0, 3);
+//
+//        if (strlen($erg) >= 1000) $erg = substr($erg, 0, 800);
+//
+//
+//        return $erg;
+        $this->generateJsonCode();
     }
 
 

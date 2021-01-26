@@ -14,39 +14,39 @@ use Symfony\Component\Serializer\SerializerInterface;
 class VerifyController extends AbstractController {
 
     /**
-     * @Route("/verify/{id}".{_format}", format="json", requirements={ "_format": "json" })
+     * @Route("/verify/")
      * @param Request $request
      * @return Response
      */
-//    public function Verify_User(string $id, Request $request): Response {
-//        if ($request->getRequestFormat() == 'json') {
-//            if ($request->getMethod() == 'GET') {
-//
-//                $entityManager = $this->getDoctrine()->getManager();
-//                $verify = $this->getDoctrine()->getRepository(Verify::class)->findBy(['code' => $id]);
-//
-//                if (count($verify) != 1) return new Response("404 NOT FOUND", 400);
-//                $user = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $verify->getFKUserID()]);
-//                if (count($user) != 0) return new Response("404 NOT FOUND", 400);
-//                $user = $user[0];
-//                if ($user->getVerified()) return new Response("-1 user already verified", 400);
-//
-//                $verify = $verify[0];
-//
-//                $verify->setVerfiyDate(new \DateTime());
-//                $entityManager->persist($verify);
-//                $entityManager->flush();
-//
-//
-//                $user->setVerified(true);
-//
-//                $entityManager->persist($user);
-//                $entityManager->flush();
-//
-//                return new Response(1);
-//            }
-//        }
-//    }
+    public function Verify_User(Request $request, SerializerInterface $serializer): Response {
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'GET') {
+                $data = json_decode($request->getContent(), true);
+                $entityManager = $this->getDoctrine()->getManager();
+                $code = $data['code'] ?? 'XYRBUGnigcYC7Nbr0cNKvqIWtoCl7jzSVoIL99tdgyChsTG9f62HPaxznSMeBV4WGHtIoekJ55Rpv54kmWAr6JGR0TJSIxhwkFbn';
+
+                $verify = $this->getDoctrine()->getRepository(Verify::class)->findBy(['code' => $code]);
+                if (count($verify) != 1) return new Response("404 Code NOT FOUND", 400);
+
+                $user = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $verify[0]->getFKUserID()]);
+                if (count($user) != 1) return new Response("404 NOT FOUND", 400);
+                if ($user[0]->getVerified()) return new Response("-1 Already Verfied", 400);
+
+                $verify[0]->setVerfiyDate(new \DateTime());
+                $entityManager->persist($verify[0]);
+                $entityManager->flush();
+
+
+                $user[0]->setVerified(true);
+                $entityManager->persist($user[0]);
+                $entityManager->flush();
+
+                return new Response($serializer->serialize($user[0], 'json'), 200);
+            }
+        } else {
+            return new Response("", 404);
+        }
+    }
     /**
      * Überarbeiten:
      * Punkte controller + doc //fertig
