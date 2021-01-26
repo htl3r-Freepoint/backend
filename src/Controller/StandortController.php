@@ -56,8 +56,8 @@ class StandortController extends AbstractController {
                 $addresse = $data["addresse"];
                 $Ort = $data["Ort"];
                 $PLZ = $data["PLZ"];
-                if (isset($data["laengengrad"])) $laengengrad = $data["laengengrad"]; else $laengengrad = null;
-                if (isset($data["breitengrad"])) $breitengrad = $data["breitengrad"]; else $breitengrad = null;
+                $laengengrad = $data["laengengrad"] ?? null;
+                $breitengrad = $data["breitengrad"] ?? null;
 
                 $saved = $this->save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad);
                 if ($saved == false) {
@@ -79,25 +79,18 @@ class StandortController extends AbstractController {
     public function GET_Betrieb_From_Firma_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
-            /*if ($request->getMethod() == 'GET') {
-                $data = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
-                return new Response($serializer->serialize($data, 'json'), 200);
-//                return new Response("GET");
-            }*/
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
                 if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
 
-                $firmaID = $data["Firmenname"];
-//                $dataDB = $this->getDoctrine()->getRepository(Firma::class)->findAll();
-                $dataDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $data]);
-                if (count($dataDB) < 1) return new Response("-1 Firma nicht gefunden", 404);
-                if (count($dataDB) > 1) return new Response("-1 zu viele Firmen gefunden", 400);
+                $firmaID = $data["FirmaID"] ?? null;
+                if (isset($firmaID)) {
+                    $dataDB = $this->getDoctrine()->getRepository(Betrieb::class)->findBy(['FK_Firma_ID' => $firmaID]);
+                } else {
+                    $dataDB = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
+                }
 
-                $id = $dataDB[0]->getID();
-                $betriebe = $this->getDoctrine()->getRepository(Betrieb::class)->findBy(['FK_Firma_ID' => $id]);
-
-                return new Response($serializer->serialize($betriebe, 'json'), 200);
+                return new Response($serializer->serialize($dataDB, 'json'), 200);
             }
         } else {
             return new Response("", 404);
