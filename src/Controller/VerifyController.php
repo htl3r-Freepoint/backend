@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class VerifyController extends AbstractController {
 
     /**
-     * @Route("/verify/")
+     * @Route("/verify")
      * @param Request $request
      * @return Response
      */
@@ -27,10 +27,10 @@ class VerifyController extends AbstractController {
                 if (!isset($code)) return new Response("-1 code", 400);
 
                 $verify = $this->getDoctrine()->getRepository(Verify::class)->findBy(['code' => $code]);
-                if (count($verify) != 1) return new Response("404 Code NOT FOUND", 400);
+                if (count($verify) != 1) return new Response("404 CODE NOT FOUND", 400);
 
                 $user = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $verify[0]->getFKUserID()]);
-                if (count($user) != 1) return new Response("404 NOT FOUND", 400);
+                if (count($user) != 1) return new Response("404 USER NOT FOUND", 400);
                 if ($user[0]->getVerified()) return new Response("-1 Already Verfied", 400);
 
                 $verify[0]->setVerfiyDate(new \DateTime());
