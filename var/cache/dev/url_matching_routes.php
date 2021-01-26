@@ -20,7 +20,7 @@ return [
         '/rabatt' => [[['_route' => 'rabatt', '_controller' => 'App\\Controller\\RabattController::saveRabatt'], null, null, null, false, false, null]],
         '/standort' => [[['_route' => 'standort', '_controller' => 'App\\Controller\\StandortController::index'], null, null, null, false, false, null]],
         '/user' => [[['_route' => 'user', '_controller' => 'App\\Controller\\UserController::index'], null, null, null, false, false, null]],
-        '/verify' => [[['_route' => 'app_verify_verify_user', '_controller' => 'App\\Controller\\VerifyController::Verify_User'], null, null, null, true, false, null]],
+        '/verify' => [[['_route' => 'app_verify_verify_user', '_controller' => 'App\\Controller\\VerifyController::Verify_User'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
@@ -71,7 +71,7 @@ return [
         159 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
         208 => [[['_route' => 'app_design_save_design', '_format' => 'html', '_controller' => 'App\\Controller\\DesignController::Save_Design'], ['_format'], null, null, false, true, null]],
         240 => [[['_route' => 'app_rabatt_post_rabatt_api', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::POST_Rabatt_API'], ['_format'], null, null, false, true, null]],
-        273 => [[['_route' => 'app_standort_post_get_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format'], null, null, false, true, null]],
+        273 => [[['_route' => 'app_standort_post_firma_api', '_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_FIRMA_API'], ['_format'], null, null, false, true, null]],
         312 => [[['_route' => 'app_design_get_design', '_format' => 'html', '_controller' => 'App\\Controller\\DesignController::GET_Design'], ['_format'], null, null, false, true, null]],
         344 => [[['_route' => 'app_punkte_get_punkte_api', '_format' => 'html', '_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], ['_format'], null, null, false, true, null]],
         376 => [[['_route' => 'app_rabatt_get_rabatt_api', '_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['_format'], null, null, false, true, null]],

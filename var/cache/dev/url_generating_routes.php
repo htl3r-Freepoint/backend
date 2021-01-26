@@ -28,7 +28,7 @@ return [
     'app_rabatt_get_rabatt_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\RabattController::GET_Rabatt_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/GetRabatt']], [], []],
     'app_rabatt_post_rabatt_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\RabattController::POST_Rabatt_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/SaveRabatt']], [], []],
     'standort' => [[], ['_controller' => 'App\\Controller\\StandortController::index'], [], [['text', '/standort']], [], []],
-    'app_standort_post_get_firma_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_GET_FIRMA_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/SaveBetrieb']], [], []],
+    'app_standort_post_firma_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\StandortController::POST_FIRMA_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/SaveBetrieb']], [], []],
     'app_standort_get_betrieb_from_firma_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\StandortController::GET_Betrieb_From_Firma_API'], ['_format' => 'json'], [['variable', '.', 'json', '_format', true], ['text', '/api/GetBetrieb']], [], []],
     'user' => [[], ['_controller' => 'App\\Controller\\UserController::index'], [], [['text', '/user']], [], []],
     'app_user_sendmail' => [['_format'], ['_format' => 'json', '_controller' => 'App\\Controller\\UserController::sendMail'], ['_format' => 'json'], [['variable', '.', 'json', '_format', true], ['text', '/api/sendMail']], [], []],
@@ -36,5 +36,5 @@ return [
     'app_user_login_user_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserController::Login_User_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/loginUser']], [], []],
     'app_userrabatt_get_userrabatte_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::GET_Userrabatte_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/GetUserrabatte']], [], []],
     'app_userrabatt_use_userrabatte_api' => [['_format'], ['_format' => 'html', '_controller' => 'App\\Controller\\UserRabattController::Use_Userrabatte_API'], ['_format' => 'html|json'], [['variable', '.', 'html|json', '_format', true], ['text', '/api/UseUserrabatte']], [], []],
-    'app_verify_verify_user' => [[], ['_controller' => 'App\\Controller\\VerifyController::Verify_User'], [], [['text', '/verify/']], [], []],
+    'app_verify_verify_user' => [[], ['_controller' => 'App\\Controller\\VerifyController::Verify_User'], [], [['text', '/verify']], [], []],
 ];

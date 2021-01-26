@@ -48,10 +48,4 @@ class VerifyController extends AbstractController {
             return new Response("", 404);
         }
     }
-    /**
-     * Überarbeiten:
-     * Punkte controller + doc //fertig
-     * Rabattcontroller + doc //fertig
-     * Standortcontroller + doc //fertig
-     */
 }

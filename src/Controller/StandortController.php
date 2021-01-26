@@ -46,7 +46,7 @@ class StandortController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
+    public function POST_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
         // Return JSON
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'POST') {
@@ -81,16 +81,28 @@ class StandortController extends AbstractController {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
-                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
+//                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
 
                 $firmaID = $data["FirmaID"] ?? null;
+                $erg = array();
                 if (isset($firmaID)) {
                     $dataDB = $this->getDoctrine()->getRepository(Betrieb::class)->findBy(['FK_Firma_ID' => $firmaID]);
                 } else {
                     $dataDB = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
                 }
+                foreach ($dataDB as $db) {
+                    $dataErg = [
+                        'id' => $db->getID(),
+                        'address' => $db->getAddresse() . ", " . $db->getPLZ() . " " . $db->getOrt(),
+                        'coords' => [$db->getLaengengrad(), $db->getBreitengrad()],
+                        'open' => array(null),
+                        'image' => null
+                    ];
+                    array_push($erg, $dataErg);
+                }
 
-                return new Response($serializer->serialize($dataDB, 'json'), 200);
+
+                return new Response($serializer->serialize($erg, 'json'), 200);
             }
         } else {
             return new Response("", 404);

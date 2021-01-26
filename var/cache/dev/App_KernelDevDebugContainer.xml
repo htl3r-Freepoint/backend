@@ -5486,7 +5486,7 @@
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.xzdLy.R" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.BXw3m_C" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\DesignController::GET_Design" type="service" id=".service_locator.VhJDIcj"/>
@@ -5498,7 +5498,7 @@
         <argument key="App\Controller\RabattController::GET_Rabatt_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\RabattController::POST_Rabatt_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\StandortController::GET_Betrieb_From_Firma_API" type="service" id=".service_locator.VhJDIcj"/>
-        <argument key="App\Controller\StandortController::POST_GET_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
+        <argument key="App\Controller\StandortController::POST_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\UserController::Login_User_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Controller\UserController::POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="App\Controller\UserController::sendMail" type="service" id=".service_locator.BtIsEwn"/>
@@ -5523,7 +5523,7 @@
         <argument key="App\Controller\RabattController:GET_Rabatt_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\RabattController:POST_Rabatt_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\StandortController:GET_Betrieb_From_Firma_API" type="service" id=".service_locator.VhJDIcj"/>
-        <argument key="App\Controller\StandortController:POST_GET_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
+        <argument key="App\Controller\StandortController:POST_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\UserController:Login_User_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Controller\UserController:POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="App\Controller\UserController:sendMail" type="service" id=".service_locator.BtIsEwn"/>
@@ -6067,12 +6067,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.xzdLy.R"/>
+      <argument type="service" id=".service_locator.BXw3m_C"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.xzdLy.R"/>
+      <argument type="service" id=".service_locator.BXw3m_C"/>
     </service>
     <service id=".debug.http_client.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface">
       <argument type="collection"/>
@@ -6474,7 +6474,7 @@
     <service id="Twig\Environment" alias="twig"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.Kbr2i2X" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.xzdLy.R"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.BXw3m_C"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
     <service id="Psr\Log\LoggerInterface $cacheLogger" alias="monolog.logger.cache"/>
