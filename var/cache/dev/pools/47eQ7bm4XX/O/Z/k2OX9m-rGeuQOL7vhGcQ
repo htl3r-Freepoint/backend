@@ -8,17 +8,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
     [
         'Symfony\\Component\\Routing\\Annotation\\Route' => [
             'path' => [
-                '/api/SaveDesign.{_format}',
-            ],
-            'requirements' => [
-                [
-                    '_format' => 'html|json',
-                ],
-            ],
-            'defaults' => [
-                [
-                    '_format' => 'html',
-                ],
+                '/api/saveDesign',
             ],
         ],
     ],

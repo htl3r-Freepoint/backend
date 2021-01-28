@@ -8,17 +8,7 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
     [
         'Symfony\\Component\\Routing\\Annotation\\Route' => [
             'path' => [
-                '/api/GetBetrieb.{_format}',
-            ],
-            'requirements' => [
-                [
-                    '_format' => 'json',
-                ],
-            ],
-            'defaults' => [
-                [
-                    '_format' => 'html',
-                ],
+                '/api/getBetrieb',
             ],
         ],
     ],

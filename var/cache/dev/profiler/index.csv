@@ -336,3 +336,6 @@ d7cf4f,127.0.0.1,POST,http://127.0.0.1:8000/api/RegisterUser.json,1611841259,,20
 184815,127.0.0.1,GET,http://127.0.0.1:8000/api/RegisterUser.json,1611841264,275263,500
 275263,127.0.0.1,POST,http://127.0.0.1:8000/api/RegisterUser.json,1611841264,,500
 5ee709,127.0.0.1,POST,http://127.0.0.1:8000/api/RegisterUser.json,1611841316,,200
+0314c9,127.0.0.1,GET,http://127.0.0.1:8000/api/RegisterUser,1611850530,a6dba4,404
+a6dba4,127.0.0.1,POST,http://127.0.0.1:8000/api/RegisterUser,1611850530,,404
+dbead1,127.0.0.1,POST,http://127.0.0.1:8000/api/registerUser,1611850569,,200

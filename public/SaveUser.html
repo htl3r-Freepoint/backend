@@ -33,12 +33,12 @@
     function send() {
 
         console.log(
-            postData('http://127.0.0.1:8000/api/RegisterUser.json', {
-                "username": "Ich",
-                "email": "christopher.scherling@gmail.com",
+            postData('http://127.0.0.1:8000/api/registerUser', {
+                "username": "Mariobacsi",
+                "email": "5124@htl.rennweg.at",
                 "vorname": null,
                 "nachname": null,
-                "password": "YESS",
+                "password": "Test123",
                 "type": null
             })
                 .then(data => {
