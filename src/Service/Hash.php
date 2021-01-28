@@ -74,7 +74,7 @@ class Hash extends UserController {
 
         $data = [
             'valid' => $valid,
-            'user' => $user
+            'user' => $user[0]
         ];
         return $data;
     }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Firma;
 use App\Entity\Punkte;
 use App\Entity\User;
+use App\Service\clean;
 use App\Service\Hash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,24 +23,15 @@ class FirmaController extends AbstractController {
         ]);
     }
 
-    private function save($owner, $name, $kontakt, $XEuro, $datei, $domain) {
-        if ($owner == "ADD_HERE" || isset($owner) || $owner == "undefined" || $owner == "null") $owner = null;
-        if ($name == "ADD_HERE" || isset($name) || $name == "undefined" || $name == "null") $name = null;
-        if ($kontakt == "ADD_HERE" || isset($kontakt) || $kontakt == "undefined" || $kontakt == "null") $kontakt = null;
-        if ($XEuro == "ADD_HERE" || isset($XEuro) || $XEuro == "undefined" || $XEuro == "null") $XEuro = null;
-        if ($datei == "ADD_HERE" || isset($datei) || $datei == "undefined" || $datei == "null") $datei = null;
-        if ($domain == "ADD_HERE" || isset($domain) || $domain == "undefined" || $domain == "null") $domain = null;
-
-        if ($name == null || $kontakt == null || $XEuro == null || $domain == null) return false;
-
+    private function save($owner, $name, $kontakt, $XEuro, $logo, $domain) {
         $entityManager = $this->getDoctrine()->getManager();
 
         $Firma = new Firma();
-        $Firma->setFKUserIDOwner(null); //TODO !!!!!!!!!!
+        $Firma->setFKUserIDOwner(null);
         $Firma->setFirmanname($name);
         $Firma->setKontaktEmail($kontakt);
         $Firma->setXEuroFuer1Punkt($XEuro);
-        $Firma->setDatei($datei);
+        $Firma->setDatei($logo);
         $Firma->setDomain($domain);
 
         $entityManager->persist($Firma);
@@ -49,25 +41,22 @@ class FirmaController extends AbstractController {
     }
 
     /**
-     * @Route("/api/firma")
+     * @Route("/api/registerCompany")
      * @param Request $request
      * @return Response
      */
-    public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        if ($request->getMethod() == 'GET') {
-            $data = $this->getDoctrine()->getRepository(Firma::class)->findAll();
-            return new Response($serializer->serialize($data, 'json'), 200);
-//                return new Response("GET");
-        }
+    public function SAVE_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth, clean $clean): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-            $owner = $data["owner"];
+            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
+
+            $owner = $user->getID();
             $name = $data["Name"];
-            $kontakt = $data["kontakt"];
-            $XEuro = $data["XEuro"];
-            $datei = $data["datei"];
-            $domain = $data["domain"];
+            $kontakt = $data["email"] ?? null;
+            $XEuro = $data["conversionRate"] ?? 10;
+            $logo = $data["logo"] ?? null;
+            $domain = strtolower($clean->cleanString($name));
 
 
             $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
@@ -79,13 +68,13 @@ class FirmaController extends AbstractController {
             }
 
             if ($exists != 0) {
-                if ($exists == "-1 Firmenname") return new Response("-1 Firmenname", 400);
-                if ($exists == "-1 Domain") return new Response("-1 Domain", 400);
+                if ($exists == "-1 Firmenname") return new Response("This name is already in use", 400);
+                if ($exists == "-1 Domain") return new Response("This Domain is already in use", 400);
             } else {
-                if ($this->save($owner, $name, $kontakt, $XEuro, $datei, $domain) == true) {
+                if ($this->save($owner, $name, $kontakt, $XEuro, $logo, $domain) == true) {
                     return new Response("1", 200);
                 } else {
-                    return new Response("-1 Missing", 100);
+                    return new Response("Please fill out everything", 100);
                 }
             }
         }
