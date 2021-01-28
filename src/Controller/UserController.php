@@ -156,7 +156,7 @@ class UserController extends AbstractController {
         $entityManager->flush();
 
         $id = $USER->getId();
-        $code = $jsonHash->generateCode($id);
+        $code = $jsonHash->generateJsonCode($id);
 
         $VERIFY = new Verify();
         $VERIFY->setFKUserID($id);
@@ -185,8 +185,9 @@ class UserController extends AbstractController {
                 return new Response("forbidden", 403);
             }
             if ($request->getMethod() == 'POST') {
+//                    return new Response("neinenienei", 202);
                 $data = json_decode($request->getContent(), true);
-                echo count($data);
+//                echo count($data);
 
                 $username = $data["username"];
                 $email = $data["email"];
@@ -208,7 +209,7 @@ class UserController extends AbstractController {
 
                     if ($exists != 0) {
                         if ($exists == "-1 Username") return new Response("-1 Username", 400);
-                        if ($exists == "-1 Username") return new Response("-1 Username", 400);
+                        if ($exists == "-1 Email") return new Response("-1 Email", 400);
                     } else {
                         if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) == true) {
                             $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email])[0];
