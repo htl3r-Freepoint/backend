@@ -52,7 +52,7 @@ class FirmaController extends AbstractController {
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
 
             $owner = $user->getID();
-            $name = $data["Name"];
+            $name = $data["name"];
             $kontakt = $data["email"] ?? null;
             $XEuro = $data["conversionRate"] ?? 10;
             $logo = $data["logo"] ?? null;
@@ -72,7 +72,7 @@ class FirmaController extends AbstractController {
                 if ($exists == "-1 Domain") return new Response("This Domain is already in use", 400);
             } else {
                 if ($this->save($owner, $name, $kontakt, $XEuro, $logo, $domain) == true) {
-                    return new Response("1", 200);
+                    return new Response("", 200);
                 } else {
                     return new Response("Please fill out everything", 100);
                 }
