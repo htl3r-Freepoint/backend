@@ -70,7 +70,7 @@ class Hash extends UserController {
             }
         }
 
-        $user = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $DataDB[0]->getCode()]);
+        $user = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $DataDB[0]->getFKUserID()]);
 
         $data = [
             'valid' => $valid,
