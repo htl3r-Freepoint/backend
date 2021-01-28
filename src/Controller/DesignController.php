@@ -31,49 +31,45 @@ class DesignController extends AbstractController {
      * @return Response
      */
     public function Save_Design(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
-                if (isset($data['name'])) $name = $data['name']; else $name = null; //z.B.: Logo
-                $datei = $data['datei'];
-                $firmenname = $data['firmenname'];
-                $typ = $data['typ'];
-                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (isset($data['name'])) $name = $data['name']; else $name = null; //z.B.: Logo
+            $datei = $data['datei'];
+            $firmenname = $data['firmenname'];
+            $typ = $data['typ'];
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
 
 //                $datei = "PLATZHALTER FÜR EIN BILD";
 //                $firmenname = "Schnitzelbude1337";
 //                $typ = "Logo";
 
-                $FirmaDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
-                if (count($FirmaDB) < 1) return new Response("-1 Firma nicht gefunden", 404);
-                if (count($FirmaDB) > 1) return new Response("-1 zu viele Firmen gefunden", 400);
+            $FirmaDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+            if (count($FirmaDB) < 1) return new Response("-1 Firma nicht gefunden", 404);
+            if (count($FirmaDB) > 1) return new Response("-1 zu viele Firmen gefunden", 400);
 
 
-                $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->getDoctrine()->getManager();
 
-                $DESIGN = new Design();
-                $DESIGN->setName($firmenname);
-                $DESIGN->setDatei($datei);
+            $DESIGN = new Design();
+            $DESIGN->setName($firmenname);
+            $DESIGN->setDatei($datei);
 
-                $entityManager->persist($DESIGN);
-                $entityManager->flush();
+            $entityManager->persist($DESIGN);
+            $entityManager->flush();
 
-                $firmaID = $FirmaDB[0]->getID();
-                $designID = $DESIGN->getId();
+            $firmaID = $FirmaDB[0]->getID();
+            $designID = $DESIGN->getId();
 
-                $ZUWEISUNG = new DesignZuweisung();
-                $ZUWEISUNG->setFKDesignID($designID);
-                $ZUWEISUNG->setFKFirmaID($firmaID);
+            $ZUWEISUNG = new DesignZuweisung();
+            $ZUWEISUNG->setFKDesignID($designID);
+            $ZUWEISUNG->setFKFirmaID($firmaID);
 
-                $entityManager->persist($ZUWEISUNG);
-                $entityManager->flush();
+            $entityManager->persist($ZUWEISUNG);
+            $entityManager->flush();
 
 
-                return new Response("1", 200);
-            }
-        } else {
-            return new Response("", 404);
+            return new Response("1", 200);
         }
     }
 
@@ -83,27 +79,23 @@ class DesignController extends AbstractController {
      * @return Response
      */
     public function GET_Design(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
-                $firmenname = $data['firmenname'];
-                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            $firmenname = $data['firmenname'];
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
-                $FirmaDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
-                if (count($FirmaDB) < 1) return new Response("-1 Firma nicht gefunden", 404);
-                if (count($FirmaDB) > 1) return new Response("-1 zu viele Firmen gefunden", 400);
+            $FirmaDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+            if (count($FirmaDB) < 1) return new Response("-1 Firma nicht gefunden", 404);
+            if (count($FirmaDB) > 1) return new Response("-1 zu viele Firmen gefunden", 400);
 
-                $DesignZuweisungDB = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $FirmaDB[0]->getID()]);
-                $Designs = [];
-                foreach ($DesignZuweisungDB as $db) {
-                    $DesignDB = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $db->getFKDesignID()]);
-                    array_push($Designs, $DesignDB[0]);
-                }
-
-                return new Response($serializer->serialize($Designs, 'json'), 200);
+            $DesignZuweisungDB = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $FirmaDB[0]->getID()]);
+            $Designs = [];
+            foreach ($DesignZuweisungDB as $db) {
+                $DesignDB = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $db->getFKDesignID()]);
+                array_push($Designs, $DesignDB[0]);
             }
-        } else {
-            return new Response("", 404);
+
+            return new Response($serializer->serialize($Designs, 'json'), 200);
         }
     }
 }

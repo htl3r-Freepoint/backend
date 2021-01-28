@@ -45,22 +45,18 @@ class RabattController extends AbstractController {
      * @return Response
      */
     public function GET_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
 //                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
-                isset($data['FirmaID']) ? $firmaID = $data['FirmaID'] : $firmaID = 1;
+            isset($data['FirmaID']) ? $firmaID = $data['FirmaID'] : $firmaID = 1;
 
-                if (isset($firmaID)) {
-                    $data = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $firmaID]); //Hier umändern
-                    return new Response($serializer->serialize($data, 'json'), 200);
-                } else {
-                    $data = $this->getDoctrine()->getRepository(Rabatt::class)->findAll(); //Hier umändern
-                    return new Response($serializer->serialize($data, 'json'), 200);
-                }
+            if (isset($firmaID)) {
+                $data = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $firmaID]); //Hier umändern
+                return new Response($serializer->serialize($data, 'json'), 200);
+            } else {
+                $data = $this->getDoctrine()->getRepository(Rabatt::class)->findAll(); //Hier umändern
+                return new Response($serializer->serialize($data, 'json'), 200);
             }
-        } else {
-            return new Response("", 404);
         }
     }
 
@@ -70,24 +66,20 @@ class RabattController extends AbstractController {
      * @return Response
      */
     public function POST_Rabatt_API(int $id, Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
-                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
-                $fk_firma_id = $data["fk_firma_id"];
-                $beschreibung = $data["beschreibung"];
-                $rabttbeschreibung = $data["rabattBeschreibung"];
-                $datei = $data["datei"];
-                $XEuro = $data["XEuro"];
+            $fk_firma_id = $data["fk_firma_id"];
+            $beschreibung = $data["beschreibung"];
+            $rabttbeschreibung = $data["rabattBeschreibung"];
+            $datei = $data["datei"];
+            $XEuro = $data["XEuro"];
 
 
-                if ($this->saveRabatt($fk_firma_id, $beschreibung, $datei, $XEuro, $rabttbeschreibung) == true) {
-                    return new Response("1", 200);
-                }
+            if ($this->saveRabatt($fk_firma_id, $beschreibung, $datei, $XEuro, $rabttbeschreibung) == true) {
+                return new Response("1", 200);
             }
-        } else {
-            return new Response("", 404);
         }
     }
 }

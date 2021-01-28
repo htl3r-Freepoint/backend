@@ -48,26 +48,22 @@ class StandortController extends AbstractController {
      */
     public function POST_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
         // Return JSON
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
 
-                $firmaID = $data["firma"];
-                $addresse = $data["addresse"];
-                $Ort = $data["Ort"];
-                $PLZ = $data["PLZ"];
-                $laengengrad = $data["laengengrad"] ?? null;
-                $breitengrad = $data["breitengrad"] ?? null;
+            $firmaID = $data["firma"];
+            $addresse = $data["addresse"];
+            $Ort = $data["Ort"];
+            $PLZ = $data["PLZ"];
+            $laengengrad = $data["laengengrad"] ?? null;
+            $breitengrad = $data["breitengrad"] ?? null;
 
-                $saved = $this->save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad);
-                if ($saved == false) {
-                    return new Response($saved, 200);
-                } else {
-                    return new Response("-1 Firma", 400);
-                }
+            $saved = $this->save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad);
+            if ($saved == false) {
+                return new Response($saved, 200);
+            } else {
+                return new Response("-1 Firma", 400);
             }
-        } else {
-            return new Response("", 404);
         }
     }
 
@@ -78,42 +74,38 @@ class StandortController extends AbstractController {
      */
     public function GET_Betrieb_From_Firma_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         // Return JSON
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
-                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
-                $firmaID = $data["FirmaID"] ?? null;
-                $erg = array();
-                if (isset($firmaID)) {
-                    $dataDB = $this->getDoctrine()->getRepository(Betrieb::class)->findBy(['FK_Firma_ID' => $firmaID]);
-                } else {
-                    $dataDB = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
-                }
-                foreach ($dataDB as $db) {
-                    $dataErg = [
-                        'id' => $db->getID(),
-                        'address' => $db->getAddresse() . ", " . $db->getPLZ() . " " . $db->getOrt(),
-                        'coords' => [$db->getLaengengrad(), $db->getBreitengrad()],
-                        'open' => [
-                            'Monday' => "XD",
-                            "Tuesday" => "XD",
-                            'Wednesday' => "XD,",
-                            'Thursday' => "XD",
-                            'Friday' => "XD",
-                            'Saturday' => "XD",
-                            'Sunday' => "XD"
-                        ],
-                        'image' => null
-                    ];
-                    array_push($erg, $dataErg);
-                }
-
-
-                return new Response($serializer->serialize($erg, 'json'), 200);
+            $firmaID = $data["FirmaID"] ?? null;
+            $erg = array();
+            if (isset($firmaID)) {
+                $dataDB = $this->getDoctrine()->getRepository(Betrieb::class)->findBy(['FK_Firma_ID' => $firmaID]);
+            } else {
+                $dataDB = $this->getDoctrine()->getRepository(Betrieb::class)->findAll();
             }
-        } else {
-            return new Response("", 404);
+            foreach ($dataDB as $db) {
+                $dataErg = [
+                    'id' => $db->getID(),
+                    'address' => $db->getAddresse() . ", " . $db->getPLZ() . " " . $db->getOrt(),
+                    'coords' => [$db->getLaengengrad(), $db->getBreitengrad()],
+                    'open' => [
+                        'Monday' => "XD",
+                        "Tuesday" => "XD",
+                        'Wednesday' => "XD,",
+                        'Thursday' => "XD",
+                        'Friday' => "XD",
+                        'Saturday' => "XD",
+                        'Sunday' => "XD"
+                    ],
+                    'image' => null
+                ];
+                array_push($erg, $dataErg);
+            }
+
+
+            return new Response($serializer->serialize($erg, 'json'), 200);
         }
     }
 

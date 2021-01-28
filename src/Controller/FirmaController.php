@@ -54,45 +54,40 @@ class FirmaController extends AbstractController {
      * @return Response
      */
     public function POST_GET_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        // Return JSON
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'GET') {
-                $data = $this->getDoctrine()->getRepository(Firma::class)->findAll();
-                return new Response($serializer->serialize($data, 'json'), 200);
+        if ($request->getMethod() == 'GET') {
+            $data = $this->getDoctrine()->getRepository(Firma::class)->findAll();
+            return new Response($serializer->serialize($data, 'json'), 200);
 //                return new Response("GET");
+        }
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            $owner = $data["owner"];
+            $name = $data["Name"];
+            $kontakt = $data["kontakt"];
+            $XEuro = $data["XEuro"];
+            $datei = $data["datei"];
+            $domain = $data["domain"];
+
+
+            $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
+            $exists = 0;
+            foreach ($Firmen as $firm) {
+                if ($firm->getFirmanname() == $name) $exists = "-1 Firmenname";
+                if ($firm->getDomain() == $domain) $exists = "-1 Domain";
+
             }
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
-                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-                $owner = $data["owner"];
-                $name = $data["Name"];
-                $kontakt = $data["kontakt"];
-                $XEuro = $data["XEuro"];
-                $datei = $data["datei"];
-                $domain = $data["domain"];
 
-
-                $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
-                $exists = 0;
-                foreach ($Firmen as $firm) {
-                    if ($firm->getFirmanname() == $name) $exists = "-1 Firmenname";
-                    if ($firm->getDomain() == $domain) $exists = "-1 Domain";
-
-                }
-
-                if ($exists != 0) {
-                    if ($exists == "-1 Firmenname") return new Response("-1 Firmenname", 400);
-                    if ($exists == "-1 Domain") return new Response("-1 Domain", 400);
+            if ($exists != 0) {
+                if ($exists == "-1 Firmenname") return new Response("-1 Firmenname", 400);
+                if ($exists == "-1 Domain") return new Response("-1 Domain", 400);
+            } else {
+                if ($this->save($owner, $name, $kontakt, $XEuro, $datei, $domain) == true) {
+                    return new Response("1", 200);
                 } else {
-                    if ($this->save($owner, $name, $kontakt, $XEuro, $datei, $domain) == true) {
-                        return new Response("1", 200);
-                    } else {
-                        return new Response("-1 Missing", 100);
-                    }
+                    return new Response("-1 Missing", 100);
                 }
             }
-        } else {
-            return new Response("", 404);
         }
     }
 }

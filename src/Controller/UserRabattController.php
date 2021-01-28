@@ -26,21 +26,17 @@ class UserRabattController extends AbstractController {
      * @return Response
      */
     public function GET_Userrabatte_API(Request $request, SerializerInterface $serializer): Response {
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
-                $id = $data['id'];
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            $id = $data['id'];
 
-                if ($id < 0) {
-                    $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findAll();
-                    return new Response($serializer->serialize($data, 'json'), 200);
-                } else {
-                    $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
-                    return new Response($serializer->serialize($data, 'json'), 200);
-                }
+            if ($id < 0) {
+                $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findAll();
+                return new Response($serializer->serialize($data, 'json'), 200);
+            } else {
+                $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
+                return new Response($serializer->serialize($data, 'json'), 200);
             }
-        } else {
-            return new Response("", 404);
         }
     }
 
@@ -50,27 +46,23 @@ class UserRabattController extends AbstractController {
      * @return Response
      */
     public function Use_Userrabatte_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'PUT') {
-                $data = json_decode($request->getContent(), true);
-                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-                $code = $data["code"];
+        if ($request->getMethod() == 'PUT') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            $code = $data["code"];
 
-                $entityManager = $this->getDoctrine()->getManager();
-                $Rabatt = $this->getDoctrine()->getRepository(UserRabatte::class)->find(["Rabatt_Code" => $code]);
-                if ($Rabatt == 0) return new Response("-1 NotFound", 400);
-                if ($Rabatt >= 2) return new Response("-1 tooMany", 400);
-                if ($Rabatt->getUsed() == true) return new Response("-1 used", 400);
+            $entityManager = $this->getDoctrine()->getManager();
+            $Rabatt = $this->getDoctrine()->getRepository(UserRabatte::class)->find(["Rabatt_Code" => $code]);
+            if ($Rabatt == 0) return new Response("-1 NotFound", 400);
+            if ($Rabatt >= 2) return new Response("-1 tooMany", 400);
+            if ($Rabatt->getUsed() == true) return new Response("-1 used", 400);
 
-                $Rabatt->setUsed(true);
+            $Rabatt->setUsed(true);
 
-                $entityManager->persist($Rabatt);
-                $entityManager->flush();
+            $entityManager->persist($Rabatt);
+            $entityManager->flush();
 
-                return new Response('1', 200);
-            }
-        } else {
-            return new Response("", 404);
+            return new Response('1', 200);
         }
     }
 }

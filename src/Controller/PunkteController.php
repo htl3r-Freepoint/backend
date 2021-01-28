@@ -28,31 +28,27 @@ class PunkteController extends AbstractController {
      * @return Response
      */
     public function GET_Punkte_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        if ($request->getRequestFormat() == 'json') {
-            if ($request->getMethod() == 'POST') {
-                $data = json_decode($request->getContent(), true);
-                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-                $id = $data['UserID'];
-                isset($data['FirmaID']) ? $firmaID = $data['FirmaID'] : $firmaID = null;
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            $id = $data['UserID'];
+            isset($data['FirmaID']) ? $firmaID = $data['FirmaID'] : $firmaID = null;
 //               $id = 1;
 
-                if ($id < 0) {
-                    $data = $this->getDoctrine()->getRepository(Punkte::class)->findAll();
+            if ($id < 0) {
+                $data = $this->getDoctrine()->getRepository(Punkte::class)->findAll();
+                return new Response($serializer->serialize($data, 'json'), 200);
+            } else {
+                if (isset($firmaID)) {
+                    $data = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_User_ID' => $id, 'FK_Firma_ID' => $firmaID]); //Hier umändern
+
                     return new Response($serializer->serialize($data, 'json'), 200);
                 } else {
-                    if (isset($firmaID)) {
-                        $data = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_User_ID' => $id, 'FK_Firma_ID' => $firmaID]); //Hier umändern
+                    $data = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
+                    return new Response($serializer->serialize($data, 'json'), 200);
 
-                        return new Response($serializer->serialize($data, 'json'), 200);
-                    } else {
-                        $data = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
-                        return new Response($serializer->serialize($data, 'json'), 200);
-
-                    }
                 }
             }
-        } else {
-            return new Response("", 404);
         }
     }
 

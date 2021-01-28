@@ -169,28 +169,23 @@ class QrcodeController extends AbstractController {
      */
     public function Add_QrCode_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         // Return JSON
-        if ($request->getRequestFormat() == 'json') {
-            $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-            $OGCode = $data["code"];
-            $UserID = $data["UserID"];
+        $data = json_decode($request->getContent(), true);
+        if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+        $OGCode = $data["code"];
+        $UserID = $data["UserID"];
 //            $OGCode = "_R1-AT1_ZELJKOMUS01A_27914_2020-09-26T16:26:38_3,20_110,00_0,00_0,00_0,00_IXkPErtUR1A=_13e8e502_ctENeqtyCtU=_tQlbGAaQyGiuUR7EhIOgHJlf4s/K9ykoDyacSTutgCrLbhm4/sHHGhSqdaRAnjHl11121Do1Oc5JVG/ftLhp5u+lTQg==";
 //            $UserID = 12;
 
 
-            $exists = 0;
+        $exists = 0;
 //            $exists = $this->checkCode($OGCode);
 
-            if ($exists == "vorhanden") {
-                return new Response("-1 vorhanden", 400);
-            } else {
-                $savedPoints = $this->saveCode($OGCode, $UserID);
-                if ($savedPoints == "-1 Kassa") return new Response("-1 Kassa", 400);
-                return new Response($serializer->serialize($savedPoints, 'json'), 200);
-            }
-        }
-        else {
-            return new Response("", 404);
+        if ($exists == "vorhanden") {
+            return new Response("-1 vorhanden", 400);
+        } else {
+            $savedPoints = $this->saveCode($OGCode, $UserID);
+            if ($savedPoints == "-1 Kassa") return new Response("-1 Kassa", 400);
+            return new Response($serializer->serialize($savedPoints, 'json'), 200);
         }
     }
 }
