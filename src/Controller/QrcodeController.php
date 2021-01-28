@@ -163,7 +163,7 @@ class QrcodeController extends AbstractController {
     }
 
     /**
-     * @Route("/api/AddQrCode)
+     * @Route("/api/AddQrCode")
      * @param Request $request
      * @return Response
      */

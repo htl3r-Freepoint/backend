@@ -78,7 +78,7 @@ class DesignController extends AbstractController {
     }
 
     /**
-     * @Route("/api/GetDesign)
+     * @Route("/api/GetDesign")
      * @param Request $request
      * @return Response
      */

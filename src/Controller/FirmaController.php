@@ -49,7 +49,7 @@ class FirmaController extends AbstractController {
     }
 
     /**
-     * @Route("/api/firma)
+     * @Route("/api/firma")
      * @param Request $request
      * @return Response
      */
