@@ -21,7 +21,7 @@ class UserRabattController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/GetUserrabatte")
+     * @Route("/api/getUserrabatte")
      * @param Request $request
      * @return Response
      */
@@ -41,7 +41,7 @@ class UserRabattController extends AbstractController {
     }
 
     /**
-     * @Route("/api/UseUserrabatte")
+     * @Route("/api/useUserrabatte")
      * @param Request $request
      * @return Response
      */

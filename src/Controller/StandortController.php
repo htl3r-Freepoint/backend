@@ -42,7 +42,7 @@ class StandortController extends AbstractController {
     }
 
     /**
-     * @Route("/api/SaveBetrieb")
+     * @Route("/api/saveBetrieb")
      * @param Request $request
      * @return Response
      */
@@ -68,7 +68,7 @@ class StandortController extends AbstractController {
     }
 
     /**
-     * @Route("/api/GetBetrieb")
+     * @Route("/api/getBetrieb")
      * @param Request $request
      * @return Response
      */

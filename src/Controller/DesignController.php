@@ -26,7 +26,7 @@ class DesignController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/SaveDesign")
+     * @Route("/api/saveDesign")
      * @param Request $request
      * @return Response
      */
@@ -74,7 +74,7 @@ class DesignController extends AbstractController {
     }
 
     /**
-     * @Route("/api/GetDesign")
+     * @Route("/api/getDesign")
      * @param Request $request
      * @return Response
      */

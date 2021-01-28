@@ -104,7 +104,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/RegisterUser")
+     * @Route("/api/registerUser")
      * @param Request $request
      * @return Response
      */
