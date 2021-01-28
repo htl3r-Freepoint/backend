@@ -32,7 +32,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/sendMail.{_format}", format="json", requirements={ "_format": "json" })
+     * @Route("/api/sendMail)
      * @param Request $request
      * @return Response
      */
@@ -108,7 +108,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/RegisterUser.{_format}", format="json", requirements={ "_format": "json" })
+     * @Route("/api/RegisterUser)
      * @param Request $request
      * @return Response
      */
@@ -176,7 +176,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/CheckLogin")
+     * @Route("/api/checkLogin")
      * @param Request $request
      * @return Response
      */
@@ -187,15 +187,29 @@ class UserController extends AbstractController {
                 if (isset($data['hash'])) {
                     $hash = $data['hash'];
                 } else {
+                    $data = [
+                        'valid' => false,
+                        'verified' => ""
+                    ];
                     return new Response(false);
                 }
+                $data = [
+                    'valid' => false,
+                    'verified' => ""
+                ];
                 if (!$jsonAuth->checkJsonCode($hash)) return new Response(false);
+                $verified = $jsonAuth->returnUserFromHash($hash);
+                $data = [
+                    'valid' => true,
+                    'verified' => $verified['user']->getVerified()
+                ];
+                return new Response($serializer->serialize($data, 'json'));
             }
         }
     }
 
     /**
-     * @Route("/api/loginUser.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/loginUser)
      * @param Request $request
      * @return Response
      */
@@ -205,12 +219,35 @@ class UserController extends AbstractController {
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
 
-                $email = $data["email"];
-                $password = $data["password"];
+                $email = $data["email"] ?? null;
+                $password = $data["password"] ?? null;
                 $loginType = $data['type'] ?? null;
                 isset($data['hash']) ? $hash = $data['hash'] : $hash = $jsonAuth->generateJsonCode();
 
-                $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
+                //
+                if (isset($data['hash'])) {
+                    $users = $this->getDoctrine()->getRepository(Verify::class)->findBy(['code' => $data['hash']]);
+                    if (count($users) < 1) {
+                        if (isset($email) && $password) {
+                            $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
+                            if (count($users) < 1) {
+                                return new Response("Username or Password is invalid");
+                            }
+                        } else {
+                            return new Response("Insuficient login Informaition");
+                        }
+                    }
+                    if (count($users) < 1) {
+                        return new Response("Insuficient login Informaition");
+                    }
+                } else {
+                    if (isset($email) && $password) {
+                        $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
+                    } else {
+                        return new Response("Insuficient login Informaition");
+                    }
+                }
+                //
 
                 $anz = 0;
                 foreach ($users as $u) {

@@ -49,7 +49,7 @@ class FirmaController extends AbstractController {
     }
 
     /**
-     * @Route("/api/firma.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/firma)
      * @param Request $request
      * @return Response
      */

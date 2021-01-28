@@ -21,7 +21,7 @@ class PunkteController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/GetPunkte.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/GetPunkte)
      * @param Request $request
      * @param SerializerInterface $serializer
      * @param Hash $jsonAuth

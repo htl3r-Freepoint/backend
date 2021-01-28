@@ -26,7 +26,7 @@ class DesignController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/SaveDesign.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/SaveDesign)
      * @param Request $request
      * @return Response
      */
@@ -79,7 +79,7 @@ class DesignController extends AbstractController {
     }
 
     /**
-     * @Route("/api/GetDesign.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/GetDesign)
      * @param Request $request
      * @return Response
      */

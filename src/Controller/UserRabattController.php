@@ -21,7 +21,7 @@ class UserRabattController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/GetUserrabatte.{_format}", format="html", requirements={ "_format": "html|json"})
+     * @Route("/api/GetUserrabatte)
      * @param Request $request
      * @return Response
      */
@@ -45,7 +45,7 @@ class UserRabattController extends AbstractController {
     }
 
     /**
-     * @Route("/api/UseUserrabatte.{_format}", format="html", requirements={ "_format": "html|json" })
+     * @Route("/api/UseUserrabatte)
      * @param Request $request
      * @return Response
      */

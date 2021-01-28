@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Controller\UserController;
 use App\Entity\LoginAuthentification;
+use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 
 class Hash extends UserController {
@@ -54,6 +55,28 @@ class Hash extends UserController {
             }
         }
         return $valid == 1 ? true : false; //true: Code ist valid; false: Code ist invalid
+    }
+
+    public function returnUserFromHash($hash) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $DataDB = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findAll();
+        $valid = true;
+        foreach ($DataDB as $data) {
+            $date = date_format($data->getCreationDate(), "y-m-d");
+            $date2 = date_format(new \DateTime(), "y-m-d");
+
+            if ((strtotime($date) - strtotime($date2)) / -86400 >= 30) { //86400 = 60*60*24
+                if ($data->getHash() == $hash || $data->getValid() == false) $valid = false;
+            }
+        }
+
+        $user = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $DataDB[0]->getCode()]);
+
+        $data = [
+            'valid' => $valid,
+            'user' => $user
+        ];
+        return $data;
     }
 
     public function saveJsonCode($userID): string { //Code wird erstellt, gespeichert und zurück gegeben
