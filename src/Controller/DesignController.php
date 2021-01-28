@@ -38,7 +38,7 @@ class DesignController extends AbstractController {
                 $datei = $data['datei'];
                 $firmenname = $data['firmenname'];
                 $typ = $data['typ'];
-                if (!$jsonAuth->checkJsonCode($data['id'], $data['hash'])) return new Response('-1 invalid', 403);
+                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
 
 //                $datei = "PLATZHALTER FÜR EIN BILD";
@@ -88,7 +88,7 @@ class DesignController extends AbstractController {
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
                 $firmenname = $data['firmenname'];
-                if (!$jsonAuth->checkJsonCode($data['id'], $data['hash'])) return new Response('-1 invalid', 403);
+                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
                 $FirmaDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
                 if (count($FirmaDB) < 1) return new Response("-1 Firma nicht gefunden", 404);

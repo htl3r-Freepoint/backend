@@ -81,7 +81,7 @@ class StandortController extends AbstractController {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
-//                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
+                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
                 $firmaID = $data["FirmaID"] ?? null;
                 $erg = array();

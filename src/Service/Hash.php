@@ -39,7 +39,7 @@ class Hash extends UserController {
     }
 
 
-    public function checkJsonCode($userID, $hash): bool { // Code wird überprüft
+    public function checkJsonCode($hash): bool { // Code wird überprüft
         $entityManager = $this->getDoctrine()->getManager();
         $DataDB = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findAll();
         $valid = 1;
@@ -48,7 +48,7 @@ class Hash extends UserController {
             $date2 = date_format(new \DateTime(), "y-m-d");
 
             if ((strtotime($date) - strtotime($date2)) / -86400 >= 30) { //86400 = 60*60*24
-                if ($data->getHash() == $hash && $data->getFKUserID() == $userID || $data->getValid() == false) $valid = -1;
+                if ($data->getHash() == $hash || $data->getValid() == false) $valid = -1;
                 $entityManager->remove($data);
                 $entityManager->flush();
             }

@@ -14,5 +14,15 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="https://freepoint.htl3r.com/var/data.db" uuid="9127f255-14b7-48a1-8a0b-34ff0879e43c">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0" />
+      <secret-storage>master_key</secret-storage>
+      <auth-provider>no-auth</auth-provider>
+      <schema-mapping />
+      <ssh-properties>
+        <enabled>true</enabled>
+        <ssh-config-id>edd4a5a7-6218-4df9-b2dd-b25e92dc04dc</ssh-config-id>
+      </ssh-properties>
+    </data-source>
   </component>
 </project>

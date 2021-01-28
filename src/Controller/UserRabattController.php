@@ -53,7 +53,7 @@ class UserRabattController extends AbstractController {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'PUT') {
                 $data = json_decode($request->getContent(), true);
-                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
+                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
                 $code = $data["code"];
 
                 $entityManager = $this->getDoctrine()->getManager();

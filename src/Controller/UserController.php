@@ -32,69 +32,6 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/user/show", name="show_user")
-     */
-//    public function showUser(): Response {
-//        $userFINISH = $this->getDoctrine()->getRepository(User::class)->findAll();
-//
-//        return $this->render('user/Userprofile.html.twig', ["menus" => $userFINISH]);
-//    }
-//
-//
-//    // @Route("/user/new", name="new_user_Form")
-//    private function addUser(Request $request): Response {
-//        $USER = new User();
-//        $form = $this->createForm(UserType::class, $USER)
-//            ->add('Username', TextType::class)
-//            ->add('email', TextType::class)
-//            ->add('vorname', TextType::class)
-//            ->add('nachname', TextType::class)
-//            ->add('password', PasswordType::class)
-//            ->add('save', SubmitType::class, ['label' => 'Create Task']);
-//
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $input = $form->getData();
-//
-//            $allUsers = $this->getDoctrine()
-//                ->getRepository(User::class)
-//                ->findAll();
-//
-//            $exists = "false";
-//            foreach ($allUsers as $us) {
-//                if ($us->getEmail() == $input->getEmail()) {
-//                    $exists = "true";
-//                }
-//            }
-//
-//            if ($exists == "true") {
-//                //User schon vorhanden
-//                return $this->render("user/failed.html.twig", ["mail" => $input->getEmail()]);
-//            } else {
-//
-//                $entityManager = $this->getDoctrine()->getManager();
-//
-//                $dbUser = new User();
-//                $dbUser->setEmail($input->getEmail());
-//                $dbUser->setNachname($input->getnachname());
-//                $dbUser->setVorname($input->getVorname());
-//                $dbUser->setUsername($input->getUsername());
-//                $dbUser->setPassword($input->getPassword());
-//
-//                $entityManager->persist($dbUser);
-//                $entityManager->flush();
-//
-//
-//                return $this->render('user/Userprofile.html.twig', [
-//                    "menus" => $this->getDoctrine()->getRepository(USER::class)
-//                        ->findBy(['email' => $input->getEmail()])
-//                ]);
-//            }
-//        }
-//        return $this->render('user/newForm.html.twig', ['form' => $form->createView()]);
-//    }
-
-    /**
      * @Route("/api/sendMail.{_format}", format="json", requirements={ "_format": "json" })
      * @param Request $request
      * @return Response
@@ -103,7 +40,7 @@ class UserController extends AbstractController {
         if ($request->getRequestFormat() == 'json') {
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
-                if (!$jsonHash->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
+                if (!$jsonHash->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
                 $UserID = $data['UserID'];
                 $email = $data['email'];
@@ -203,13 +140,13 @@ class UserController extends AbstractController {
                     $Users = $this->getDoctrine()->getRepository(User::class)->findAll();
                     $exists = 0;
                     foreach ($Users as $IsUser) {
-                        if ($IsUser->getUsername() == $username) $exists = "-1 Username";
+//                        if ($IsUser->getUsername() == $username) $exists = "-1 Username";
                         if ($IsUser->getEmail() == $email) $exists = "-1 Email";
                     }
 
                     if ($exists != 0) {
-                        if ($exists == "-1 Username") return new Response("-1 Username", 400);
-                        if ($exists == "-1 Email") return new Response("-1 Email", 400);
+//                        if ($exists == "-1 Username") return new Response("-1 Username", 400);
+                        if ($exists == "-1 Email") return new Response("Email already used", 400);
                     } else {
                         if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) == true) {
                             $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email])[0];
@@ -220,7 +157,7 @@ class UserController extends AbstractController {
                                 'username' => $username,
                                 'verified' => false,
                                 'id' => $Users->getID(),
-                                'hash' => $hash
+                                'token' => $hash
                             ];
                             return new Response($serializer->serialize($data, 'json'), 200);
 
@@ -239,44 +176,66 @@ class UserController extends AbstractController {
     }
 
     /**
+     * @Route("/api/CheckLogin")
+     * @param Request $request
+     * @return Response
+     */
+    public function Check_Login_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonAuth): Response {
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
+                if (isset($data['hash'])) {
+                    $hash = $data['hash'];
+                } else {
+                    return new Response(false);
+                }
+                if (!$jsonAuth->checkJsonCode($hash)) return new Response(false);
+            }
+        }
+    }
+
+    /**
      * @Route("/api/loginUser.{_format}", format="html", requirements={ "_format": "html|json" })
      * @param Request $request
      * @return Response
      */
     public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonAuth): Response {
-        if ($request->getMethod() == 'POST') {
-            $data = json_decode($request->getContent(), true);
+        //TODO: Es soll immer ein neuer Token erstellt werden, wenn ich mich einllogge
+        if ($request->getRequestFormat() == 'json') {
+            if ($request->getMethod() == 'POST') {
+                $data = json_decode($request->getContent(), true);
 
-            $email = $data["email"];
-            $password = $data["passwort"];
-            $loginType = $data['type'];
-            isset($data['hash']) ? $hash = $data['hash'] : $hash = $jsonAuth->generateJsonCode();
+                $email = $data["email"];
+                $password = $data["password"];
+                $loginType = $data['type'] ?? null;
+                isset($data['hash']) ? $hash = $data['hash'] : $hash = $jsonAuth->generateJsonCode();
 
-            $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
+                $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
 
-            $anz = 0;
-            foreach ($users as $u) {
-                if (password_verify($password, $u->getPassword()) && $email == $u->getEmail() && $loginType == $u->getLoginType()) {
-                    $user = $u;
-                    $id = $u->getID();
-                    $anz++;
+                $anz = 0;
+                foreach ($users as $u) {
+                    if (password_verify($password, $u->getPassword()) && $email == $u->getEmail() && $loginType == $u->getLoginType()) {
+                        $user = $u;
+                        $id = $u->getID();
+                        $anz++;
+                    }
                 }
+
+
+                if ($anz > 1) return new Response("Too Many Users found:" . $anz, 400);
+                if ($anz < 1) return new Response("User or Password not found", 400);
+                if ($jsonAuth->checkJsonCode($hash) == false) $hash = $jsonAuth->saveJsonCode($id);
+                $data = [
+//                    'email' => $email,
+                    'username' => $user->getUsername(),
+                    'verified' => $user->getVerified(),
+//                    'id' => $id,
+                    'token' => $hash
+                ];
+                return new Response($serializer->serialize($data, 'json'), 200);
+            } else {
+                return new Response("", 404);
             }
-
-
-            if ($anz > 1) return new Response("-1 Too Many:" . $anz, 400);
-            if ($anz < 1) return new Response("-1 Not found", 400);
-            if ($jsonAuth->checkJsonCode($id, $hash) == false) $hash = $jsonAuth->saveJsonCode($id);
-            $data = [
-                'email' => $email,
-                'username' => $user->getUsername(),
-                'verified' => $user->getVerified(),
-                'id' => $id,
-                'hash' => $hash
-            ];
-            return new Response($serializer->serialize($data, 'json'), 200);
-        } else {
-            return new Response("", 404);
         }
     }
 

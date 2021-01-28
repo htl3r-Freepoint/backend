@@ -31,7 +31,7 @@ class KasseController extends AbstractController {
 //        $jsonAuthentification->saveJsonCode(2);
         $erg = "XD";
         $hash = "XYRBUGnigcYC7Nbr0cNKvqIWtoCl7jzSVoIL99tdgyChsTG9f62HPaxznSMeBV4WGHtIoekJ55Rpv54kmWAr6JGR0TJSIxhwkFbn";
-        $erg = $jsonAuthentification->checkJsonCode(2, $hash);
+        $erg = $jsonAuthentification->checkJsonCode($hash);
 //        $erg = $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => 'test'])[0];
 
         return new Response($serializer->serialize($erg, 'json'), 200);

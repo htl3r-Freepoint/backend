@@ -63,7 +63,7 @@ class FirmaController extends AbstractController {
             }
             if ($request->getMethod() == 'POST') {
                 $data = json_decode($request->getContent(), true);
-                if (!$jsonAuth->checkJsonCode($data['id'], $data['hash'])) return new Response('-1 invalid', 403);
+                if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
                 $owner = $data["owner"];
                 $name = $data["Name"];
                 $kontakt = $data["kontakt"];
