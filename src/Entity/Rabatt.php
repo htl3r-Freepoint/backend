@@ -22,24 +22,96 @@ class Rabatt {
     private $FK_Firma_ID;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $price;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $percentage;
+
+    /**
+     * @ORM\Column(type="string", length=4096)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(type="string", length=4096, nullable=true)
+     */
+    private $text;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPercent;
+
+    /**
      * @ORM\Column(type="float")
      */
-    private $X_Punkte_Fuer_1_Rabatt;
+    private $neededPoints;
 
     /**
      * @ORM\Column(type="string", length=4096, nullable=true)
      */
-    private $Beschreibung;
+    private $kategorie;
+
 
     /**
-     * @ORM\Column(type="string", length=4096, nullable=true)
+     * @return mixed
      */
-    private $Rabattbeschreibung;
+    public function getPercentage() {
+        return $this->percentage;
+    }
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @param mixed $percentage
      */
-    private $Datei;
+    public function setPercentage($percentage): void {
+        $this->percentage = $percentage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsPercent() {
+        return $this->isPercent;
+    }
+
+    /**
+     * @param mixed $isPercent
+     */
+    public function setIsPercent($isPercent): void {
+        $this->isPercent = $isPercent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNeededPoints() {
+        return $this->neededPoints;
+    }
+
+    /**
+     * @param mixed $neededPoints
+     */
+    public function setNeededPoints($neededPoints): void {
+        $this->neededPoints = $neededPoints;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getKategorie() {
+        return $this->kategorie;
+    }
+
+    /**
+     * @param mixed $kategorie
+     */
+    public function setKategorie($kategorie): void {
+        $this->kategorie = $kategorie;
+    }
 
     public function getId(): ?int {
         return $this->id;
@@ -55,42 +127,32 @@ class Rabatt {
         return $this;
     }
 
-    public function getXPunkteFuer1Rabatt(): ?float {
-        return $this->X_Punkte_Fuer_1_Rabatt;
+    public function getPrice(): ?float {
+        return $this->price;
     }
 
-    public function setXPunkteFuer1Rabatt(float $X_Punkte_Fuer_1_Rabatt): self {
-        $this->X_Punkte_Fuer_1_Rabatt = $X_Punkte_Fuer_1_Rabatt;
+    public function setPrice(float $X_Punkte_Fuer_1_Rabatt): self {
+        $this->price = $X_Punkte_Fuer_1_Rabatt;
 
         return $this;
     }
 
-    public function getBeschreibung(): ?string {
-        return $this->Beschreibung;
+    public function getText(): ?string {
+        return $this->text;
     }
 
-    public function setBeschreibung(?string $Beschreibung): self {
-        $this->Beschreibung = $Beschreibung;
+    public function setText(?string $Beschreibung): self {
+        $this->text = $Beschreibung;
 
         return $this;
     }
 
-    public function getRabattbeschreibung(): ?string {
-        return $this->Rabattbeschreibung;
+    public function getTitle(): ?string {
+        return $this->title;
     }
 
-    public function setRabattbeschreibung(?string $Rabattbeschreibung): self {
-        $this->Rabattbeschreibung = $Rabattbeschreibung;
-
-        return $this;
-    }
-
-    public function getDatei() {
-        return $this->Datei;
-    }
-
-    public function setDatei($Datei): self {
-        $this->Datei = $Datei;
+    public function setTitle(?string $Rabattbeschreibung): self {
+        $this->title = $Rabattbeschreibung;
 
         return $this;
     }

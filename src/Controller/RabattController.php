@@ -21,17 +21,19 @@ class RabattController extends AbstractController {
 //        ]);
 //    }
 
-    private function saveRabatt($fk_firma_id, $beschreibung, $datei, $XEuro, $rabttbeschreibung) {
-        if ($datei == "null" || $datei == "ADD_HERE") $datei = null;
+    private function saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage) {
 
         $entityManager = $this->getDoctrine()->getManager();
 
         $Firma = new Rabatt();
         $Firma->setFKFirmaID($fk_firma_id);
-        $Firma->setBeschreibung($beschreibung);
-        $Firma->setDatei($datei);
-        $Firma->setRabattbeschreibung($rabttbeschreibung);
-        $Firma->setXPunkteFuer1Rabatt($XEuro);
+        $Firma->setIsPercent($is_percent);
+        $Firma->setNeededPoints($neededPoints);
+        $Firma->setPrice($price);
+        $Firma->setTitle($title);
+        $Firma->setText($text);
+        $Firma->setKategorie($kategorie);
+        $Firma->setPercentage($percentage);
 
         $entityManager->persist($Firma);
         $entityManager->flush();
@@ -43,19 +45,63 @@ class RabattController extends AbstractController {
      * @Route("/api/getRabatt")
      * @param Request $request
      * @return Response
+     * @var Rabatt $RABATT
+     * @var Firma $FIRMA
      */
-    public function GET_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+    public function GET_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response { //TODO: Edit Rechte
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-//                if (!$jsonAuth->checkJsonCode($data['UserID'], $data['hash'])) return new Response('-1 invalid', 403);
-            isset($data['FirmaID']) ? $firmaID = $data['FirmaID'] : $firmaID = 1;
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
 
-            if (isset($firmaID)) {
-                $data = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $firmaID]); //Hier umändern
-                return new Response($serializer->serialize($data, 'json'), 200);
+
+            $firmenname = $data['firmenname'] ?? null;
+
+
+            if (isset($firmenname)) {
+                $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+                $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $FIRMA->getID()]);
+                $tmperg = array();
+
+
+                foreach ($RABATT as $rabatt) {
+                    array_push($tmperg, [
+                        "id" => $rabatt->getId(),
+                        "title" => $rabatt->getTitle(),
+                        "text" => $rabatt->getText(),
+                        "isPercent" => $rabatt->getIsPercent(),
+                        "price" => $rabatt->getPrice(),
+                        "percentage" => $rabatt->getPercentage(),
+                        "value" => $rabatt->getNeededPoints()
+                    ]);
+                }
+                $name = $FIRMA->getFirmanname();
+                $erg[$name] = $tmperg;
+
+                return new Response($serializer->serialize($erg, 'json'), 200);
             } else {
-                $data = $this->getDoctrine()->getRepository(Rabatt::class)->findAll(); //Hier umändern
-                return new Response($serializer->serialize($data, 'json'), 200);
+                $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
+                $erg = array();
+
+                foreach ($FIRMA as $firma) {
+                    $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $firma->getID()]);
+                    $tmperg = array();
+
+                    foreach ($RABATT as $rabatt) {
+                        array_push($tmperg, [
+                            "id" => $rabatt->getId(),
+                            "title" => $rabatt->getTitle(),
+                            "text" => $rabatt->getText(),
+                            "isPercent" => $rabatt->getIsPercent(),
+                            "price" => $rabatt->getPrice(),
+                            "percentage" => $rabatt->getPercentage(),
+                            "value" => $rabatt->getNeededPoints()
+                        ]);
+                    }
+                    $name = $firma->getFirmanname();
+                    $erg[$name] = $tmperg;
+                }
+                return new Response($serializer->serialize($erg, 'json'), 200);
             }
         }
     }
@@ -65,20 +111,27 @@ class RabattController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_Rabatt_API(int $id, Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+    public function POST_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+//            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+//            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
 
-            $fk_firma_id = $data["fk_firma_id"];
-            $beschreibung = $data["beschreibung"];
-            $rabttbeschreibung = $data["rabattBeschreibung"];
-            $datei = $data["datei"];
-            $XEuro = $data["XEuro"];
+            $firmenname = $data["firmanname"];
+            $title = $data["title"];
+            $is_percent = $data["is_percent"];
+            $neededPoints = $data["value"];
+            $price = $data["price"] ?? null;
+            $text = $data["text"] ?? null;
+            $percentage = $data['percentage'] ?? null;
+            $kategorie = $data["kategorie"] ?? null;
 
 
-            if ($this->saveRabatt($fk_firma_id, $beschreibung, $datei, $XEuro, $rabttbeschreibung) == true) {
-                return new Response("1", 200);
+            $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+            $fk_firma_id = $Firma->getID();
+
+            if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage) == true) {
+                return new Response($serializer->serialize($Firma, 'json'), 200);
             }
         }
     }

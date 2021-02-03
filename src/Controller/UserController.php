@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Controller;
 
 use App\Entity\Verify;
@@ -234,7 +235,7 @@ class UserController extends AbstractController {
                     return new Response("Insuficient login Informaition");
                 }
             } else {
-                if (isset($email) && $password) {
+                if (isset($email) && isset($password)) {
                     $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
                 } else {
                     return new Response("Insuficient login Informaition");
@@ -295,5 +296,46 @@ class UserController extends AbstractController {
 //
 //        return $erg;
 //    }
+
+    /**
+     * @Route("/api/changeUser")
+     * @param Request $request
+     * @return Response
+     *
+     */
+    public function Change_User_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $hash = $data['token'];
+            $username = $data['username'] ?? null;
+            $email = $data['email'] ?? null;
+            $firstname = $data['firstName'] ?? null;
+            $lastName = $data['lastName'] ?? null;
+            $oldPassword = $data['oldPassword'] ?? null;
+            $newPassword = $data['newPassword'] ?? null;
+
+            if (!isset($username) && !isset($email) && !isset($firstname) && !isset($lastName) && !isset($oldPassword) && !isset($newPassword)) {
+                return new Response("Insufficent login information", 400);
+            }
+            /**@var User $user */
+            $user = $jsonAuth->returnUserFromHash($hash)['user'];
+            if (isset($oldPassword) && isset($newPassword)) {
+                if (password_verify($oldPassword, $user->getPassword())) {
+                    $user->setPassword($newPassword);
+                } else return new Response("Passwords dont match", 400);
+            } elseif (isset($oldPassword) && !isset($newPassword)) return new Response("You have to set a new Password", 400);
+            if (isset($user)) $user->setUsername($username);
+            if (isset($email)) $user->setEmail($email);
+            if (isset($firstname)) $user->setVorname($firstname);
+            if (isset($lastName)) $user->setNachname($lastName);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return new Response("successful", 200);
+        }
+    }
 
 }

@@ -48,7 +48,7 @@ class FirmaController extends AbstractController {
     public function SAVE_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth, clean $clean): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
 
             $owner = $user->getID();
@@ -79,4 +79,22 @@ class FirmaController extends AbstractController {
             }
         }
     }
+
+    /**
+     * @Route("/api/getCompany")
+     * @param Request $request
+     * @return Response
+     */
+    public function GET_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth, clean $clean): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
+            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
+
+            $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
+
+            return new Response($serializer->serialize($Firmen, 'json'), 200);
+        }
+    }
+
 }

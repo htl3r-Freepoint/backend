@@ -505,6 +505,13 @@
         <argument type="service" id=".service_locator.5nX7ca3.App\Service\Hash"/>
       </call>
     </service>
+    <service id="App\Service\clean" class="App\Service\clean" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.5nX7ca3.App\Service\clean"/>
+      </call>
+    </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="response_listener" class="Symfony\Component\HttpKernel\EventListener\ResponseListener">
       <tag name="kernel.event_subscriber"/>
@@ -5197,6 +5204,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Service\Hash" class="App\Service\Hash" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Service\Hash" class="App\Service\Hash" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Service\Hash" class="App\Service\Hash" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Service\clean" class="App\Service\clean" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Service\clean" class="App\Service\clean" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Service\clean" class="App\Service\clean" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.Kbr2i2X" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5457,6 +5467,14 @@
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
+    <service id=".service_locator.asj2MBR" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="clean" type="service" id="App\Service\clean"/>
+        <argument key="jsonAuth" type="service" id="App\Service\Hash"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
     <service id=".service_locator.uYfMB_k" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5486,12 +5504,13 @@
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.rsPyIqo" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.bXsL0AP" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\DesignController::GET_Design" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\DesignController::Save_Design" type="service" id=".service_locator.VhJDIcj"/>
-        <argument key="App\Controller\FirmaController::POST_GET_FIRMA_API" type="service" id=".service_locator.VhJDIcj"/>
+        <argument key="App\Controller\FirmaController::GET_FIRMA_API" type="service" id=".service_locator.asj2MBR"/>
+        <argument key="App\Controller\FirmaController::SAVE_FIRMA_API" type="service" id=".service_locator.asj2MBR"/>
         <argument key="App\Controller\KasseController::TestingGrounds" type="service" id=".service_locator.uYfMB_k"/>
         <argument key="App\Controller\PunkteController::GET_Punkte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\QrcodeController::Add_QrCode_API" type="service" id=".service_locator.VhJDIcj"/>
@@ -5499,6 +5518,7 @@
         <argument key="App\Controller\RabattController::POST_Rabatt_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\StandortController::GET_Betrieb_From_Firma_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\StandortController::POST_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
+        <argument key="App\Controller\UserController::Change_User_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\UserController::Check_Login_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Controller\UserController::Login_User_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Controller\UserController::POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
@@ -5509,16 +5529,23 @@
         <argument key="App\Kernel::loadRoutes" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="App\Kernel::terminate" type="service" id=".service_locator.KfwZsne"/>
+        <argument key="App\Service\Hash::Change_User_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Service\Hash::Check_Login_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Service\Hash::Login_User_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Service\Hash::POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="App\Service\Hash::sendMail" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Service\clean::Change_User_API" type="service" id=".service_locator.VhJDIcj"/>
+        <argument key="App\Service\clean::Check_Login_API" type="service" id=".service_locator.pByTI9U"/>
+        <argument key="App\Service\clean::Login_User_API" type="service" id=".service_locator.pByTI9U"/>
+        <argument key="App\Service\clean::POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Service\clean::sendMail" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="kernel::loadRoutes" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::registerContainerConfiguration" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::terminate" type="service" id=".service_locator.KfwZsne"/>
         <argument key="App\Controller\DesignController:GET_Design" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\DesignController:Save_Design" type="service" id=".service_locator.VhJDIcj"/>
-        <argument key="App\Controller\FirmaController:POST_GET_FIRMA_API" type="service" id=".service_locator.VhJDIcj"/>
+        <argument key="App\Controller\FirmaController:GET_FIRMA_API" type="service" id=".service_locator.asj2MBR"/>
+        <argument key="App\Controller\FirmaController:SAVE_FIRMA_API" type="service" id=".service_locator.asj2MBR"/>
         <argument key="App\Controller\KasseController:TestingGrounds" type="service" id=".service_locator.uYfMB_k"/>
         <argument key="App\Controller\PunkteController:GET_Punkte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\QrcodeController:Add_QrCode_API" type="service" id=".service_locator.VhJDIcj"/>
@@ -5526,6 +5553,7 @@
         <argument key="App\Controller\RabattController:POST_Rabatt_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\StandortController:GET_Betrieb_From_Firma_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\StandortController:POST_FIRMA_API" type="service" id=".service_locator.9wplPMA"/>
+        <argument key="App\Controller\UserController:Change_User_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\UserController:Check_Login_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Controller\UserController:Login_User_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Controller\UserController:POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
@@ -5533,10 +5561,16 @@
         <argument key="App\Controller\UserRabattController:GET_Userrabatte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\UserRabattController:Use_Userrabatte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\VerifyController:Verify_User" type="service" id=".service_locator.9wplPMA"/>
+        <argument key="App\Service\Hash:Change_User_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Service\Hash:Check_Login_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Service\Hash:Login_User_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Service\Hash:POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="App\Service\Hash:sendMail" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Service\clean:Change_User_API" type="service" id=".service_locator.VhJDIcj"/>
+        <argument key="App\Service\clean:Check_Login_API" type="service" id=".service_locator.pByTI9U"/>
+        <argument key="App\Service\clean:Login_User_API" type="service" id=".service_locator.pByTI9U"/>
+        <argument key="App\Service\clean:POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Service\clean:sendMail" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="kernel:loadRoutes" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel:registerContainerConfiguration" type="service" id=".service_locator.KfbR3DY"/>
         <argument key="kernel:terminate" type="service" id=".service_locator.KfwZsne"/>
@@ -5910,6 +5944,12 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.5nX7ca3" method="withContext"/>
     </service>
+    <service id=".service_locator.5nX7ca3.App\Service\clean" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Service\clean"/>
+      <argument>App\Service\clean</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.5nX7ca3" method="withContext"/>
+    </service>
     <service id=".service_locator.J4b.DPX" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -6071,12 +6111,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.rsPyIqo"/>
+      <argument type="service" id=".service_locator.bXsL0AP"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.rsPyIqo"/>
+      <argument type="service" id=".service_locator.bXsL0AP"/>
     </service>
     <service id=".debug.http_client.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface">
       <argument type="collection"/>
@@ -6478,7 +6518,7 @@
     <service id="Twig\Environment" alias="twig"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.Kbr2i2X" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.rsPyIqo"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.bXsL0AP"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
     <service id="Psr\Log\LoggerInterface $cacheLogger" alias="monolog.logger.cache"/>

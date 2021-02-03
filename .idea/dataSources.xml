@@ -7,13 +7,5 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/var/data.db</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="https://freepoint.htl3r.com/var/data.db" uuid="9127f255-14b7-48a1-8a0b-34ff0879e43c">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <configured-by-url>true</configured-by-url>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>https://freepoint.htl3r.com/var/data.db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>

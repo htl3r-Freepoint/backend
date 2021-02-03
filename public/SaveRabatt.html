@@ -32,12 +32,15 @@
 
     function send() {
 
-        postData('https://127.0.0.1:8000/api/1/rabatt.json', { //Es ist egal, was man bei der ID(1) renschreibt. Es wird nicht verwendet
-            "fk_firma_id": "1",
-            "beschreibung": "ADD_HERE",
-            "rabattBeschreibung": "ADD_HERE",
-            "datei": "null",
-            "XEuro": "3"
+        postData('http://127.0.0.1:8000/api/saveRabatt', { //Es ist egal, was man bei der ID(1) renschreibt. Es wird nicht verwendet
+            "firmanname": "Tier-Dreckslerei",
+            "title": "Cheeseburger",
+            "text": "Genieße den saftigen Cheeseburger mit Gurken, Salat und geschmolzenem Ementaler, um -1€",
+            "is_percent": false,
+            "price": 1.00,
+            "percentage": null,
+            "value": 25,
+            "kategorie": "3"
         })
             .then(data => {
                 console.log(data); // JSON data parsed by `data.json()` call
@@ -45,10 +48,10 @@
     }
 
     // Example POST method implementation:
-    async function getData(url = '') {
+    async function getData(url = '', data = {}) {
         // Default options are marked with *
         const response = await fetch(url, {
-            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
@@ -58,13 +61,17 @@
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             redirect: 'follow', // manual, *follow, error
-            referrerPolicy: 'no-referrer' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
         });
         return response.json(); // parses JSON response into native JavaScript objects
     }
 
     function get() {
-        getData('https://127.0.0.1:8000/api/1/rabatt.json').then(data => {
+        getData('http://127.0.0.1:8000/api/getRabatt', {
+            'hash': 'ttgIeo6YNCoDg3YoJNUlMy868vhWBblZv6z4Ki61pEV3ATcWiqr4aZPPLiu19MfNHl5wa48tnJM6l2N7iAJumg7mnw6z0kGIhGtS',
+            'firmenname': "Schulkantine"
+        }).then(data => {
             console.log(data);
         })
     }
