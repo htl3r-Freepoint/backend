@@ -18,6 +18,7 @@ return [
         '/firma' => [[['_route' => 'firma', '_controller' => 'App\\Controller\\FirmaController::index'], null, null, null, false, false, null]],
         '/api/registerCompany' => [[['_route' => 'app_firma_save_firma_api', '_controller' => 'App\\Controller\\FirmaController::SAVE_FIRMA_API'], null, null, null, false, false, null]],
         '/api/getCompany' => [[['_route' => 'app_firma_get_firma_api', '_controller' => 'App\\Controller\\FirmaController::GET_FIRMA_API'], null, null, null, false, false, null]],
+        '/api/updateCompany' => [[['_route' => 'app_firma_update_firma_api', '_controller' => 'App\\Controller\\FirmaController::Update_FIRMA_API'], null, null, null, false, false, null]],
         '/api/VerifyCode' => [[['_route' => 'app_kasse_testinggrounds', '_format' => 'json', '_controller' => 'App\\Controller\\KasseController::TestingGrounds'], null, null, null, false, false, null]],
         '/api/getPunkte' => [[['_route' => 'app_punkte_get_punkte_api', '_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], null, null, null, false, false, null]],
         '/qrcode' => [[['_route' => 'qrcode', '_controller' => 'App\\Controller\\QrcodeController::index'], null, null, null, false, false, null]],

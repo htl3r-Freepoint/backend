@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Controller\UserController;
+use App\Entity\Firma;
 use App\Entity\LoginAuthentification;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -77,6 +78,15 @@ class Hash extends UserController {
             'user' => $user[0]
         ];
         return $data;
+    }
+
+    public function returnFirmenFromHash($hash, $firmenname = null) {
+        /** @var User $user */
+        $user = $this->returnUserFromHash($hash)['user'];
+        if (isset($firmenname)) $DataDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getId(), 'Firmanname' => $firmenname]);
+        if (!isset($firmenname)) $DataDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getId()]);
+
+        return $DataDB;
     }
 
     public function saveJsonCode($userID): string { //Code wird erstellt, gespeichert und zurück gegeben

@@ -90,10 +90,76 @@ class FirmaController extends AbstractController {
             $data = json_decode($request->getContent(), true);
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
+            $firmenname = $data['companyName'] ?? null;
 
-            $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
+            if (!isset($firmenname)) {
+                $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
 
-            return new Response($serializer->serialize($Firmen, 'json'), 200);
+                $tmperg = array();
+                /** @var Firma $firma */
+                foreach ($Firmen as $firma) {
+                    $tmperg = [
+                        'owner' => $firma->getId(),
+                        'companyName' => $firma->getFirmanname(),
+                        'contactMail' => $firma->getKontaktEmail(),
+                        'conversionRate' => $firma->getXEuroFuer1Punkt(),
+                        'logo' => $firma->getDatei(),
+                        'domain' => $firma->getDomain()
+                    ];
+                    $name = $firma->getFirmanname();
+                    $erg[$name] = $tmperg;
+                }
+
+            }
+            if (isset($firmenname)) {
+                $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID(), 'Firmanname' => $firmenname])[0];
+                $erg = [
+                    'owner' => $firma->getId(),
+                    'companyName' => $firma->getFirmanname(),
+                    'contactMail' => $firma->getKontaktEmail(),
+                    'conversionRate' => $firma->getXEuroFuer1Punkt(),
+                    'logo' => $firma->getDatei(),
+                    'domain' => $firma->getDomain()
+                ];
+            }
+
+
+            return new Response($serializer->serialize($erg, 'json'), 200);
+        }
+    }
+
+    /**
+     * @Route("/api/updateCompany")
+     * @param Request $request
+     * @return Response
+     */
+    public function Update_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth, clean $clean): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            $entityManager = $this->getDoctrine()->getManager();
+            if (!$jsonAuth->checkJsonCode($data['token'])) return new Response('Token Invalid', 403);
+            $user = $jsonAuth->returnUserFromHash($data['token'])['user'];
+
+            $hash = $data['token'];
+            $logo = $data['logo'] ?? null;
+            $firmenname = $data['companyName'] ?? null;
+            $email = $data['email'] ?? null;
+            $conversionRate = $data['conversionRate'] ?? null;
+
+            if (!isset($firmenname)) return new Response("Which company do you want to edit?", 400);
+            /** @var Firma $firma */
+            $firma = $jsonAuth->returnFirmenFromHash($hash, $firmenname);
+            if (count($firma) == 0) return new Response("company not found");
+            $firma = $firma[0];
+
+            if (isset($logo)) $firma->setDatei($logo);
+            if (isset($email)) $firma->setKontaktEmail($email);
+            if (isset($conversionRate)) $firma->setXEuroFuer1Punkt($conversionRate);
+
+            $entityManager->persist($firma);
+            $entityManager->flush();
+
+            return new Response("successful", 200);
         }
     }
 

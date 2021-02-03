@@ -20,6 +20,7 @@ return [
     'firma' => [[], ['_controller' => 'App\\Controller\\FirmaController::index'], [], [['text', '/firma']], [], []],
     'app_firma_save_firma_api' => [[], ['_controller' => 'App\\Controller\\FirmaController::SAVE_FIRMA_API'], [], [['text', '/api/registerCompany']], [], []],
     'app_firma_get_firma_api' => [[], ['_controller' => 'App\\Controller\\FirmaController::GET_FIRMA_API'], [], [['text', '/api/getCompany']], [], []],
+    'app_firma_update_firma_api' => [[], ['_controller' => 'App\\Controller\\FirmaController::Update_FIRMA_API'], [], [['text', '/api/updateCompany']], [], []],
     'app_kasse_testinggrounds' => [[], ['_format' => 'json', '_controller' => 'App\\Controller\\KasseController::TestingGrounds'], ['_format' => 'html|json'], [['text', '/api/VerifyCode']], [], []],
     'app_punkte_get_punkte_api' => [[], ['_controller' => 'App\\Controller\\PunkteController::GET_Punkte_API'], [], [['text', '/api/getPunkte']], [], []],
     'qrcode' => [[], ['_controller' => 'App\\Controller\\QrcodeController::index'], [], [['text', '/qrcode']], [], []],
