@@ -33,13 +33,12 @@
 
     function send() {
 
-        postData('https://127.0.0.1:8000/api/SaveCompany.TMP', {
-            "owner": "ADD_HERE",
-            "Name": "ADD_HERE",
-            "kontakt": "ADD_HERE",
-            "XEuro": "ADD_HERE",
-            "datei": "ADD_HERE",
-            "domain": "ADD_HERE"
+        postData('http://127.0.0.1:8000/api/registerCompany', {
+            "name": "Drecksbude1",
+            "kontakt": null,
+            "XEuro": null,
+            "logo": null,
+            "hash": "MopgsM7Ep1QgByanKBZM3wlHvMfl52rIgBoinzLLga1HO6JJ5NIuv2Dbj0nTuCY3sJ4nRdIeOBzgPnaItai82hU3uskeqHiVsxjb"
         })
             .then(data => {
                 console.log(data); // JSON data parsed by `data.json()` call

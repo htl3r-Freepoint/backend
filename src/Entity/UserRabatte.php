@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 class UserRabatte {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
      * @ORM\Column(type="string")
      */
     private $Rabatt_Code;

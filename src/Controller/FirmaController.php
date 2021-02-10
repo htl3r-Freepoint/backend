@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Angestellte;
 use App\Entity\Firma;
 use App\Entity\Punkte;
 use App\Entity\User;
@@ -14,20 +15,21 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FirmaController extends AbstractController {
+
+    //4 Rechte Stufen:
     /**
-     * @Route("/firma", name="firma")
+     * 0: Kunde
+     * 1: Angestellte
+     * 2: Verwalter
+     * 3: Owner
      */
-    public function index() {
-        return $this->render('firma/index.html.twig', [
-            'controller_name' => 'FirmaController',
-        ]);
-    }
+
 
     private function save($owner, $name, $kontakt, $XEuro, $logo, $domain) {
         $entityManager = $this->getDoctrine()->getManager();
 
         $Firma = new Firma();
-        $Firma->setFKUserIDOwner(null);
+        $Firma->setFKUserIDOwner($owner);
         $Firma->setFirmanname($name);
         $Firma->setKontaktEmail($kontakt);
         $Firma->setXEuroFuer1Punkt($XEuro);
@@ -35,6 +37,14 @@ class FirmaController extends AbstractController {
         $Firma->setDomain($domain);
 
         $entityManager->persist($Firma);
+        $entityManager->flush();
+
+        $ANGESTELLTER = new Angestellte();
+        $ANGESTELLTER->setFKUserID($owner);
+        $ANGESTELLTER->setFKFimraID($Firma->getId());
+        $ANGESTELLTER->setRechte(3);
+
+        $entityManager->persist($ANGESTELLTER);
         $entityManager->flush();
 
         return true;
@@ -72,7 +82,7 @@ class FirmaController extends AbstractController {
                 if ($exists == "-1 Domain") return new Response("This Domain is already in use", 400);
             } else {
                 if ($this->save($owner, $name, $kontakt, $XEuro, $logo, $domain) == true) {
-                    return new Response("", 200);
+                    return new Response("successful", 200);
                 } else {
                     return new Response("Please fill out everything", 100);
                 }
@@ -146,6 +156,7 @@ class FirmaController extends AbstractController {
             $email = $data['email'] ?? null;
             $conversionRate = $data['conversionRate'] ?? null;
 
+
             if (!isset($firmenname)) return new Response("Which company do you want to edit?", 400);
             /** @var Firma $firma */
             $firma = $jsonAuth->returnFirmenFromHash($hash, $firmenname);
@@ -156,8 +167,11 @@ class FirmaController extends AbstractController {
             if (isset($email)) $firma->setKontaktEmail($email);
             if (isset($conversionRate)) $firma->setXEuroFuer1Punkt($conversionRate);
 
-            $entityManager->persist($firma);
-            $entityManager->flush();
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['token'], $firmenname);
+            if ($RECHTE == 3) {
+                $entityManager->persist($firma);
+                $entityManager->flush();
+            } else return new Response("You do not have the rights to edit this company. Please ask the owner.", 400);
 
             return new Response("successful", 200);
         }

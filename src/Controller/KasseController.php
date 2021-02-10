@@ -29,10 +29,12 @@ class KasseController extends AbstractController {
     public function TestingGrounds(Request $request, SerializerInterface $serializer, Hash $jsonAuthentification): Response {
         $entityManager = $this->getDoctrine()->getManager();
 //        $jsonAuthentification->saveJsonCode(2);
-        $erg = "XD";
-        $hash = "XYRBUGnigcYC7Nbr0cNKvqIWtoCl7jzSVoIL99tdgyChsTG9f62HPaxznSMeBV4WGHtIoekJ55Rpv54kmWAr6JGR0TJSIxhwkFbn";
-        $erg = $jsonAuthentification->checkJsonCode($hash);
+//        $erg = "XD";
+        $hash = "YOLIKdGCn6nV0mBXi9dzQnNCp0ciuqBPNVCQ08BEXsKhgyBcWfsXLLh3EBZRvEvercHwbZJR2EIgVYSSqQT9WTUuMPPGkGmDluKT";
+//        $erg = $jsonAuthentification->checkJsonCode($hash);
 //        $erg = $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => 'test'])[0];
+
+        $erg = $jsonAuthentification->returnRechteFromHash($hash, "Schnitzelbude1337");
 
         return new Response($serializer->serialize($erg, 'json'), 200);
     }

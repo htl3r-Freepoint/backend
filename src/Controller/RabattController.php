@@ -130,9 +130,12 @@ class RabattController extends AbstractController {
             $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
             $fk_firma_id = $Firma->getID();
 
-            if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage) == true) {
-                return new Response($serializer->serialize($Firma, 'json'), 200);
-            }
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['token'], $firmenname);
+            if ($RECHTE >= 2) {
+                if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage) == true) {
+                    return new Response($serializer->serialize($Firma, 'json'), 200);
+                }
+            } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         }
     }
 }

@@ -65,8 +65,11 @@ class DesignController extends AbstractController {
             $ZUWEISUNG->setFKDesignID($designID);
             $ZUWEISUNG->setFKFirmaID($firmaID);
 
-            $entityManager->persist($ZUWEISUNG);
-            $entityManager->flush();
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
+            if ($RECHTE >= 2) {
+                $entityManager->persist($ZUWEISUNG);
+                $entityManager->flush();
+            } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
 
 
             return new Response("1", 200);

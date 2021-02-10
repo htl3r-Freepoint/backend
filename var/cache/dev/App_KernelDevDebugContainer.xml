@@ -384,6 +384,13 @@
         <argument type="service" id=".service_locator.5nX7ca3.App\Controller\KasseController"/>
       </call>
     </service>
+    <service id="App\Controller\MitarbeiterController" class="App\Controller\MitarbeiterController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.5nX7ca3.App\Controller\MitarbeiterController"/>
+      </call>
+    </service>
     <service id="App\Controller\PunkteController" class="App\Controller\PunkteController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -5146,6 +5153,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\KasseController" class="App\Controller\KasseController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\KasseController" class="App\Controller\KasseController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\KasseController" class="App\Controller\KasseController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\MitarbeiterController" class="App\Controller\MitarbeiterController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\MitarbeiterController" class="App\Controller\MitarbeiterController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\MitarbeiterController" class="App\Controller\MitarbeiterController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\PunkteController" class="App\Controller\PunkteController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\PunkteController" class="App\Controller\PunkteController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\PunkteController" class="App\Controller\PunkteController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -5504,7 +5514,7 @@
         <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
-    <service id=".service_locator.bUiz6x1" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.yNMO.8s" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\DesignController::GET_Design" type="service" id=".service_locator.VhJDIcj"/>
@@ -5513,6 +5523,9 @@
         <argument key="App\Controller\FirmaController::SAVE_FIRMA_API" type="service" id=".service_locator.asj2MBR"/>
         <argument key="App\Controller\FirmaController::Update_FIRMA_API" type="service" id=".service_locator.asj2MBR"/>
         <argument key="App\Controller\KasseController::TestingGrounds" type="service" id=".service_locator.uYfMB_k"/>
+        <argument key="App\Controller\MitarbeiterController::Add_Mitarbeiter" type="service" id=".service_locator.asj2MBR"/>
+        <argument key="App\Controller\MitarbeiterController::Edit_Mitarbeiter" type="service" id=".service_locator.asj2MBR"/>
+        <argument key="App\Controller\MitarbeiterController::Remove_Mitarbeiter" type="service" id=".service_locator.asj2MBR"/>
         <argument key="App\Controller\PunkteController::GET_Punkte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\QrcodeController::Add_QrCode_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\RabattController::GET_Rabatt_API" type="service" id=".service_locator.VhJDIcj"/>
@@ -5524,6 +5537,7 @@
         <argument key="App\Controller\UserController::Login_User_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Controller\UserController::POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="App\Controller\UserController::sendMail" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Controller\UserRabattController::Add_Userrabatte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\UserRabattController::GET_Userrabatte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\UserRabattController::Use_Userrabatte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\VerifyController::Verify_User" type="service" id=".service_locator.9wplPMA"/>
@@ -5549,6 +5563,9 @@
         <argument key="App\Controller\FirmaController:SAVE_FIRMA_API" type="service" id=".service_locator.asj2MBR"/>
         <argument key="App\Controller\FirmaController:Update_FIRMA_API" type="service" id=".service_locator.asj2MBR"/>
         <argument key="App\Controller\KasseController:TestingGrounds" type="service" id=".service_locator.uYfMB_k"/>
+        <argument key="App\Controller\MitarbeiterController:Add_Mitarbeiter" type="service" id=".service_locator.asj2MBR"/>
+        <argument key="App\Controller\MitarbeiterController:Edit_Mitarbeiter" type="service" id=".service_locator.asj2MBR"/>
+        <argument key="App\Controller\MitarbeiterController:Remove_Mitarbeiter" type="service" id=".service_locator.asj2MBR"/>
         <argument key="App\Controller\PunkteController:GET_Punkte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\QrcodeController:Add_QrCode_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\RabattController:GET_Rabatt_API" type="service" id=".service_locator.VhJDIcj"/>
@@ -5560,6 +5577,7 @@
         <argument key="App\Controller\UserController:Login_User_API" type="service" id=".service_locator.pByTI9U"/>
         <argument key="App\Controller\UserController:POST_GET_User_API" type="service" id=".service_locator.BtIsEwn"/>
         <argument key="App\Controller\UserController:sendMail" type="service" id=".service_locator.BtIsEwn"/>
+        <argument key="App\Controller\UserRabattController:Add_Userrabatte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\UserRabattController:GET_Userrabatte_API" type="service" id=".service_locator.9wplPMA"/>
         <argument key="App\Controller\UserRabattController:Use_Userrabatte_API" type="service" id=".service_locator.VhJDIcj"/>
         <argument key="App\Controller\VerifyController:Verify_User" type="service" id=".service_locator.9wplPMA"/>
@@ -5898,6 +5916,12 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.5nX7ca3" method="withContext"/>
     </service>
+    <service id=".service_locator.5nX7ca3.App\Controller\MitarbeiterController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\MitarbeiterController"/>
+      <argument>App\Controller\MitarbeiterController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.5nX7ca3" method="withContext"/>
+    </service>
     <service id=".service_locator.5nX7ca3.App\Controller\PunkteController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\PunkteController"/>
       <argument>App\Controller\PunkteController</argument>
@@ -6113,12 +6137,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.bUiz6x1"/>
+      <argument type="service" id=".service_locator.yNMO.8s"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.bUiz6x1"/>
+      <argument type="service" id=".service_locator.yNMO.8s"/>
     </service>
     <service id=".debug.http_client.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface">
       <argument type="collection"/>
@@ -6520,7 +6544,7 @@
     <service id="Twig\Environment" alias="twig"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.Kbr2i2X" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.bUiz6x1"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.yNMO.8s"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
     <service id="Psr\Log\LoggerInterface $cacheLogger" alias="monolog.logger.cache"/>

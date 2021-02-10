@@ -7,6 +7,7 @@
 <body>
 
 <button onclick="send()">Use Rabatt</button>
+<button onclick="add()">Add Rabatt</button>
 
 
 <script type="text/javascript">
@@ -14,7 +15,7 @@
     async function postData(url = '', data = {}) {
         // Default options are marked with *
         const response = await fetch(url, {
-            method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
@@ -31,13 +32,46 @@
     }
 
     function send() {
-        postData('https://127.0.0.1:8000/api/Userrabatte/use.json', {
-            "code": "342dfsqt41"
+        postData('http://127.0.0.1:8000/api/useUserrabatte', {
+            "hash": "MopgsM7Ep1QgByanKBZM3wlHvMfl52rIgBoinzLLga1HO6JJ5NIuv2Dbj0nTuCY3sJ4nRdIeOBzgPnaItai82hU3uskeqHiVsxjb",
+            "code": "q1vv59dhoHY6o7j5iwXTNICAdTMUl9fbhQiS1zQNolYcbiAud73KdARLy6fkZbmRRzELpKUYxa8CFgj91PefVKqUAK10i5y9dxtr"
         })
             .then(data => {
                 console.log(data); // JSON data parsed by `data.json()` call
             });
     }
+
+    ////////
+    async function ADDData(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    function add() {
+        ADDData('http://127.0.0.1:8000/api/addUserrabatte', {
+            "hash": "MopgsM7Ep1QgByanKBZM3wlHvMfl52rIgBoinzLLga1HO6JJ5NIuv2Dbj0nTuCY3sJ4nRdIeOBzgPnaItai82hU3uskeqHiVsxjb",
+            "firmenName": "Schulkantine",
+            "rabattID": 5
+        })
+            .then(data => {
+                console.log(data); // JSON data parsed by `data.json()` call
+            });
+    }
+
 </script>
 
 </body>

@@ -4,10 +4,12 @@
 namespace App\Service;
 
 use App\Controller\UserController;
+use App\Entity\Angestellte;
 use App\Entity\Firma;
 use App\Entity\LoginAuthentification;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
 class Hash extends UserController {
     public function generateCode($id) {
@@ -113,5 +115,14 @@ class Hash extends UserController {
             $pass[] = $alphabet[$n];
         }
         return implode($pass); //turn the array into a string
+    }
+
+    public function returnRechteFromHash($hash, $firmenname) {
+        /** @var User $user */
+        $user = $this->returnUserFromHash($hash)['user'];
+        $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+
+        $ANGESTELLTE = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getID(), 'FK_Fimra_ID' => $FIRMA->getID()])[0];;
+        return $ANGESTELLTE->getRechte();
     }
 }

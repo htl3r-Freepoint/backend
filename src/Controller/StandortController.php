@@ -46,7 +46,7 @@ class StandortController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_FIRMA_API(Request $request, SerializerInterface $serializer): Response {
+    public function POST_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         // Return JSON
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
@@ -58,7 +58,13 @@ class StandortController extends AbstractController {
             $laengengrad = $data["laengengrad"] ?? null;
             $breitengrad = $data["breitengrad"] ?? null;
 
-            $saved = $this->save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Invalid Authwntification token', 403);
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $firmaID])[0];
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $FIRMA->getFirmanname());
+            if ($RECHTE >= 2) {
+                $saved = $this->save($firmaID, $addresse, $Ort, $PLZ, $laengengrad, $breitengrad);
+            } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+
             if ($saved == false) {
                 return new Response($saved, 200);
             } else {

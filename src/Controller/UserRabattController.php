@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Firma;
+use App\Entity\Punkte;
+use App\Entity\Rabatt;
+use App\Entity\User;
 use App\Entity\UserRabatte;
 use App\Service\Hash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,23 +50,65 @@ class UserRabattController extends AbstractController {
      * @return Response
      */
     public function Use_Userrabatte_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        if ($request->getMethod() == 'PUT') {
+        if ($request->getMethod() == 'POST') {
+            $entityManager = $this->getDoctrine()->getManager();
             $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
             $code = $data["code"];
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $Rabatt = $this->getDoctrine()->getRepository(UserRabatte::class)->find(["Rabatt_Code" => $code]);
-            if ($Rabatt == 0) return new Response("-1 NotFound", 400);
-            if ($Rabatt >= 2) return new Response("-1 tooMany", 400);
-            if ($Rabatt->getUsed() == true) return new Response("-1 used", 400);
+            $Rabatt = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(["Rabatt_Code" => $code]);
+            if (count($Rabatt) == 0) return new Response("Coupon Code Not Found. Please try again with another code", 400);
+            if (count($Rabatt) >= 2) return new Response("Too many codes found. Please contact the administrator", 400);
+            $Rabatt = $Rabatt[0];
+            if ($Rabatt->getUsed() == true) return new Response("Code has already been used", 400);
 
-            $Rabatt->setUsed(true);
-
-            $entityManager->persist($Rabatt);
+            $entityManager->remove($Rabatt);
             $entityManager->flush();
 
-            return new Response('1', 200);
+            return new Response('successful', 200);
+        }
+    }
+
+    /**
+     * @Route("/api/addUserrabatte")
+     * @param Request $request
+     * @return Response
+     */
+    public function Add_Userrabatte_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        if ($request->getMethod() == 'POST') {
+            $entityManager = $this->getDoctrine()->getManager();
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            /** @var User $user */
+            $hash = $data['hash'];
+            $user = $jsonAuth->returnUserFromHash($hash)['user'];
+            $firmenname = $data['firmenName'];
+            $rabattID = $data['rabattID'];
+
+            /** @var Firma $FIRMA */
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+            /** @var Punkte $PUNKTE */
+            $PUNKTE = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_Firma_ID' => $FIRMA->getId(), "FK_User_ID" => $user->getId()])[0];
+            /** @var Rabatt $RABATT */
+            $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $rabattID])[0];
+
+            if ($PUNKTE->getPunkte() - $RABATT->getNeededPoints() >= 0) {
+                $PUNKTE->setPunkte($PUNKTE->getPunkte() - $RABATT->getNeededPoints());
+                $code = $jsonAuth->generateJsonCode();
+
+                $USERRABATT = new UserRabatte();
+                $USERRABATT->setFKUserID($user->getId());
+                $USERRABATT->setFKRabattID($rabattID);
+                $USERRABATT->setRabattCode($code);
+                $USERRABATT->setUsed(false);
+
+                $entityManager->persist($PUNKTE);
+                $entityManager->persist($USERRABATT);
+                $entityManager->flush();
+
+            }
+
+            return new Response($serializer->serialize($code, 'json'), 200);
         }
     }
 }
