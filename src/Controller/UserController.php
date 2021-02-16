@@ -67,7 +67,7 @@ class UserController extends AbstractController {
             ->from('no-reply@freepoint.at')
             ->to($email)
             ->subject('Verify your FreePoint account')
-            ->text('Verification Link: https://127.0.0.1:8000/verify/' . $code);
+            ->text('Verification Link: https://freepoint.htl3r.com/verify/' . $code);
 
         $mailer->send($email);
     }
