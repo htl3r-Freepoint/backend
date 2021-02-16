@@ -33,7 +33,7 @@ class UserController extends AbstractController {
     }
 
     /**
-     * @Route("/api/sendMail")
+     * @Route("/api/sendEmail")
      * @param Request $request
      * @return Response
      */
