@@ -15,7 +15,9 @@ class VerifyController extends AbstractController {
 
     /**
      * @Route("/verify/{id}")
+     * @param int $id
      * @param Request $request
+     * @param SerializerInterface $serializer
      * @return Response
      */
     public function Verify_User(int $id, Request $request, SerializerInterface $serializer): Response {
