@@ -91,8 +91,8 @@ class Hash extends UserController {
         return $DataDB;
     }
 
-    public function saveJsonCode($userID): string { //Code wird erstellt, gespeichert und zurück gegeben
-        $code = $this->generateJsonCode();
+    public function saveJsonCode($userID, $code = null): string { //Code wird erstellt, gespeichert und zurück gegeben
+        if (!isset($code)) $code = $this->generateJsonCode();
         $entityManager = $this->getDoctrine()->getManager();
         $LOGINAUTHENTIFICATION = new LoginAuthentification();
         $LOGINAUTHENTIFICATION->setFKUserID($userID);

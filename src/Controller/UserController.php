@@ -258,7 +258,7 @@ class UserController extends AbstractController {
 
             if ($anz > 1) return new Response("Too Many Users found:" . $anz, 400);
             if ($anz < 1) return new Response("User or Password not found", 400);
-            if ($jsonAuth->checkJsonCode($hash) == false) $hash = $jsonAuth->saveJsonCode($id);
+            if ($jsonAuth->checkJsonCode($hash) == false) $hash = $jsonAuth->saveJsonCode($id, $hash);
             $data = [
 //                    'email' => $email,
                 'username' => $user->getUsername(),
