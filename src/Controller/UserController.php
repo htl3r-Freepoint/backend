@@ -42,8 +42,11 @@ class UserController extends AbstractController {
             $data = json_decode($request->getContent(), true);
             if (!$jsonHash->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
-            $UserID = $data['UserID'];
-            $email = $data['email'];
+            /** @var User $user */
+            $user = $jsonHash->returnUserFromHash($data['hash'])['user'];
+            $UserID = $user->getID();
+            $email = $user->getEmail();
+
             $UserDB = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email]);
             if (count($UserDB) == 1) {
                 $VerifyDB = $this->getDoctrine()->getRepository(Verify::class)->findBy(['FK_User_ID' => $UserID]);
