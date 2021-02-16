@@ -45,5 +45,6 @@ class VerifyController extends AbstractController {
 
             return new Response($serializer->serialize($user[0], 'json'), 200);
         }
+        return new Response("Successful!");
     }
 }
