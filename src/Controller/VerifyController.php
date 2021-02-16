@@ -15,12 +15,12 @@ class VerifyController extends AbstractController {
 
     /**
      * @Route("/verify/{id}")
-     * @param int $id
+     * @param String $id
      * @param Request $request
      * @param SerializerInterface $serializer
      * @return Response
      */
-    public function Verify_User(int $id, Request $request, SerializerInterface $serializer): Response {
+    public function Verify_User(String $id, Request $request, SerializerInterface $serializer): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
             $entityManager = $this->getDoctrine()->getManager();
