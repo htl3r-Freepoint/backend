@@ -14,15 +14,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 class VerifyController extends AbstractController {
 
     /**
-     * @Route("/verify")
+     * @Route("/verify/{id}")
      * @param Request $request
      * @return Response
      */
-    public function Verify_User(Request $request, SerializerInterface $serializer): Response {
+    public function Verify_User(int $id, Request $request, SerializerInterface $serializer): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
             $entityManager = $this->getDoctrine()->getManager();
-            $code = $data['code'] ?? null;
+            $code = $data['code'] ?? $id;
             if (!isset($code)) return new Response("-1 code", 400);
 
             $verify = $this->getDoctrine()->getRepository(Verify::class)->findBy(['code' => $code]);
