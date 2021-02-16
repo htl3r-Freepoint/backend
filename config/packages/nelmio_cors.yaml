@@ -13,3 +13,4 @@ nelmio_cors:
       allow_headers: [ '*' ]
       allow_methods: [ 'POST', 'PUT' ]
       max_age: 3600
+
