@@ -14,4 +14,10 @@ var/cache/
 var/log/
 var/cach/dev/
 .idea
+public/css
+public/fonts
+public/img
+public/js
+public/favicon.ico
+public/index.html
 ###< symfony/phpunit-bridge ###
