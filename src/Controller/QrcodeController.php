@@ -27,7 +27,7 @@ class QrcodeController extends AbstractController {
      * @Route("/qrcode", name="qrcode")
      */
     public function index() {
-        return $this->render('qrcode/index.html.twig', [
+        return $this->render('qrcode/index.php.twig', [
             'controller_name' => 'QrcodeController',
         ]);
     }

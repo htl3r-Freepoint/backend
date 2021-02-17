@@ -17,7 +17,7 @@ class StandortController extends AbstractController {
      * @Route("/standort", name="standort")
      */
     public function index() {
-        return $this->render('standort/index.html.twig', [
+        return $this->render('standort/index.php.twig', [
             'controller_name' => 'StandortController',
         ]);
     }

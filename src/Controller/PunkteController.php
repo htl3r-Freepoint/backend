@@ -15,7 +15,7 @@ class PunkteController extends AbstractController {
      * @Route("/punkte", name="punkte")
      */
 //    public function index() {
-//        return $this->render('punkte/index.html.twig', [
+//        return $this->render('punkte/index.php.twig', [
 //            'controller_name' => 'PunkteController',
 //        ]);
 //    }
@@ -49,6 +49,8 @@ class PunkteController extends AbstractController {
 
                 }
             }
+        } else {
+            return new Response("NOT ALLOWED!!!");
         }
     }
 

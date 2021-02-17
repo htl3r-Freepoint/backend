@@ -17,7 +17,7 @@ class KasseController extends AbstractController {
      */
 //    public function index()
 //    {
-//        return $this->render('kasse/index.html.twig', [
+//        return $this->render('kasse/index.php.twig', [
 //            'controller_name' => 'KasseController',
 //        ]);
 //    }

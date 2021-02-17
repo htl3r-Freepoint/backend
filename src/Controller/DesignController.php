@@ -20,7 +20,7 @@ class DesignController extends AbstractController {
      * @Route("/design", name="design")
      */
 //    public function index() {
-//        return $this->render('design/index.html.twig', [
+//        return $this->render('design/index.php.twig', [
 //            'controller_name' => 'DesignController',
 //        ]);
 //    }

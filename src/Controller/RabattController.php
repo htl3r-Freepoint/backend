@@ -16,7 +16,7 @@ class RabattController extends AbstractController {
      * @Route("/rabatt", name="rabatt")
      */
 //    public function index() {
-//        return $this->render('rabatt/index.html.twig', [
+//        return $this->render('rabatt/index.php.twig', [
 //            'controller_name' => 'RabattController',
 //        ]);
 //    }

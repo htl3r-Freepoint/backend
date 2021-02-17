@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('build/css/app.a06e13da.css') }}">
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+    <div id="app"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {# includes all built assets of VueJs/VueRouter/... #}
+    <script src="{{ asset('build/js/app.a3b19cdf.js') }}"></script>
+{% endblock %}
+</body>
+</html>
