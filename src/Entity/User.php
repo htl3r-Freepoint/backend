@@ -53,6 +53,25 @@ class User {
     private $loginType;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $locked = false;
+
+    /**
+     * @return bool
+     */
+    public function isLocked(): bool {
+        return $this->locked;
+    }
+
+    /**
+     * @param bool $locked
+     */
+    public function setLocked(bool $locked): void {
+        $this->locked = $locked;
+    }
+
+    /**
      * @return mixed
      */
     public function getLoginType() {

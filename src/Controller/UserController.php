@@ -259,6 +259,7 @@ class UserController extends AbstractController {
             if ($anz > 1) return new Response("Too Many Users found:" . $anz, 400);
             if ($anz < 1) return new Response("User or Password not found", 400);
             if ($jsonAuth->checkJsonCode($hash) == false) $hash = $jsonAuth->saveJsonCode($id, $hash);
+            if ($user->getLocked() == true) return new Response("Your account has been locked! Please contact us at: \"contact@freepoint.at\" to unlock your account.", 400);
             $data = [
 //                    'email' => $email,
                 'username' => $user->getUsername(),

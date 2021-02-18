@@ -35,8 +35,8 @@ class KasseController extends AbstractController {
 //        $erg = $jsonAuthentification->checkJsonCode($hash);
 //        $erg = $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => 'test'])[0];
 //        $erg = $jsonAuthentification->returnRechteFromHash($hash, "Schnitzelbude1337");
-        $erg = $dsgvo->getAllUserData($hash, null);
+//        $erg = $dsgvo->unlockUser(null, '5124@htl.rennweg.at');
 
-        return new Response($serializer->serialize($erg, 'json'), 200);
+        return new Response($serializer->serialize("", 'json'), 404);
     }
 }

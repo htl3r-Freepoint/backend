@@ -18,6 +18,9 @@ use App\Entity\Rabatt;
 use App\Entity\User;
 use App\Entity\UserRabatte;
 use App\Entity\Verify;
+use App\Entity\Widerspruchsrecht;
+use phpDocumentor\Reflection\DocBlock\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class DSGVO extends UserController {
 
@@ -59,6 +62,52 @@ class DSGVO extends UserController {
         return $data;
     }
 
+    public function lockUser($hash = null, $email = null) {
+        $entityManager = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->returnUser($hash, $email);
+        $user->setLocked(true);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $user;
+    }
+
+    public function unlockUser($hash = null, $email = null) {
+        $entityManager = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->returnUser($hash, $email);
+        $user->setLocked(false);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $user;
+    }
+
+//    public function lockUser(SerializerInterface $serializer, $hash = null, $email = null) {
+//        $entityManager = $this->getDoctrine()->getManager();
+//        $data = $this->getAllUserData($hash, $email);
+//        $mail = $data['user']->getEmail();
+//
+//        $WIERECHT = new Widerspruchsrecht();
+//        $WIERECHT->setData($serializer->serialize($data, 'json'));
+//        $WIERECHT->setEmail($mail . "");
+//
+////        $this->deleteEverything($hash, $email);
+//
+//        $entityManager->persist($WIERECHT);
+//        $entityManager->flush();
+//        return "1";
+//    }
+//
+//    public function unlockUser(SerializerInterface $serializer, $email) {
+//        $db = $this->getDoctrine()->getRepository(Widerspruchsrecht::class)->findBy(['email' => $email])[0];
+//        $data = json_decode($db->getData(), true);
+//        $user = $data['user'];
+//        $firmen = $data['firmen'];
+//        return $user;
+//    }
+
     public function deleteEverything($hash = null, $email = null) {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->returnUser($hash, $email);
@@ -75,34 +124,53 @@ class DSGVO extends UserController {
         $userrabatte = $this->getUserRabatte($user);
         $verify = $this->getVerify($user);
 
+
         $this->deleteQRCode($qrcodes);
         $entityManager->remove($user);
         foreach ($firmen as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
         foreach ($standorte as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
         foreach ($designzuweiungen as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
         foreach ($kassen as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
         foreach ($angestellte as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
         foreach ($loginAuth as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
         foreach ($rabatte as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
         foreach ($userrabatte as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
         foreach ($verify as $firma) {
-            $entityManager->remove($firma);
+            if (isset($firma)) {
+                $entityManager->remove($firma);
+            }
         }
 
         $entityManager->flush();
@@ -113,12 +181,14 @@ class DSGVO extends UserController {
         $entityManager = $this->getDoctrine()->getManager();
         /** @var Qrcode $code */
         foreach ($qrcodes as $code) {
-            $code->setFKUserID(null);
-            $code->setScannDatum(null);
+            if (isset($code)) {
+                $code->setFKUserID(0);
+                $code->setScannDatum(new \DateTime('2000-01-01'));
+                $entityManager->persist($code);
+                $entityManager->flush();
+            }
         }
 
-        $entityManager->persist($code);
-        $entityManager->flush();
     }
 
     private function getVerify($user) {
