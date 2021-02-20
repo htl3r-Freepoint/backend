@@ -65,6 +65,13 @@ class User {
     }
 
     /**
+     * @return bool
+     */
+    public function isLocked(): bool {
+        return $this->locked;
+    }
+
+    /**
      * @param bool $locked
      */
     public function setLocked(bool $locked): void {
