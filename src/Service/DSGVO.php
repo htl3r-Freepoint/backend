@@ -175,6 +175,7 @@ class DSGVO extends UserController {
 
         $entityManager->flush();
 
+        return 1;
     }
 
     private function deleteQRCode($qrcodes) {

@@ -30,13 +30,14 @@ class KasseController extends AbstractController {
     public function TestingGrounds(Request $request, SerializerInterface $serializer, Hash $jsonAuthentification, DSGVO $dsgvo): Response {
         $entityManager = $this->getDoctrine()->getManager();
 //        $jsonAuthentification->saveJsonCode(2);
-//        $erg = "XD";
+        $erg = "";
         $hash = "ttgIeo6YNCoDg3YoJNUlMy868vhWBblZv6z4Ki61pEV3ATcWiqr4aZPPLiu19MfNHl5wa48tnJM6l2N7iAJumg7mnw6z0kGIhGtS";
 //        $erg = $jsonAuthentification->checkJsonCode($hash);
 //        $erg = $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => 'test'])[0];
 //        $erg = $jsonAuthentification->returnRechteFromHash($hash, "Schnitzelbude1337");
 //        $erg = $dsgvo->unlockUser(null, '5124@htl.rennweg.at');
+//        $erg = $dsgvo->deleteEverything(null, '32541432');
 
-        return new Response($serializer->serialize("", 'json'), 404);
+        return new Response($serializer->serialize($erg, 'json'), 404);
     }
 }
