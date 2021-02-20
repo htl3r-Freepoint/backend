@@ -60,7 +60,7 @@ class User {
     /**
      * @return bool
      */
-    public function isLocked(): bool {
+    public function getLocked(): bool {
         return $this->locked;
     }
 
