@@ -341,5 +341,35 @@ class UserController extends AbstractController {
             return new Response("successful", 200);
         }
     }
+    /**
+     * @Route("/api/getUser")
+     * @param Request $request
+     * @return Response
+     *
+     */
+    public function Get_User_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token invalid', 403);
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $hash = $data['hash'];
+
+            $DataDB = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['Hash' => $hash]);
+            /** @var User $user */
+            $user = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $DataDB[0]->getFKUserID()])[0];
+
+            $erg = [
+                'username' => $user->getUsername(),
+                'FirstName' => $user->getVorname(),
+                'LastName' => $user->getNachname(),
+                'email' => $user->getEmail(),
+                'verified' => $user->getVerified(),
+            ];
+
+            return new Response($serializer->serialize($erg, 'json'), 200);
+        }
+    }
+
 
 }
