@@ -44,7 +44,7 @@ class VerifyController extends AbstractController {
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return new Response($serializer->serialize($user, 'json'), 200);
+        return new Response("Successfully verified! You can now head back and log in into your account.", 200);
 //        }
 //        return new Response("Successfuly verified!: " . $serializer->serialize($user, 'json'));
     }
