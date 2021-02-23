@@ -36,7 +36,7 @@ class StatistikController extends AbstractController {
             foreach ($firmen as $firma) {
                 $erg[$firma->getFirmanname()] = [
                     'app starts' => $firma->getAppAufrufe(),
-                    'Coupons bought' => $firma->getKaeufeRabatte(),
+                    'coupons bought' => $firma->getKaeufeRabatte(),
                     'used coupons' => $firma->getGenutzteRabatte(),
                     'qr-codes scanned' => $firma->getGescannteRechnungen()
                 ];
