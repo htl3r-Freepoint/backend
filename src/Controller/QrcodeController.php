@@ -81,7 +81,9 @@ class QrcodeController extends AbstractController {
         $entityManager = $this->getDoctrine()->getManager();
         $kasse = mb_split("_", $OGCode)[2];
         $firmen = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['Bezeichnung' => $kasse]);
-        if (count($firmen) == 0) return "-1 Kassa";
+        if (count($firmen) == 0) return "No Kassa found";
+        /** @var Firma $FIRMA */
+        $FIRMA = $firmen[0];
 
         $QRCODE = new Qrcode();
         $QRCODE->setKlartext($OGCode);
@@ -91,7 +93,7 @@ class QrcodeController extends AbstractController {
 //        $entityManager->flush();
 
 
-        $firma_id = $firmen[0]->getFkFirmaId();
+        $firma_id = $FIRMA->getFkFirmaId();
         $return = ['points' => 0, 'all_points' => 0];
         $punkte = $this->getPointsFromCode($OGCode, $firma_id);
         $tmp = $punkte;
@@ -108,6 +110,13 @@ class QrcodeController extends AbstractController {
         $entityManager->persist($PUNKTE);
         $entityManager->flush();
         $punkte = ['points' => $tmp, 'all_points' => $PUNKTE->getPunkte()];
+
+        $scans = $FIRMA->getGescannteRechnungen() ?? 0;
+        if (!isset($scans)) $scans = 0;
+        $FIRMA->setAppAufrufe($scans + 1);
+        $entityManager->persist($FIRMA);
+        $entityManager->flush();
+
 
         return $punkte;
     }
