@@ -133,13 +133,6 @@ class FirmaController extends AbstractController {
                 ];
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $aufrufe = $firma->getAppAufrufe() ?? 0;
-            if (!isset($aufrufe)) $aufrufe = 0;
-            $firma->setAppAufrufe($aufrufe + 1);
-            $entityManager->persist($firma);
-            $entityManager->flush();
-
 
             return new Response($serializer->serialize($erg, 'json'), 200);
         }

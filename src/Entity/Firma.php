@@ -22,27 +22,6 @@ class Firma {
     private $FK_User_ID__Owner;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $AppAufrufe = 0;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $KaeufeRabatte = 0;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $GenutzteRabatte = 0;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $GescannteRechnungen = 0;
-
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $Firmanname;
@@ -66,62 +45,6 @@ class Firma {
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $Domain;
-
-    /**
-     * @return int
-     */
-    public function getAppAufrufe(): int {
-        return $this->AppAufrufe;
-    }
-
-    /**
-     * @param int $AppAufrufe
-     */
-    public function setAppAufrufe(int $AppAufrufe): void {
-        $this->AppAufrufe = $AppAufrufe;
-    }
-
-    /**
-     * @return int
-     */
-    public function getKaeufeRabatte(): int {
-        return $this->KaeufeRabatte;
-    }
-
-    /**
-     * @param int $KaeufeRabatte
-     */
-    public function setKaeufeRabatte(int $KaeufeRabatte): void {
-        $this->KaeufeRabatte = $KaeufeRabatte;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGenutzteRabatte(): int {
-        return $this->GenutzteRabatte;
-    }
-
-    /**
-     * @param int $GenutzteRabatte
-     */
-    public function setGenutzteRabatte(int $GenutzteRabatte): void {
-        $this->GenutzteRabatte = $GenutzteRabatte;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGescannteRechnungen(): int {
-        return $this->GescannteRechnungen;
-    }
-
-    /**
-     * @param int $GescannteRechnungen
-     */
-    public function setGescannteRechnungen(int $GescannteRechnungen): void {
-        $this->GescannteRechnungen = $GescannteRechnungen;
-    }
 
     public function getId(): ?int {
         return $this->id;
