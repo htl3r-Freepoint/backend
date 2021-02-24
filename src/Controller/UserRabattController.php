@@ -62,6 +62,15 @@ class UserRabattController extends AbstractController {
             $Rabatt = $Rabatt[0];
             if ($Rabatt->getUsed() == true) return new Response("Code has already been used", 400);
 
+
+            $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(["FK_Rabatt_ID" => $Rabatt->getFKRabattID()])[0];
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(["id" => $RABATT->getFKFirmaID()])[0];
+            $kaeufe = $FIRMA->getKaeufeRabatte() ?? 0;
+            if (!isset($kaeufe)) $kaeufe = 0;
+            $FIRMA->setAppAufrufe($kaeufe + 1);
+            $entityManager->persist($FIRMA);
+            $entityManager->flush();
+
             $entityManager->remove($Rabatt);
             $entityManager->flush();
 
@@ -104,6 +113,12 @@ class UserRabattController extends AbstractController {
 
                 $entityManager->persist($PUNKTE);
                 $entityManager->persist($USERRABATT);
+                $entityManager->flush();
+
+                $kaeufe = $FIRMA->getKaeufeRabatte() ?? 0;
+                if (!isset($kaeufe)) $kaeufe = 0;
+                $FIRMA->setAppAufrufe($kaeufe + 1);
+                $entityManager->persist($FIRMA);
                 $entityManager->flush();
 
             }
