@@ -147,7 +147,6 @@ class FirmaController extends AbstractController {
 
     /**
      * @Route("/api/updateCompany")
-     * @Route("/api/changeFirma")
      * @param Request $request
      * @return Response
      */
@@ -184,6 +183,5 @@ class FirmaController extends AbstractController {
             return new Response("successful", 200);
         }
     }
-
 
 }
