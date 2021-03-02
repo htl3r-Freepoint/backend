@@ -25,59 +25,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 
 class QrcodeController extends AbstractController {
-    /**
-     * @Route("/qrcode", name="qrcode")
-     */
-    public function index() {
-        return $this->render('qrcode/index.php.twig', [
-            'controller_name' => 'QrcodeController',
-        ]);
-    }
-
-    /**
-     * @Route("/qrcode/showAll/", name="showAll_qrcodes")
-     */
-//    public function showAll() {
-//        $codeFINISH = $this->getDoctrine()->getRepository(Qrcode::class);
-//        return $this->render("qrcode/success.html.twig", ["menus" => $codeFINISH->findAll()]);
-//    }
-
-    /**
-     * @Route("/qrcode/new", name="new_qrcode_form")
-     */
-//    public function add(Request $request) {
-//        $QRCODE = new Qrcode();
-//        $form = $this->createForm(QRCodeType::class, $QRCODE)
-//            ->add('FK_User_ID', NumberType::class, ['label' => 'User ID: '])
-//            ->add('Klartext', TextType::class, ['label' => 'Klartext: '])
-//            ->add('ScannDatum', DateType::class, ['label' => 'Scanndatum: '])
-//            ->add('save', SubmitType::class, ['label' => 'Create QRCode']);
-//
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $task = $form->getData();
-//            ////////////////////////////////////////////
-//            $OGCode = $task->getKlartext();
-//
-//            $exists = $this->checkCode($OGCode);
-//
-//            if ($exists == "true") {
-////                echo "Fehler! QR-Code wurde schon eingelöst!";
-//                return $this->render("qrcode/failed.html.twig", ["code" => $OGCode]);
-//            } else {
-//
-//                $this->saveCode($OGCode, 1);
-//
-//                ////////////////////////////////////////////
-//                $codeFINISH = $this->getDoctrine()->getRepository(Qrcode::class);
-//                return $this->render("qrcode/success.html.twig", ["menus" => $codeFINISH->findAll()]);
-//            }
-//        }
-//
-//        return $this->render('qrcode/newForm.html.twig', [
-//            'form' => $form->createView(),
-//        ]);
-//    }
 
     protected function saveCode($OGCode, $FKUserId) {
         $entityManager = $this->getDoctrine()->getManager();
@@ -175,24 +122,24 @@ class QrcodeController extends AbstractController {
      * @return Response
      */
     public function Add_QrCode_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        // Return JSON
-        $data = json_decode($request->getContent(), true);
-        if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-        $OGCode = $data["code"];
-        $UserID = $data["UserID"];
-//            $OGCode = "_R1-AT1_ZELJKOMUS01A_27914_2020-09-26T16:26:38_3,20_110,00_0,00_0,00_0,00_IXkPErtUR1A=_13e8e502_ctENeqtyCtU=_tQlbGAaQyGiuUR7EhIOgHJlf4s/K9ykoDyacSTutgCrLbhm4/sHHGhSqdaRAnjHl11121Do1Oc5JVG/ftLhp5u+lTQg==";
-//            $UserID = 12;
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            $OGCode = $data["code"];
+            $UserID = $data["UserID"];
 
-
-        $exists = 0;
+            $exists = 0;
 //            $exists = $this->checkCode($OGCode);
 
-        if ($exists == "vorhanden") {
-            return new Response("-1 vorhanden", 400);
+            if ($exists == "vorhanden") {
+                return new Response("-1 vorhanden", 400);
+            } else {
+                $savedPoints = $this->saveCode($OGCode, $UserID);
+                if ($savedPoints == "-1 Kassa") return new Response("-1 Kassa", 400);
+                return new Response($serializer->serialize($savedPoints, 'json'), 200);
+            }
         } else {
-            $savedPoints = $this->saveCode($OGCode, $UserID);
-            if ($savedPoints == "-1 Kassa") return new Response("-1 Kassa", 400);
-            return new Response($serializer->serialize($savedPoints, 'json'), 200);
+            return new Response("", 404);
         }
     }
 }

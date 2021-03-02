@@ -43,6 +43,8 @@ class UserRabattController extends AbstractController {
                 $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
                 return new Response($serializer->serialize($data, 'json'), 200);
             }
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -75,6 +77,8 @@ class UserRabattController extends AbstractController {
             $STATISTIK->setFKFirmaID($FIRMA->getId());
 
             return new Response('successful', 200);
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -123,6 +127,8 @@ class UserRabattController extends AbstractController {
             }
 
             return new Response($serializer->serialize($code, 'json'), 200);
+        } else {
+            return new Response("", 404);
         }
     }
 }

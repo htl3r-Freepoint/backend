@@ -103,6 +103,8 @@ class RabattController extends AbstractController {
                 }
                 return new Response($serializer->serialize($erg, 'json'), 200);
             }
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -136,6 +138,8 @@ class RabattController extends AbstractController {
                     return new Response($serializer->serialize($Firma, 'json'), 200);
                 }
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+        } else {
+            return new Response("", 404);
         }
     }
 }

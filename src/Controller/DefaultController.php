@@ -19,10 +19,10 @@ class DefaultController extends AbstractController {
     /**
      * @Route("/", name="home_FE")
      */
-    public function indexAction(Request $request) {
-
-        return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
-        ]);
-    }
+//    public function indexAction(Request $request) {
+//
+//        return $this->render('default/index.html.twig', [
+//            'controller_name' => 'DefaultController',
+//        ]);
+//    }
 }

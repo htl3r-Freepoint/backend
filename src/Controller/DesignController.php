@@ -73,6 +73,8 @@ class DesignController extends AbstractController {
 
 
             return new Response("1", 200);
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -99,6 +101,8 @@ class DesignController extends AbstractController {
             }
 
             return new Response($serializer->serialize($Designs, 'json'), 200);
+        }else {
+            return new Response("", 404);
         }
     }
 }

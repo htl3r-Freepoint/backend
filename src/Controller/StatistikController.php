@@ -20,48 +20,51 @@ class StatistikController extends AbstractController {
      * @return Response
      */
     public function GET_Statistik(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-//        if ($request->getMethod() == 'POST') {
-        $data = json_decode($request->getContent(), true);
-        $data['hash'] = $data['hash'] ?? "ttgIeo6YNCoDg3YoJNUlMy868vhWBblZv6z4Ki61pEV3ATcWiqr4aZPPLiu19MfNHl5wa48tnJM6l2N7iAJumg7mnw6z0kGIhGtS";
-        if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token invalid', 403);
-        $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
-        $firmen = $jsonAuth->returnFirmenFromHash($data['hash']);
-        $final = [];
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            $data['hash'] = $data['hash'] ?? "ttgIeo6YNCoDg3YoJNUlMy868vhWBblZv6z4Ki61pEV3ATcWiqr4aZPPLiu19MfNHl5wa48tnJM6l2N7iAJumg7mnw6z0kGIhGtS";
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token invalid', 403);
+            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
+            $firmen = $jsonAuth->returnFirmenFromHash($data['hash']);
+            $final = [];
 
 
-        /** @var Firma $firma */
-        foreach ($firmen as $firma) {
-            $eingescanned = array();
-            $gekauft = array();
-            $eingeloest = array();
-            $aufrufe = array();
-            $STATISTIK = $this->getDoctrine()->getRepository(Statistik::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
-            /** @var Statistik $stat */
-            foreach ($STATISTIK as $stat) {
-                if ($stat->getType() == "eingescannt") {
-                    array_push($eingescanned, $stat);
+            /** @var Firma $firma */
+            foreach ($firmen as $firma) {
+                $eingescanned = array();
+                $gekauft = array();
+                $eingeloest = array();
+                $aufrufe = array();
+                $STATISTIK = $this->getDoctrine()->getRepository(Statistik::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
+                /** @var Statistik $stat */
+                foreach ($STATISTIK as $stat) {
+                    if ($stat->getType() == "eingescannt") {
+                        array_push($eingescanned, $stat);
+                    }
+                    if ($stat->getType() == "gekauft") {
+                        array_push($gekauft, $stat);
+                    }
+                    if ($stat->getType() == "eingelöst") {
+                        array_push($eingeloest, $stat);
+                    }
+                    if ($stat->getType() == "aufruf") {
+                        array_push($aufrufe, $stat);
+                    }
                 }
-                if ($stat->getType() == "gekauft") {
-                    array_push($gekauft, $stat);
-                }
-                if ($stat->getType() == "eingelöst") {
-                    array_push($eingeloest, $stat);
-                }
-                if ($stat->getType() == "aufruf") {
-                    array_push($aufrufe, $stat);
-                }
+
+                $erg = [
+                    'scanned' => $this->sortDates($eingescanned),
+                    'bought' => $this->sortDates($gekauft),
+                    'used' => $this->sortDates($eingeloest),
+                    'opened' => $this->sortDates($aufrufe)
+                ];
+                $final [$firma->getFirmanname()] = $erg;
             }
 
-            $erg = [
-                'scanned' => $this->sortDates($eingescanned),
-                'bought' => $this->sortDates($gekauft),
-                'used' => $this->sortDates($eingeloest),
-                'opened' => $this->sortDates($aufrufe)
-            ];
-            $final [$firma->getFirmanname()] = $erg;
+            return new Response($serializer->serialize($final, 'json'), 200);
+        } else {
+            return new Response("", 404);
         }
-
-        return new Response($serializer->serialize($final, 'json'), 200);
     }
 
     private function sortDates($eingescanned) {

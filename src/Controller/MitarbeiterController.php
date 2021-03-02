@@ -52,6 +52,8 @@ class MitarbeiterController extends AbstractController {
             $entityManager->flush();
 
             return new Response($serializer->serialize($MITARBEITER, 'json'), 200);
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -77,6 +79,8 @@ class MitarbeiterController extends AbstractController {
             $entityManager->flush();
 
             return new Response("successful", 200);
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -107,6 +111,8 @@ class MitarbeiterController extends AbstractController {
             $entityManager->flush();
 
             return new Response($serializer->serialize($ANGESTELLTER, 'json'), 200);
+        } else {
+            return new Response("", 404);
         }
     }
 }

@@ -49,8 +49,8 @@ class PunkteController extends AbstractController {
 
                 }
             }
-        } else {
-            return new Response("NOT ALLOWED!!!");
+        }  else {
+            return new Response("", 404);
         }
     }
 

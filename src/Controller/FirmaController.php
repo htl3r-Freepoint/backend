@@ -89,6 +89,8 @@ class FirmaController extends AbstractController {
                     return new Response("Please fill out everything", 100);
                 }
             }
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -144,6 +146,8 @@ class FirmaController extends AbstractController {
 
 
             return new Response($serializer->serialize($erg, 'json'), 200);
+        } else {
+            return new Response("", 404);
         }
     }
 
@@ -183,6 +187,8 @@ class FirmaController extends AbstractController {
             } else return new Response("You do not have the rights to edit this company. Please ask the owner.", 400);
 
             return new Response("successful", 200);
+        } else {
+            return new Response("", 404);
         }
     }
 
