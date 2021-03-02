@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Firma;
 use App\Entity\Kasse;
 use App\Entity\Punkte;
+use App\Entity\Statistik;
 use App\Entity\User;
 use App\Service\Hash;
+use DateTime;
 use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -108,6 +110,11 @@ class QrcodeController extends AbstractController {
         $entityManager->persist($PUNKTE);
         $entityManager->flush();
         $punkte = ['points' => $tmp, 'all_points' => $PUNKTE->getPunkte()];
+
+        $STATISTIK = new Statistik();
+        $STATISTIK->setDate(new DateTime("0 days ago"));
+        $STATISTIK->setType("gekauft");
+        $STATISTIK->setFKFirmaID($firma_id);
 
         return $punkte;
     }

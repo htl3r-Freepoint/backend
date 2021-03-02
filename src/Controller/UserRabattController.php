@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Firma;
 use App\Entity\Punkte;
 use App\Entity\Rabatt;
+use App\Entity\Statistik;
 use App\Entity\User;
 use App\Entity\UserRabatte;
 use App\Service\Hash;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use DateTime;
 
 class UserRabattController extends AbstractController {
     /**
@@ -59,11 +61,18 @@ class UserRabattController extends AbstractController {
             $Rabatt = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(["Rabatt_Code" => $code]);
             if (count($Rabatt) == 0) return new Response("Coupon Code Not Found. Please try again with another code", 400);
             if (count($Rabatt) >= 2) return new Response("Too many codes found. Please contact the administrator", 400);
+            /** @var Rabatt $Rabatt */
             $Rabatt = $Rabatt[0];
             if ($Rabatt->getUsed() == true) return new Response("Code has already been used", 400);
 
             $entityManager->remove($Rabatt);
             $entityManager->flush();
+
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $Rabatt->getFKFirmaID()])[0];
+            $STATISTIK = new Statistik();
+            $STATISTIK->setDate(new DateTime("0 days ago"));
+            $STATISTIK->setType("gekauft");
+            $STATISTIK->setFKFirmaID($FIRMA->getId());
 
             return new Response('successful', 200);
         }
@@ -105,6 +114,11 @@ class UserRabattController extends AbstractController {
                 $entityManager->persist($PUNKTE);
                 $entityManager->persist($USERRABATT);
                 $entityManager->flush();
+
+                $STATISTIK = new Statistik();
+                $STATISTIK->setDate(new DateTime("0 days ago"));
+                $STATISTIK->setType("gekauft");
+                $STATISTIK->setFKFirmaID($FIRMA->getId());
 
             }
 

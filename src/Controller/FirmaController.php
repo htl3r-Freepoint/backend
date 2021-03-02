@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Angestellte;
 use App\Entity\Firma;
 use App\Entity\Punkte;
+use App\Entity\Statistik;
 use App\Entity\User;
 use App\Service\clean;
 use App\Service\Hash;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -104,6 +106,7 @@ class FirmaController extends AbstractController {
 
             if (!isset($firmenname)) {
                 $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
+                $FIRMA = $Firmen[0];
 
                 $tmperg = array();
                 /** @var Firma $firma */
@@ -123,6 +126,7 @@ class FirmaController extends AbstractController {
             }
             if (isset($firmenname)) {
                 $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID(), 'Firmanname' => $firmenname])[0];
+                $FIRMA = $firma;
                 $erg = [
                     'owner' => $firma->getId(),
                     'companyName' => $firma->getFirmanname(),
@@ -132,6 +136,11 @@ class FirmaController extends AbstractController {
                     'domain' => $firma->getDomain()
                 ];
             }
+
+            $STATISTIK = new Statistik();
+            $STATISTIK->setDate(new DateTime("0 days ago"));
+            $STATISTIK->setType("gekauft");
+            $STATISTIK->setFKFirmaID($FIRMA->getId());
 
 
             return new Response($serializer->serialize($erg, 'json'), 200);
