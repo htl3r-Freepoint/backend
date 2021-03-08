@@ -63,14 +63,16 @@ class UserRabattController extends AbstractController {
             $Rabatt = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(["Rabatt_Code" => $code]);
             if (count($Rabatt) == 0) return new Response("Coupon Code Not Found. Please try again with another code", 400);
             if (count($Rabatt) >= 2) return new Response("Too many codes found. Please contact the administrator", 400);
-            /** @var Rabatt $Rabatt */
+            /** @var UserRabatte $Rabatt */
             $Rabatt = $Rabatt[0];
             if ($Rabatt->getUsed() == true) return new Response("Code has already been used", 400);
 
             $entityManager->remove($Rabatt);
             $entityManager->flush();
 
-            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $Rabatt->getFKFirmaID()])[0];
+            /** @var Rabatt $Rabatte */
+            $Rabatte = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(["id" => $Rabatt->getFKRabattID()]);
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $Rabatte->getFKFirmaID()])[0];
             $STATISTIK = new Statistik();
             $STATISTIK->setDate(new DateTime("0 days ago"));
             $STATISTIK->setType("gekauft");
