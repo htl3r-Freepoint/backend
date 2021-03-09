@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Angestellte;
+use App\Entity\Design;
+use App\Entity\DesignZuweisung;
 use App\Entity\Firma;
 use App\Entity\Punkte;
 use App\Entity\Statistik;
@@ -113,13 +115,27 @@ class FirmaController extends AbstractController {
                 $tmperg = array();
                 /** @var Firma $firma */
                 foreach ($Firmen as $firma) {
+                    /** @var DesignZuweisung $DESIGNZUWEISUNG */
+                    $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
+                    $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()]);
+                    $designs = array();
+                    /** @var Design $design */
+                    foreach ($DESIGN as $design) {
+                        $tmp = [
+                            "type" => $design->getTyp(),
+                            "file" => $design->getDatei(),
+                            "color" => $design->getStingDatei()
+                        ];
+                        array_push($designs, $tmp);
+                    }
                     $tmperg = [
                         'owner' => $firma->getId(),
                         'companyName' => $firma->getFirmanname(),
                         'contactMail' => $firma->getKontaktEmail(),
                         'conversionRate' => $firma->getXEuroFuer1Punkt(),
                         'logo' => $firma->getDatei(),
-                        'domain' => $firma->getDomain()
+                        'domain' => $firma->getDomain(),
+                        'files' => $designs
                     ];
                     $name = $firma->getFirmanname();
                     $erg[$name] = $tmperg;
@@ -128,14 +144,28 @@ class FirmaController extends AbstractController {
             }
             if (isset($firmenname)) {
                 $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID(), 'Firmanname' => $firmenname])[0];
+                $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
+                $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()]);
                 $FIRMA = $firma;
+                $designs = array();
+                /** @var Design $design */
+                foreach ($DESIGN as $design) {
+                    $tmp = [
+                        "type" => $design->getTyp(),
+                        "file" => $design->getDatei(),
+                        "color" => $design->getStingDatei()
+                    ];
+                    array_push($designs, $tmp);
+                }
+
                 $erg = [
                     'owner' => $firma->getId(),
                     'companyName' => $firma->getFirmanname(),
                     'contactMail' => $firma->getKontaktEmail(),
                     'conversionRate' => $firma->getXEuroFuer1Punkt(),
                     'logo' => $firma->getDatei(),
-                    'domain' => $firma->getDomain()
+                    'domain' => $firma->getDomain(),
+                    'files' => $designs
                 ];
             }
 

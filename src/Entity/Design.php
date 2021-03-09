@@ -22,7 +22,7 @@ class Design {
     private $Name;
 
     /**
-     * @ORM\Column(type="blob")
+     * @ORM\Column(type="blob", nullable=true)
      */
     private $Datei;
 
@@ -30,6 +30,25 @@ class Design {
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $Typ;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $StingDatei;
+
+    /**
+     * @return mixed
+     */
+    public function getStingDatei() {
+        return $this->StingDatei;
+    }
+
+    /**
+     * @param mixed $StingDatei
+     */
+    public function setStingDatei($StingDatei): void {
+        $this->StingDatei = $StingDatei;
+    }
 
     /**
      * @return mixed

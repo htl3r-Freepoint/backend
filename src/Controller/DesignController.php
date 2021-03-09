@@ -34,9 +34,10 @@ class DesignController extends AbstractController {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
             if (isset($data['name'])) $name = $data['name']; else $name = null; //z.B.: Logo
-            $datei = $data['datei'];
+            $datei = $data['datei'] ?? null;
             $firmenname = $data['firmenname'];
             $typ = $data['typ'];
+            $StringDesign = $data['farbcode'] ?? null;
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
 
@@ -47,6 +48,7 @@ class DesignController extends AbstractController {
             $FirmaDB = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
             if (count($FirmaDB) < 1) return new Response("-1 Firma nicht gefunden", 404);
             if (count($FirmaDB) > 1) return new Response("-1 zu viele Firmen gefunden", 400);
+            if (!isset($datei) && !isset($StringDesign)) return new Response("You have to provide some kind of Design");
 
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -54,6 +56,8 @@ class DesignController extends AbstractController {
             $DESIGN = new Design();
             $DESIGN->setName($firmenname);
             $DESIGN->setDatei($datei);
+            $DESIGN->setTyp($typ);
+            $DESIGN->setStingDatei($StringDesign);
 
             $entityManager->persist($DESIGN);
             $entityManager->flush();
@@ -101,7 +105,7 @@ class DesignController extends AbstractController {
             }
 
             return new Response($serializer->serialize($Designs, 'json'), 200);
-        }else {
+        } else {
             return new Response("", 404);
         }
     }
