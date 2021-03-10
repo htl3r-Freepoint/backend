@@ -15,6 +15,34 @@ use Symfony\Component\Serializer\SerializerInterface;
 class StatistikController extends AbstractController {
 
     /**
+     * @Route("/api/writeStatistik")
+     * @param Request $request
+     * @return Response
+     */
+    public function Save_Statistik(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        $entityManager = $this->getDoctrine()->getManager();
+        $type = ["eingescannt", "gekauft", "eingelöst", "aufruf"];
+//        $type = ["gekauft", "eingescannt", "aufruf"];
+        $erg = array();
+        foreach ($type as $item) {
+            for ($i = 0; $i <= 8; $i++) {
+                for ($ii = 0; $ii < rand(0, 50); $ii++) {
+                    $STATISTIK = new Statistik();
+                    $STATISTIK->setFKFirmaID(1);
+                    $STATISTIK->setType($item);
+                    $STATISTIK->setDate(new DateTime($ii . " days ago"));
+                    array_push($erg, $STATISTIK);
+
+                    $entityManager->persist($STATISTIK);
+                    $entityManager->flush();
+                }
+            }
+        }
+        return new Response($serializer->serialize($erg, 'json'), 200);
+    }
+
+
+    /**
      * @Route("/api/getStatistik")
      * @param Request $request
      * @return Response
@@ -81,33 +109,38 @@ class StatistikController extends AbstractController {
 
 
         foreach ($eingescanned as $statistik) {
-            switch ($statistik->getDate()->format("Y-M-D")) {
+            switch ($statistik->getDate()->format("Y-m-d")) {
 
-                case $dates[0][0]->format("Y-M-D"):
+                case $dates[0][0]->format("Y-m-d"):
                     $dates[0][1]++;
                     break;
-                case $dates[1][0]->format("Y-M-D"):
+                case $dates[1][0]->format("Y-m-d"):
                     $dates[1][1]++;
                     break;
-                case $dates[2][0]->format("Y-M-D"):
+                case $dates[2][0]->format("Y-m-d"):
                     $dates[2][1]++;
                     break;
-                case $dates[3][0]->format("Y-M-D"):
+                case $dates[3][0]->format("Y-m-d"):
                     $dates[3][1]++;
                     break;
-                case $dates[4][0]->format("Y-M-D"):
+                case $dates[4][0]->format("Y-m-d"):
                     $dates[4][1]++;
                     break;
-                case $dates[5][0]->format("Y-M-D"):
+                case $dates[5][0]->format("Y-m-d"):
                     $dates[5][1]++;
                     break;
-                case $dates[6][0]->format("Y-M-D"):
+                case $dates[6][0]->format("Y-m-d"):
                     $dates[6][1]++;
                     break;
-                case $dates[7][0]->format("Y-M-D"):
+                case $dates[7][0]->format("Y-m-d"):
                     $dates[7][1]++;
                     break;
             }
+            if (isset($dates[8])) {
+                $dates[8][0]->format("Y-M-D");
+                $dates[8][1]++;
+            }
+
         }
 
         $dates[0][0] = $dates[0][0]->format('Y-m-d');
@@ -118,6 +151,9 @@ class StatistikController extends AbstractController {
         $dates[5][0] = $dates[5][0]->format('Y-m-d');
         $dates[6][0] = $dates[6][0]->format('Y-m-d');
         $dates[7][0] = $dates[7][0]->format('Y-m-d');
+        if (isset($dates[8])) {
+            $dates[8][0] = $dates[8][0]->format('Y-m-d');
+        }
         return $dates;
     }
 }
