@@ -111,43 +111,46 @@ class FirmaController extends AbstractController {
                 $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             }
             $firmenname = strtolower($data['companyName']) ?? null;
+            if (!isset($firmenname)) return new Response("You have to provide a comany name", 404);
 
-            if (!isset($firmenname)) {
-                $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
-                $FIRMA = $Firmen[0];
-
-                $tmperg = array();
-                /** @var Firma $firma */
-                foreach ($Firmen as $firma) {
-                    /** @var DesignZuweisung $DESIGNZUWEISUNG */
-                    $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
-                    $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()]);
-                    $designs = array();
-                    /** @var Design $design */
-                    foreach ($DESIGN as $design) {
-                        $tmp = [
-                            "type" => $design->getTyp(),
-                            "file" => $design->getDatei(),
-                            "color" => $design->getStingDatei()
-                        ];
-                        array_push($designs, $tmp);
-                    }
-                    $tmperg = [
-                        'owner' => $firma->getId(),
-                        'companyName' => $firma->getFirmanname(),
-                        'contactMail' => $firma->getKontaktEmail(),
-                        'conversionRate' => $firma->getXEuroFuer1Punkt(),
-                        'logo' => $firma->getDatei(),
-                        'domain' => $firma->getDomain(),
-                        'files' => $designs
-                    ];
-                    $name = $firma->getFirmanname();
-                    $erg[$name] = $tmperg;
-                }
-
-            }
+//            if (!isset($firmenname)) {
+//                $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
+//                $FIRMA = $Firmen[0];
+//
+//                $tmperg = array();
+//                /** @var Firma $firma */
+//                foreach ($Firmen as $firma) {
+//                    /** @var DesignZuweisung $DESIGNZUWEISUNG */
+//                    $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
+//                    $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()]);
+//                    $designs = array();
+//                    /** @var Design $design */
+//                    foreach ($DESIGN as $design) {
+//                        $tmp = [
+//                            "type" => $design->getTyp(),
+//                            "file" => $design->getDatei(),
+//                            "color" => $design->getStingDatei()
+//                        ];
+//                        array_push($designs, $tmp);
+//                    }
+//                    $tmperg = [
+//                        'owner' => $firma->getId(),
+//                        'companyName' => $firma->getFirmanname(),
+//                        'contactMail' => $firma->getKontaktEmail(),
+//                        'conversionRate' => $firma->getXEuroFuer1Punkt(),
+//                        'logo' => $firma->getDatei(),
+//                        'domain' => $firma->getDomain(),
+//                        'files' => $designs
+//                    ];
+//                    $name = $firma->getFirmanname();
+//                    $erg[$name] = $tmperg;
+//                }
+//
+//            }
             if (isset($firmenname)) {
-                $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+                $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+                if (count($firma) == 0) return new Response("The company was not found", 404);
+                $firma = $firma[0];
                 $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
                 $designs = array();
                 $FIRMA = $firma;
