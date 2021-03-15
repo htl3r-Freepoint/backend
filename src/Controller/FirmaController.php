@@ -148,7 +148,7 @@ class FirmaController extends AbstractController {
 //
 //            }
             if (isset($firmenname)) {
-                $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+                $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Domain' => $firmenname]);
                 if (count($firma) == 0) return new Response("The company was not found", 404);
                 $firma = $firma[0];
                 $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
@@ -167,8 +167,8 @@ class FirmaController extends AbstractController {
                     }
                 }
 
-                $erg = [
-                    'owner' => $firma->getId(),
+                $erg['company'] = [
+//                    'owner' => $firma->getId(),
                     'companyName' => $firma->getFirmanname(),
                     'contactMail' => $firma->getKontaktEmail(),
                     'conversionRate' => $firma->getXEuroFuer1Punkt(),
@@ -182,9 +182,9 @@ class FirmaController extends AbstractController {
             $STATISTIK->setDate(new DateTime("0 days ago"));
             $STATISTIK->setType("gekauft");
             $STATISTIK->setFKFirmaID($FIRMA->getId());
-            $tmp ['company'] = $erg;
+//            $tmp ['company'] = $erg;
 
-            return new Response($serializer->serialize($tmp, 'json'), 200);
+            return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
             return new Response("", 404);
         }
