@@ -182,9 +182,9 @@ class FirmaController extends AbstractController {
             $STATISTIK->setDate(new DateTime("0 days ago"));
             $STATISTIK->setType("gekauft");
             $STATISTIK->setFKFirmaID($FIRMA->getId());
+            $tmp ['company'] = $erg;
 
-
-            return new Response($serializer->serialize($erg, 'json'), 200);
+            return new Response($serializer->serialize($tmp, 'json'), 200);
         } else {
             return new Response("", 404);
         }
