@@ -66,7 +66,7 @@ class FirmaController extends AbstractController {
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
 
             $owner = $user->getID();
-            $name = $data["name"];
+            $name = strtolower($data["name"]);
             $kontakt = $data["email"] ?? null;
             $XEuro = $data["conversionRate"] ?? 10;
             $logo = $data["logo"] ?? null;
@@ -104,10 +104,13 @@ class FirmaController extends AbstractController {
     public function GET_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth, clean $clean): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            if (!isset($data['hash'])) return new Response("Please provide a usertoken", 404);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
-            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
-            $firmenname = $data['companyName'] ?? null;
+//            if (!isset($data['hash'])) return new Response("Please provide a usertoken", 404);
+//            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
+            $hash = $data['hash'] ?? null;
+            if (isset($hash)) {
+                $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
+            }
+            $firmenname = strtolower($data['companyName']) ?? null;
 
             if (!isset($firmenname)) {
                 $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
@@ -144,19 +147,21 @@ class FirmaController extends AbstractController {
 
             }
             if (isset($firmenname)) {
-                $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID(), 'Firmanname' => $firmenname])[0];
+                $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
                 $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
-                $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()]);
-                $FIRMA = $firma;
                 $designs = array();
-                /** @var Design $design */
-                foreach ($DESIGN as $design) {
-                    $tmp = [
-                        "type" => $design->getTyp(),
-                        "file" => $design->getDatei(),
-                        "color" => $design->getStingDatei()
-                    ];
-                    array_push($designs, $tmp);
+                $FIRMA = $firma;
+                if (count($DESIGNZUWEISUNG) >= 1) {
+                    $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG[0]->getFKDesignID()]);
+                    /** @var Design $design */
+                    foreach ($DESIGN as $design) {
+                        $tmp = [
+                            "type" => $design->getTyp(),
+                            "file" => $design->getDatei(),
+                            "color" => $design->getStingDatei()
+                        ];
+                        array_push($designs, $tmp);
+                    }
                 }
 
                 $erg = [
