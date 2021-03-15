@@ -104,6 +104,7 @@ class FirmaController extends AbstractController {
     public function GET_FIRMA_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth, clean $clean): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
+            if (!isset($data['hash'])) return new Response("Please provide a usertoken", 404);
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             $firmenname = $data['companyName'] ?? null;

@@ -65,7 +65,7 @@ class UserController extends AbstractController {
             ->subject('Verify your FreePoint account')
             ->text('Verification Link: https://freepoint.htl3r.com/verify/' . $code);
 
-        $mailer->send($email);
+//        $mailer->send($email);
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) {
@@ -213,7 +213,12 @@ class UserController extends AbstractController {
             $email = $data["email"] ?? null;
             $password = $data["password"] ?? null;
             $loginType = $data['type'] ?? null;
-            isset($data['hash']) ? $hash = $data['hash'] : $hash = $jsonAuth->generateJsonCode();
+//            isset($data['hash']) ? $hash = $data['hash'] : $hash = $jsonAuth->generateJsonCode();
+//            if(isset($data['hash'])){
+//                $hash = $data['hash'];
+//            } else {
+//                $hash = $jsonAuth->generateJsonCode();
+//            }
 
             //
             if (isset($data['hash'])) {
@@ -229,7 +234,7 @@ class UserController extends AbstractController {
                     }
                 }
                 if (count($users) < 1) {
-                    return new Response("Insuficient login Informaition");
+                    return new Response("Insuficient login Information");
                 }
             } else {
                 if (isset($email) && isset($password)) {
@@ -252,7 +257,8 @@ class UserController extends AbstractController {
 
             if ($anz > 1) return new Response("Too Many Users found:" . $anz, 400);
             if ($anz < 1) return new Response("User or Password not found", 400);
-            if ($jsonAuth->checkJsonCode($hash) == false) $hash = $jsonAuth->saveJsonCode($id, $hash);
+            $hash = $jsonAuth->generateJsonCode();
+            $jsonAuth->saveJsonCode($id, $hash);
             if ($user->getLocked() == true) return new Response("Your account has been locked! Please contact us at: \"contact@freepoint.at\" to unlock your account.", 400);
             $data = [
 //                    'email' => $email,

@@ -63,6 +63,7 @@ class Hash extends UserController {
     public function returnUserFromHash($hash) {
         $entityManager = $this->getDoctrine()->getManager();
         $DataDB = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['Hash' => $hash]);
+        echo count($DataDB);
         $valid = true;
         foreach ($DataDB as $data) {
             $date = date_format($data->getCreationDate(), "y-m-d");
@@ -92,8 +93,15 @@ class Hash extends UserController {
     }
 
     public function saveJsonCode($userID, $code = null): string { //Code wird erstellt, gespeichert und zurück gegeben
-        if (!isset($code)) $code = $this->generateJsonCode();
         $entityManager = $this->getDoctrine()->getManager();
+        $oldHashes = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['FK_User_ID' => $userID]);
+        foreach ($oldHashes as $h) {
+            $entityManager->remove($h);
+            $entityManager->flush();
+        }
+
+
+        if (!isset($code)) $code = $this->generateJsonCode();
         $LOGINAUTHENTIFICATION = new LoginAuthentification();
         $LOGINAUTHENTIFICATION->setFKUserID($userID);
         $LOGINAUTHENTIFICATION->setValid(true);
