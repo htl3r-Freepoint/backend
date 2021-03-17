@@ -45,7 +45,7 @@ class UserController extends AbstractController {
                 if (count($VerifyDB) == 1) {
                     $code = $VerifyDB[0]->getCode();
 
-                    $this->sendEmail($email, $mailer, $clean->returnHtmlFile($code));
+                    $this->sendEmail($email, $mailer, $code);
                     return new Response("", 200);
                 } else {
                     return new Response("Verification Code not found", 404);
@@ -59,7 +59,9 @@ class UserController extends AbstractController {
     }
 
 
-    private function sendEmail($email, $mailer, $text) {
+    private function sendEmail($email, $mailer, $code) {
+        $clean = new clean();
+        $text = $clean->returnHtmlFile($code);
         $email = (new Email())
             ->from('no-reply@freepoint.at')
             ->to($email)
@@ -67,7 +69,7 @@ class UserController extends AbstractController {
             ->text("Please verify")
             ->html($text);
 
-//        $mailer->send($email);
+        $mailer->send($email);
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) {
