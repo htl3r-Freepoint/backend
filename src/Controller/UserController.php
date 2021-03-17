@@ -46,12 +46,12 @@ class UserController extends AbstractController {
                     $code = $VerifyDB[0]->getCode();
 
                     $this->sendEmail($email, $mailer, $clean->returnHtmlFile($code));
-                    return new Response("1", 200);
+                    return new Response("", 200);
                 } else {
-                    return new Response("-1 Verification Code not found", 404);
+                    return new Response("Verification Code not found", 404);
                 }
             } else {
-                return new Response("-1 not found", 404);
+                return new Response("404 not found", 404);
             }
         } else {
             return new Response("", 404);
@@ -67,7 +67,7 @@ class UserController extends AbstractController {
             ->text("Please verify")
             ->html($text);
 
-        $mailer->send($email);
+//        $mailer->send($email);
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) {
