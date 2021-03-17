@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\Verify;
+use App\Service\clean;
 use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -28,7 +29,7 @@ class UserController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function sendMail(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonHash) {
+    public function sendMail(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonHash, clean $clean) {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
             if (!$jsonHash->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
@@ -44,7 +45,7 @@ class UserController extends AbstractController {
                 if (count($VerifyDB) == 1) {
                     $code = $VerifyDB[0]->getCode();
 
-                    $this->sendEmail($email, $mailer, $code);
+                    $this->sendEmail($email, $mailer, $clean->returnHtmlFile($code));
                     return new Response("1", 200);
                 } else {
                     return new Response("-1 Verification Code not found", 404);
@@ -58,14 +59,15 @@ class UserController extends AbstractController {
     }
 
 
-    private function sendEmail($email, $mailer, $code) {
+    private function sendEmail($email, $mailer, $text) {
         $email = (new Email())
             ->from('no-reply@freepoint.at')
             ->to($email)
             ->subject('Verify your FreePoint account')
-            ->text('Verification Link: https://freepoint.htl3r.com/verify/' . $code);
+            ->text("Please verify")
+            ->html($text);
 
-//        $mailer->send($email);
+        $mailer->send($email);
     }
 
     private function saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) {
