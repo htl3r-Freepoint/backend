@@ -196,7 +196,7 @@ class UserController extends AbstractController {
                 'valid' => true,
                 'verified' => $verified['user']->getVerified()
             ];
-            return new Response($serializer->serialize($data, 'json'));
+            return new Response($serializer->serialize($data, 'json'), 200);
         } else {
             return new Response("", 404);
         }
