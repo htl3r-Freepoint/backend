@@ -53,12 +53,13 @@ class RabattController extends AbstractController {
     public function GET_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response { //TODO: Edit Rechte
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            $hash = $data['hash'];
-            if (!$jsonAuth->checkJsonCode($hash)) return new Response('-1 invalid', 403);
-            /** @var User $user */
-            $user = $jsonAuth->returnUserFromHash($hash)['user'];
+            $hash = $data['hash'] ?? null;
+            if (isset($hash)) {
+                if (!$jsonAuth->checkJsonCode($hash)) return new Response('Token invalid', 403);
+                /** @var User $user */
+                $user = $jsonAuth->returnUserFromHash($hash)['user'];
+            }
 
-            //toke ist dazu da, damit man schaut, ob der User edit-Rechte hat
             $firmenname = $data['firmenname'];
 
 
@@ -82,7 +83,11 @@ class RabattController extends AbstractController {
                 }
                 $name = $FIRMA->getFirmanname();
                 $erg[$name] = $tmperg;
-                $erg['editRights'] = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getId(), 'FK_Fimra_ID' => $FIRMA->getId()])[0]->getRechte();
+                if (isset($user)) {
+                    $erg['editRights'] = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getId(), 'FK_Fimra_ID' => $FIRMA->getId()])[0]->getRechte();
+                } else {
+                    $erg['editRights'] = 0;
+                }
 
                 return new Response($serializer->serialize($erg, 'json'), 200);
             } else {
