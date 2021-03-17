@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Angestellte;
 use App\Entity\Firma;
 use App\Entity\Rabatt;
+use App\Entity\User;
 use App\Service\Hash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,20 +51,49 @@ class RabattController extends AbstractController {
      * @var Firma $FIRMA
      */
     public function GET_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response { //TODO: Edit Rechte
-        if ($request->getMethod() == 'POST') {
-            $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
+//        if ($request->getMethod() == 'POST') {
+        $hash = $data['hash'] ?? 'ttgIeo6YNCoDg3YoJNUlMy868vhWBblZv6z4Ki61pEV3ATcWiqr4aZPPLiu19MfNHl5wa48tnJM6l2N7iAJumg7mnw6z0kGIhGtS';
+        $data = json_decode($request->getContent(), true);
+        if (!$jsonAuth->checkJsonCode($hash)) return new Response('-1 invalid', 403);
+        /** @var User $user */
+        $user = $jsonAuth->returnUserFromHash($hash)['user'];
+
+        //toke ist dazu da, damit man schaut, ob der User edit-Rechte hat
+        $firmenname = $data['firmenname'] ?? "Schulkantine";
+
+//            return new Response($firmenname);
 
 
-            $firmenname = $data['firmenname'] ?? null;
+        if (isset($firmenname)) {
+            /** @var Firma $FIRMA */
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+            $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $FIRMA->getID()]);
+            $tmperg = array();
 
 
-            if (isset($firmenname)) {
-                $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
-                $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $FIRMA->getID()]);
+            foreach ($RABATT as $rabatt) {
+                array_push($tmperg, [
+                    "id" => $rabatt->getId(),
+                    "title" => $rabatt->getTitle(),
+                    "text" => $rabatt->getText(),
+                    "isPercent" => $rabatt->getIsPercent(),
+                    "price" => $rabatt->getPrice(),
+                    "percentage" => $rabatt->getPercentage(),
+                    "value" => $rabatt->getNeededPoints()
+                ]);
+            }
+            $name = $FIRMA->getFirmanname();
+            $erg[$name] = $tmperg;
+            $erg['editRights'] = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getId(), 'FK_Fimra_ID' => $FIRMA->getId()])[0]->getRechte();
+
+            return new Response($serializer->serialize($erg, 'json'), 200);
+        } else {
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
+            $erg = array();
+
+            foreach ($FIRMA as $firma) {
+                $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $firma->getID()]);
                 $tmperg = array();
-
 
                 foreach ($RABATT as $rabatt) {
                     array_push($tmperg, [
@@ -75,37 +106,15 @@ class RabattController extends AbstractController {
                         "value" => $rabatt->getNeededPoints()
                     ]);
                 }
-                $name = $FIRMA->getFirmanname();
+                $name = $firma->getFirmanname();
                 $erg[$name] = $tmperg;
-
-                return new Response($serializer->serialize($erg, 'json'), 200);
-            } else {
-                $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['FK_User_ID__Owner' => $user->getID()]);
-                $erg = array();
-
-                foreach ($FIRMA as $firma) {
-                    $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $firma->getID()]);
-                    $tmperg = array();
-
-                    foreach ($RABATT as $rabatt) {
-                        array_push($tmperg, [
-                            "id" => $rabatt->getId(),
-                            "title" => $rabatt->getTitle(),
-                            "text" => $rabatt->getText(),
-                            "isPercent" => $rabatt->getIsPercent(),
-                            "price" => $rabatt->getPrice(),
-                            "percentage" => $rabatt->getPercentage(),
-                            "value" => $rabatt->getNeededPoints()
-                        ]);
-                    }
-                    $name = $firma->getFirmanname();
-                    $erg[$name] = $tmperg;
-                }
-                return new Response($serializer->serialize($erg, 'json'), 200);
             }
-        } else {
-            return new Response("", 404);
+
+            return new Response($serializer->serialize($erg, 'json'), 200);
         }
+//        } else {
+//            return new Response("", 404);
+//        }
     }
 
     /**
