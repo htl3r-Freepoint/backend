@@ -95,9 +95,9 @@ class MitarbeiterController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             if (!$jsonAuth->checkJsonCode($data['token'])) return new Response('Token Invalid', 403);
 
-            $firmenname = $data['firmenname'] ?? "Schnitzelbude1337";
+            $firmenname = $data['firmenname'];
             $rechte = $data['rechteLevel'] ?? 1;
-            $addedUser = $data['email'] ?? "uiuiui";
+            $addedUser = $data['email'];
 
             /** @var User $USER */
             $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $addedUser])[0];

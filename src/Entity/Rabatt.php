@@ -56,6 +56,43 @@ class Rabatt {
      */
     private $kategorie;
 
+    /**
+     * @ORM\Column(type="string", length=4096, nullable=true)
+     */
+    private $pos;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $lastModified;
+
+    /**
+     * @return mixed
+     */
+    public function getLastModified() {
+        return $this->lastModified;
+    }
+
+    /**
+     * @param mixed $lastModified
+     */
+    public function setLastModified($lastModified): void {
+        $this->lastModified = $lastModified;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPos() {
+        return $this->pos;
+    }
+
+    /**
+     * @param mixed $pos
+     */
+    public function setPos($pos): void {
+        $this->pos = $pos;
+    }
 
     /**
      * @return mixed

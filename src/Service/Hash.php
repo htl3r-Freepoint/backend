@@ -114,15 +114,29 @@ class Hash extends UserController {
     }
 
 
-    public function generateJsonCode(): string { //Code wird nur erstellt
+    public function generateJsonCode(): string { // Hash soll erstellt werden
+
+        // Alle Zahlen und Buchstaben, aus denen ein code erstellt werden kann.
         $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-        $pass = array(); //remember to declare $pass as an array
-        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+
+        // in $erg wird der Code schlussendlich geschrieben
+        $erg = array();
+
+        // Es wird geschaut, wie lange der String von den zu benutzenden Zeichen ist
+        $alphaLength = strlen($alphabet) - 1;
+
+        // Der Ergebnis Hash soll 100 Zeichen lang sein
         for ($i = 0; $i < 100; $i++) {
+
+            // Es wird eine zufällige Zahl ersteltt, die in $alphabet vorkommt
             $n = rand(0, $alphaLength);
-            $pass[] = $alphabet[$n];
+
+            // die Zufällige Zahl wird genommen un in $erg geschrieben
+            $erg[] = $alphabet[$n];
         }
-        return implode($pass); //turn the array into a string
+
+        // Array wird in ein String konvertiert und zurückgegeben
+        return implode($erg);
     }
 
     public function returnRechteFromHash($hash, $firmenname) {

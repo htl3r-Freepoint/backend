@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class RabattController extends AbstractController {
     /**
@@ -23,7 +24,7 @@ class RabattController extends AbstractController {
 //        ]);
 //    }
 
-    private function saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage) {
+    private function saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) {
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -36,6 +37,8 @@ class RabattController extends AbstractController {
         $Firma->setText($text);
         $Firma->setKategorie($kategorie);
         $Firma->setPercentage($percentage);
+        $Firma->setPos($pos);
+        $Firma->setLastModified(new DateTime());
 
         $entityManager->persist($Firma);
         $entityManager->flush();
@@ -77,7 +80,8 @@ class RabattController extends AbstractController {
                         "isPercent" => $rabatt->getIsPercent(),
                         "price" => $rabatt->getPrice(),
                         "percentage" => $rabatt->getPercentage(),
-                        "value" => $rabatt->getNeededPoints()
+                        "value" => $rabatt->getNeededPoints(),
+                        "pos" => $rabatt->getPos()
                     ]);
                 }
                 $name = $FIRMA->getFirmanname();
@@ -97,6 +101,7 @@ class RabattController extends AbstractController {
                     $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $firma->getID()]);
                     $tmperg = array();
 
+                    /** @var Rabatt $rabatt */
                     foreach ($RABATT as $rabatt) {
                         array_push($tmperg, [
                             "id" => $rabatt->getId(),
@@ -105,7 +110,9 @@ class RabattController extends AbstractController {
                             "isPercent" => $rabatt->getIsPercent(),
                             "price" => $rabatt->getPrice(),
                             "percentage" => $rabatt->getPercentage(),
-                            "value" => $rabatt->getNeededPoints()
+                            "value" => $rabatt->getNeededPoints(),
+                            "pos" => $rabatt->getPos(),
+                            "lastChanged" => $rabatt->getLastModified()
                         ]);
                     }
                     $name = $firma->getFirmanname();
@@ -138,6 +145,7 @@ class RabattController extends AbstractController {
             $text = $data["text"] ?? null;
             $percentage = $data['percentage'] ?? null;
             $kategorie = $data["kategorie"] ?? null;
+            $pos = $data["pos"];
 
 
             $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
@@ -145,7 +153,7 @@ class RabattController extends AbstractController {
 
             $RECHTE = $jsonAuth->returnRechteFromHash($data['token'], $firmenname);
             if ($RECHTE >= 2) {
-                if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage) == true) {
+                if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) == true) {
                     return new Response($serializer->serialize($Firma, 'json'), 200);
                 }
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
@@ -153,4 +161,57 @@ class RabattController extends AbstractController {
             return new Response("", 404);
         }
     }
+
+    /**
+     * @Route("/api/changeRabatt")
+     * @param Request $request
+     * @return Response
+     */
+    public function Change_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        if ($request->getMethod() == 'POST') {
+            $entityManager = $this->getDoctrine()->getManager();
+            $rawData = json_decode($request->getContent(), true)['data'];
+            foreach ($rawData as $data) {
+
+                $id = $data['id'];
+                $firmenname = $data["firmanname"] ?? null;
+                $title = $data["title"] ?? null;
+                $is_percent = $data["is_percent"] ?? null;
+                $neededPoints = $data["value"] ?? null;
+                $price = $data["price"] ?? null;
+                $text = $data["text"] ?? null;
+                $percentage = $data['percentage'] ?? null;
+                $kategorie = $data["kategorie"] ?? null;
+                $pos = $data['pos'] ?? null;
+
+                /** @var Rabatt $RABATT */
+                $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $id]);
+                $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+                $fk_firma_id = $Firma->getID();
+            }
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['token'], $firmenname);
+            if ($RECHTE >= 2) {
+                if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) == true) {
+                    return new Response($serializer->serialize($Firma, 'json'), 200);
+                }
+            } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+
+            if (isset($firmenname)) $RABATT->setFKFirmaID($fk_firma_id);
+            if (isset($title)) $RABATT->setTitle($title);
+            if (isset($is_percent)) $RABATT->setIsPercent($is_percent);
+            if (isset($neededPoints)) $RABATT->setNeededPoints($neededPoints);
+            if (isset($price)) $RABATT->setPrice($price);
+            if (isset($text)) $RABATT->setText($text);
+            if (isset($percentage)) $RABATT->setPercentage($percentage);
+            if (isset($kategorie)) $RABATT->setKategorie($kategorie);
+            if (isset($pos)) $RABATT->setPos($pos);
+            $RABATT->setLastModified(new DateTime());
+
+            $entityManager->persist($RABATT);
+            $entityManager->flush();
+        } else {
+            return new Response("", 404);
+        }
+    }
+
 }

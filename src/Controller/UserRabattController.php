@@ -31,18 +31,21 @@ class UserRabattController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function GET_Userrabatte_API(Request $request, SerializerInterface $serializer): Response {
+    public function GET_Userrabatte_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            $id = $data['id'];
-
-            if ($id < 0) {
-                $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findAll();
-                return new Response($serializer->serialize($data, 'json'), 200);
-            } else {
-                $data = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
-                return new Response($serializer->serialize($data, 'json'), 200);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
+            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
+            $id = $user->getID();
+            $firmenname = $data['firmenname'];
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+            $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $FIRMA->getID()]);
+            $erg = array();
+            foreach ($RABATT as $item) {
+                $USERRABATTE = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
+                array_push($erg, $USERRABATTE);
             }
+            return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
             return new Response("", 404);
         }
