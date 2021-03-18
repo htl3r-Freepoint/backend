@@ -210,7 +210,6 @@ class UserController extends AbstractController {
      * @return Response
      */
     public function Login_User_API(Request $request, SerializerInterface $serializer, MailerInterface $mailer, Hash $jsonAuth): Response {
-        //TODO: Es soll immer ein neuer Token erstellt werden, wenn ich mich einllogge
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
 

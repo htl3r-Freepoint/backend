@@ -59,6 +59,7 @@ class RabattController extends AbstractController {
             $hash = $data['hash'] ?? null;
             if (isset($hash)) {
                 if (!$jsonAuth->checkJsonCode($hash)) return new Response('Token invalid', 403);
+//                return new Response($hash);
                 $user = $jsonAuth->returnUserFromHash($hash)['user'];
             }
 
@@ -84,7 +85,7 @@ class RabattController extends AbstractController {
                         "pos" => $rabatt->getPos()
                     ]);
                 }
-                $name = $FIRMA->getFirmanname();
+                $erg = null;
                 $erg['coupons'] = $tmperg;
                 if (isset($user)) {
                     $erg['editRights'] = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getId(), 'FK_Fimra_ID' => $FIRMA->getId()])[0]->getRechte();

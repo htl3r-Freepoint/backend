@@ -63,7 +63,7 @@ class Hash extends UserController {
     public function returnUserFromHash($hash) {
         $entityManager = $this->getDoctrine()->getManager();
         $DataDB = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['Hash' => $hash]);
-        echo count($DataDB);
+
         $valid = true;
         foreach ($DataDB as $data) {
             $date = date_format($data->getCreationDate(), "y-m-d");
