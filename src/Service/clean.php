@@ -768,7 +768,7 @@ class clean extends UserController {
                                 <tr>
                                     <td align="center" class="esd-block-button">
                                                     <span class="es-button-border" style="background: #00a982;">
-                                                        <a href="https://freepoint.htl3r.com/verify/' . $code . '" class="es-button"
+                                                        <a href="https://www.freepoint.htl3r.com/verify/' . $code . '" class="es-button"
                                                            target="_blank"
                                                            style="font-family: Helvetica; font-weight: bold; background: #00a982; border-color: #00a982;">Verifizieren</a>
                                                     </span>

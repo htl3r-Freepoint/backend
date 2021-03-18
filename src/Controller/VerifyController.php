@@ -33,7 +33,7 @@ class VerifyController extends AbstractController {
         $user = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $verify[0]->getFKUserID()]);
         if (count($user) != 1) return new Response("USER NOT FOUND", 404);
         $user = $user[0];
-        if ($user->getVerified()) return new Response("User is already verified", 400);
+        if ($user->getVerified()) /*return new Response("User is already verified", 400);*/ return $this->redirect('https://www.freepoint.htl3r.com/#/');
 
         $verify[0]->setVerfiyDate(new \DateTime());
         $entityManager->persist($verify[0]);
@@ -44,7 +44,9 @@ class VerifyController extends AbstractController {
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return new Response("Successfully verified! You can now head back and log in into your account.", 200);
+        return $this->redirect('https://www.freepoint.htl3r.com/#/');
+//        return new Response("Successfully verified! You can now head back and log in into your account.", 200);
+
 //        }
 //        return new Response("Successfuly verified!: " . $serializer->serialize($user, 'json'));
     }
