@@ -86,7 +86,7 @@ class FirmaController extends AbstractController {
                 if ($exists == "-1 Domain") return new Response("This Domain is already in use", 400);
             } else {
                 if ($this->save($owner, $name, $kontakt, $XEuro, $logo, $domain) == true) {
-                    return new Response("successful", 200);
+                    return new Response($domain, 200);
                 } else {
                     return new Response("Please fill out everything", 100);
                 }
