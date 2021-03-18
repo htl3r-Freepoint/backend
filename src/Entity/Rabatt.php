@@ -57,12 +57,12 @@ class Rabatt {
     private $kategorie;
 
     /**
-     * @ORM\Column(type="string", length=4096, nullable=true)
+     * @ORM\Column(type="integer", length=4096, nullable=true)
      */
     private $pos;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastModified;
 
@@ -160,6 +160,12 @@ class Rabatt {
 
     public function setFKFirmaID(int $FK_Firma_ID): self {
         $this->FK_Firma_ID = $FK_Firma_ID;
+
+        return $this;
+    }
+
+    public function setID(int $id): self {
+        $this->id = $id;
 
         return $this;
     }

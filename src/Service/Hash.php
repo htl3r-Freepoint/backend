@@ -144,7 +144,8 @@ class Hash extends UserController {
         $user = $this->returnUserFromHash($hash)['user'];
         $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
 
-        $ANGESTELLTE = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getID(), 'FK_Fimra_ID' => $FIRMA->getID()])[0];;
-        return $ANGESTELLTE->getRechte();
+        $ANGESTELLTE = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getID(), 'FK_Fimra_ID' => $FIRMA->getID()]);
+        if (count($ANGESTELLTE) == 0) return 0;
+        return $ANGESTELLTE[0]->getRechte();
     }
 }
