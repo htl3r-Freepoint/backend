@@ -134,8 +134,8 @@ class QrcodeController extends AbstractController {
             $exists = 0;
 //            $exists = $this->checkCode($OGCode);
 
-            if ($exists == "vorhanden") {
-                return new Response("-1 vorhanden", 400);
+            if ($exists != 0 && $exists == "vorhanden") {
+                return new Response("QR-Code wurde bereits eingescanned", 400);
             } else {
                 $savedPoints = $this->saveCode($OGCode, $UserID);
                 if ($savedPoints == "-1 Kassa") return new Response("-1 Kassa", 400);
