@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.71c4a7f0f0c7976782d78a48339d8b4d.js"
+  "/precache-manifest.1ec3eb257257f3701c6257d6e205e2c9.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "freepoint"});
