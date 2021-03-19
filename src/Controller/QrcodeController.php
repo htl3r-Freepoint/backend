@@ -30,7 +30,7 @@ class QrcodeController extends AbstractController {
         $entityManager = $this->getDoctrine()->getManager();
         $kasse = mb_split("_", $OGCode)[2];
         $firmen = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['Bezeichnung' => $kasse]);
-        if (count($firmen) == 0) return "-1 Kassa";
+        if (count($firmen) == 0) return "No company was identified with this 'Kassa'";
 
         $QRCODE = new Qrcode();
         $QRCODE->setKlartext($OGCode);
