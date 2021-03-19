@@ -117,16 +117,6 @@ class QrcodeController extends AbstractController {
     }
 
     /**
-     * @Route("/apiAddQrCode.json")
-     * @param Request $request
-     * @return Response
-     */
-    public function Add_QrCode_API_JSON(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
-        return $this->redirectToRoute('/api/addQrCode');
-    }
-
-
-    /**
      * @Route("/api/addQrCode")
      * @param Request $request
      * @return Response
@@ -134,9 +124,12 @@ class QrcodeController extends AbstractController {
     public function Add_QrCode_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
+            $hash = $data['hash'];
+            if (!$jsonAuth->checkJsonCode($hash)) return new Response('-1 invalid', 403);
+            /** @var User $user */
+            $user = $jsonAuth->returnUserFromHash($hash)['user'];
             $OGCode = $data["code"];
-            $UserID = $data["UserID"];
+            $UserID = $user->getId();
 
             $exists = 0;
 //            $exists = $this->checkCode($OGCode);
