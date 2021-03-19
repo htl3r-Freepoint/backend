@@ -117,6 +117,16 @@ class QrcodeController extends AbstractController {
     }
 
     /**
+     * @Route("/apiAddQrCode.json")
+     * @param Request $request
+     * @return Response
+     */
+    public function Add_QrCode_API_JSON(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        return $this->redirectToRoute('/api/addQrCode');
+    }
+
+
+    /**
      * @Route("/api/addQrCode")
      * @param Request $request
      * @return Response
