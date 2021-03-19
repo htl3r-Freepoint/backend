@@ -31,7 +31,10 @@ class PunkteController extends AbstractController {
     public function GET_Punkte_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            $hash = $data['hash'];
+            $hash = $data['hash'] ?? null;
+
+            if (!isset($hash)) return new Response(0);
+
             if (!$jsonAuth->checkJsonCode($hash)) return new Response('-1 invalid', 403);
             $firmenname = $data['companyName'];
             $user = $jsonAuth->returnUserFromHash($hash)['user'];
