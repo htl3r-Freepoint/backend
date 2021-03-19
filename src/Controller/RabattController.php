@@ -88,7 +88,12 @@ class RabattController extends AbstractController {
                 $erg = null;
                 $erg['coupons'] = $tmperg;
                 if (isset($user)) {
-                    $erg['editRights'] = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getId(), 'FK_Fimra_ID' => $FIRMA->getId()])[0]->getRechte();
+                    $tmp1 = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getId(), 'FK_Fimra_ID' => $FIRMA->getId()]);
+                    if (count($tmp1) > 0) {
+                        $erg['editRights'] = $tmp1[0]->getRechte();
+                    } else {
+                        $erg['editRights'] = 0;
+                    }
                 } else {
                     $erg['editRights'] = 0;
                 }

@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\LoginAuthentification;
 use App\Entity\Verify;
 use App\Service\clean;
 use Doctrine\DBAL\Types\IntegerType;
@@ -243,7 +244,7 @@ class UserController extends AbstractController {
                 if (isset($email) && isset($password)) {
                     $users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email, 'loginType' => $loginType]);
                 } else {
-                    return new Response("Insuficient login Informaition");
+                    return new Response("Insufficient login Information");
                 }
             }
             //
@@ -251,6 +252,7 @@ class UserController extends AbstractController {
             $anz = 0;
             foreach ($users as $u) {
                 if (password_verify($password, $u->getPassword()) && $email == $u->getEmail() && $loginType == $u->getLoginType()) {
+                    /** @var User $user */
                     $user = $u;
                     $id = $u->getID();
                     $anz++;
@@ -260,7 +262,12 @@ class UserController extends AbstractController {
 
             if ($anz > 1) return new Response("Too Many Users found:" . $anz, 400);
             if ($anz < 1) return new Response("User or Password not found", 400);
-            $hash = $jsonAuth->generateJsonCode();
+            $HASH = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(["FK_User_ID" => $user->getId()]);
+            if (count($HASH) > 0) {
+                $hash = $HASH[0]->getHash();
+            } else {
+                $hash = $jsonAuth->generateJsonCode();
+            }
             $jsonAuth->saveJsonCode($id, $hash);
             if ($user->getLocked() == true) return new Response("Your account has been locked! Please contact us at: \"contact@freepoint.at\" to unlock your account.", 400);
             $data = [
