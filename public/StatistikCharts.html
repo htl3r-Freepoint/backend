@@ -80,7 +80,7 @@
     }
 
     function send() {
-        getData('https://127.0.0.1:8000/api/getStatistik', {
+        getData('http://127.0.0.1:8000/api/getStatistik', {
             "hash": "ttgIeo6YNCoDg3YoJNUlMy868vhWBblZv6z4Ki61pEV3ATcWiqr4aZPPLiu19MfNHl5wa48tnJM6l2N7iAJumg7mnw6z0kGIhGtS"
         }).then(data => {
             console.log(data); // JSON data parsed by `data.json()` call

@@ -26,15 +26,17 @@ class StatistikController extends AbstractController {
         $erg = array();
         foreach ($type as $item) {
             for ($i = 0; $i <= 8; $i++) {
-                for ($ii = 0; $ii < rand(0, 50); $ii++) {
-                    $STATISTIK = new Statistik();
-                    $STATISTIK->setFKFirmaID(1);
-                    $STATISTIK->setType($item);
-                    $STATISTIK->setDate(new DateTime($ii . " days ago"));
-                    array_push($erg, $STATISTIK);
+                for ($ii = 0; $ii < rand(0, 100); $ii++) {
+                    if (rand(0, 5) != 2) {
+                        $STATISTIK = new Statistik();
+                        $STATISTIK->setFKFirmaID(1);
+                        $STATISTIK->setType($item);
+                        $STATISTIK->setDate(new DateTime($ii . " days ago"));
+                        array_push($erg, $STATISTIK);
 
-                    $entityManager->persist($STATISTIK);
-                    $entityManager->flush();
+                        $entityManager->persist($STATISTIK);
+                        $entityManager->flush();
+                    }
                 }
             }
         }
