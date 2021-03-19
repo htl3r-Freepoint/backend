@@ -267,8 +267,8 @@ class UserController extends AbstractController {
                 $hash = $HASH[0]->getHash();
             } else {
                 $hash = $jsonAuth->generateJsonCode();
+                $jsonAuth->saveJsonCode($id, $hash);
             }
-            $jsonAuth->saveJsonCode($id, $hash);
             if ($user->getLocked() == true) return new Response("Your account has been locked! Please contact us at: \"contact@freepoint.at\" to unlock your account.", 400);
             $data = [
 //                    'email' => $email,
