@@ -137,32 +137,37 @@ class RabattController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function POST_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+    public function SAVE_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
-            $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
+            $rawData = json_decode($request->getContent(), true)['data'];
+            $firmenname = $rawData['firmenname'];
+            $RECHTE = $jsonAuth->returnRechteFromHash($rawData['hash'], $firmenname);
 
-            $firmenname = $data["firmanname"];
-            $title = $data["title"];
-            $is_percent = $data["is_percent"];
-            $neededPoints = $data["value"];
-            $price = $data["price"] ?? null;
-            $text = $data["text"] ?? null;
-            $percentage = $data['percentage'] ?? null;
-            $kategorie = $data["kategorie"] ?? null;
-            $pos = $data["pos"];
+            if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) != 1) return new Response("You have to provide a company Name");
 
 
-            $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
-            $fk_firma_id = $Firma->getID();
+            $parsedData = json_decode($rawData, true);
+            foreach ($parsedData as $data) {
+                $title = $data["title"];
+                $is_percent = $data["is_percent"];
+                $neededPoints = $data["value"];
+                $price = $data["price"] ?? null;
+                $text = $data["text"] ?? null;
+                $percentage = $data['percentage'] ?? null;
+                $kategorie = $data["kategorie"] ?? null;
+                $pos = $data["pos"];
 
-            $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
-            if ($RECHTE >= 0) {
-                if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) == true) {
-                    return new Response($serializer->serialize($Firma, 'json'), 200);
-                }
-            } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+
+                $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+                $fk_firma_id = $Firma->getID();
+
+                $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
+                if ($RECHTE >= 0) {
+                    if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) == true) {
+                        return new Response($serializer->serialize($Firma, 'json'), 200);
+                    }
+                } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+            }
         } else {
             return new Response("", 404);
         }
@@ -176,7 +181,14 @@ class RabattController extends AbstractController {
     public function Change_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $entityManager = $this->getDoctrine()->getManager();
+
             $rawData = json_decode($request->getContent(), true)['data'];
+            $firmenname = $rawData['firmenname'];
+            $RECHTE = $jsonAuth->returnRechteFromHash($rawData['hash'], $firmenname);
+
+            if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) != 1) return new Response("You have to provide a company Name");
+
+
             $parsedData = json_decode($rawData, true);
             foreach ($parsedData as $data) {
 
@@ -198,7 +210,6 @@ class RabattController extends AbstractController {
                 $fk_firma_id = $Firma->getID();
 
 
-                $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $Firma->getFirmanname());
                 if ($RECHTE >= 0) {
 
 //                    $entityManager->remove($RABATT);
@@ -227,5 +238,6 @@ class RabattController extends AbstractController {
             return new Response("", 404);
         }
     }
+
 
 }

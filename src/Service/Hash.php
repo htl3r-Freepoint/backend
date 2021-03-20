@@ -114,7 +114,7 @@ class Hash extends UserController {
     }
 
 
-    public function generateJsonCode(): string { // Hash soll erstellt werden
+    public function generateJsonCode($lenght = 100): string { // Hash soll erstellt werden
 
         // Alle Zahlen und Buchstaben, aus denen ein code erstellt werden kann.
         $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
@@ -126,7 +126,7 @@ class Hash extends UserController {
         $alphaLength = strlen($alphabet) - 1;
 
         // Der Ergebnis Hash soll 100 Zeichen lang sein
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < $lenght; $i++) {
 
             // Es wird eine zufällige Zahl ersteltt, die in $alphabet vorkommt
             $n = rand(0, $alphaLength);

@@ -100,7 +100,7 @@ class UserRabattController extends AbstractController {
             /** @var User $user */
             $hash = $data['hash'];
             $user = $jsonAuth->returnUserFromHash($hash)['user'];
-            $firmenname = $data['firmenName'];
+            $firmenname = $data['firmenname'];
             $rabattID = $data['rabattID'];
 
             /** @var Firma $FIRMA */
@@ -112,7 +112,7 @@ class UserRabattController extends AbstractController {
 
             if ($PUNKTE->getPunkte() - $RABATT->getNeededPoints() >= 0) {
                 $PUNKTE->setPunkte($PUNKTE->getPunkte() - $RABATT->getNeededPoints());
-                $code = $jsonAuth->generateJsonCode();
+                $code = $jsonAuth->generateJsonCode(10);
 
                 $USERRABATT = new UserRabatte();
                 $USERRABATT->setFKUserID($user->getId());
