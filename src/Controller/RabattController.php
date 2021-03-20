@@ -179,6 +179,7 @@ class RabattController extends AbstractController {
      */
     public function Change_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
+            $entityManager = $this->getDoctrine()->getManager();
             $rawData = json_decode($request->getContent(), true);
             $firmenname = $rawData['firmenname'];
             $RECHTE = $jsonAuth->returnRechteFromHash($rawData['hash'], $firmenname);
@@ -202,15 +203,11 @@ class RabattController extends AbstractController {
                     $kategorie = $data["kategorie"] ?? null;
                     $pos = $data['pos'] ?? null;
 
-                    /** @var Rabatt $RABATT */
                     $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $RABATT->getFKFirmaID()])[0];
                     $fk_firma_id = $Firma->getID();
 
 
-//                    $entityManager->remove($RABATT);
-//                    $entityManager->flush();
-
-                    if (isset($title)) $RABATT->setFKFirmaID($fkFirmaID);
+                    if (isset($fk_firma_id)) $RABATT->setFKFirmaID($fkFirmaID);
                     if (isset($title)) $RABATT->setTitle($title);
                     if (isset($is_percent)) $RABATT->setIsPercent($is_percent);
                     if (isset($neededPoints)) $RABATT->setNeededPoints($neededPoints);
@@ -226,7 +223,7 @@ class RabattController extends AbstractController {
                     $entityManager->flush();
 
 
-                    return new Response($serializer->serialize($Firma, 'json'), 200);
+                    return new Response("successful", 200);
                 }
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         } else {
