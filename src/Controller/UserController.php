@@ -183,21 +183,19 @@ class UserController extends AbstractController {
             if (isset($data['hash'])) {
                 $hash = $data['hash'];
             } else {
-//                $data = [
-//                    'valid' => false,
-//                    'verified' => ""
-//                ];
                 return new Response(false);
             }
-//            $data = [
-//                'valid' => false,
-//                'verified' => ""
-//            ];
             if (!$jsonAuth->checkJsonCode($hash)) return new Response(false);
             $verified = $jsonAuth->returnUserFromHash($hash);
+            $editRights = 0;
+            $firmenname = $data['firmenname'] ?? null;
+            if (isset($firmenname)) {
+                $editRights = $jsonAuth->returnRechteFromHash($hash, $firmenname);
+            }
             $erg = [
                 'valid' => true,
-                'verified' => $verified['user']->getVerified()
+                'verified' => $verified['user']->getVerified(),
+                'editRights' => $editRights
             ];
             return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
