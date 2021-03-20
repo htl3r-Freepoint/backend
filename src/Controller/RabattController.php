@@ -147,8 +147,6 @@ class RabattController extends AbstractController {
 
             if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) != 1) return new Response("You have to provide a company Name");
 
-
-//            return new Response($serializer->serialize($parsedData, 'json'), 200);
             if ($RECHTE >= 0) {
                 foreach ($parsedData as $data) {
                     $title = $data["title"];
@@ -181,37 +179,33 @@ class RabattController extends AbstractController {
      */
     public function Change_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $rawData = json_decode($request->getContent(), true)['data'];
+            $rawData = json_decode($request->getContent(), true);
             $firmenname = $rawData['firmenname'];
             $RECHTE = $jsonAuth->returnRechteFromHash($rawData['hash'], $firmenname);
+            $parsedData = json_decode($rawData['data'], true);
 
             if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) != 1) return new Response("You have to provide a company Name");
 
+            if ($RECHTE >= 0) {
+                foreach ($parsedData as $data) {
 
-            $parsedData = json_decode($rawData, true);
-            foreach ($parsedData as $data) {
+                    $id = $data['id'];
+                    /** @var Rabatt $RABATT */
+                    $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $id])[0];
+                    $fkFirmaID = $RABATT->getFKFirmaID();
+                    $title = $data["title"] ?? null;
+                    $is_percent = $data["is_percent"] ?? null;
+                    $neededPoints = $data["value"] ?? null;
+                    $price = $data["price"] ?? null;
+                    $text = $data["text"] ?? null;
+                    $percentage = $data['percentage'] ?? null;
+                    $kategorie = $data["kategorie"] ?? null;
+                    $pos = $data['pos'] ?? null;
 
-                $id = $data['id'];
-                /** @var Rabatt $RABATT */
-                $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $id])[0];
-                $fkFirmaID = $RABATT->getFKFirmaID();
-                $title = $data["title"] ?? null;
-                $is_percent = $data["is_percent"] ?? null;
-                $neededPoints = $data["value"] ?? null;
-                $price = $data["price"] ?? null;
-                $text = $data["text"] ?? null;
-                $percentage = $data['percentage'] ?? null;
-                $kategorie = $data["kategorie"] ?? null;
-                $pos = $data['pos'] ?? null;
+                    /** @var Rabatt $RABATT */
+                    $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $RABATT->getFKFirmaID()])[0];
+                    $fk_firma_id = $Firma->getID();
 
-                /** @var Rabatt $RABATT */
-                $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $RABATT->getFKFirmaID()])[0];
-                $fk_firma_id = $Firma->getID();
-
-
-                if ($RECHTE >= 0) {
 
 //                    $entityManager->remove($RABATT);
 //                    $entityManager->flush();
@@ -233,8 +227,8 @@ class RabattController extends AbstractController {
 
 
                     return new Response($serializer->serialize($Firma, 'json'), 200);
-                } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
-            }
+                }
+            } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         } else {
             return new Response("", 404);
         }
