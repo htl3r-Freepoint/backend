@@ -40,7 +40,7 @@ class RabattController extends AbstractController {
         $Firma->setPos($pos);
         $Firma->setLastModified(new \DateTime());
 
-//        $entityManager->persist($Firma);
+        $entityManager->persist($Firma);
         $entityManager->flush();
 
         return true;
