@@ -140,15 +140,15 @@ class RabattController extends AbstractController {
      */
     public function SAVE_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
-            $rawData = json_decode($request->getContent(), true)['data'];
-            $parsedData = json_decode($rawData, true);
+            $rawData = json_decode($request->getContent(), true);
             $firmenname = $rawData['firmenname'];
             $RECHTE = $jsonAuth->returnRechteFromHash($rawData['hash'], $firmenname);
+            $parsedData = json_decode($rawData['data'], true);
 
             if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) != 1) return new Response("You have to provide a company Name");
 
 
-            return new Response($serializer->serialize($parsedData, 'json'), 200);
+//            return new Response($serializer->serialize($parsedData, 'json'), 200);
             if ($RECHTE >= 0) {
                 foreach ($parsedData as $data) {
                     $title = $data["title"];
