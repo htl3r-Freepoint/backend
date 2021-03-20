@@ -147,27 +147,26 @@ class RabattController extends AbstractController {
             if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) != 1) return new Response("You have to provide a company Name");
 
 
-            $parsedData = json_decode($rawData, true);
-            foreach ($parsedData as $data) {
-                $title = $data["title"];
-                $is_percent = $data["is_percent"];
-                $neededPoints = $data["value"];
-                $price = $data["price"] ?? null;
-                $text = $data["text"] ?? null;
-                $percentage = $data['percentage'] ?? null;
-                $kategorie = $data["kategorie"] ?? null;
-                $pos = $data["pos"];
+            if ($RECHTE >= 0) {
+                $parsedData = json_decode($rawData, true);
+                foreach ($parsedData as $data) {
+                    $title = $data["title"];
+                    $is_percent = $data["is_percent"];
+                    $neededPoints = $data["value"];
+                    $price = $data["price"] ?? null;
+                    $text = $data["text"] ?? null;
+                    $percentage = $data['percentage'] ?? null;
+                    $kategorie = $data["kategorie"] ?? null;
+                    $pos = $data["pos"];
 
 
-                $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
-                $fk_firma_id = $Firma->getID();
+                    $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+                    $fk_firma_id = $Firma->getID();
 
-                $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
-                if ($RECHTE >= 0) {
                     if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) == true) {
                         return new Response($serializer->serialize($Firma, 'json'), 200);
-                    }
-                } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+                    } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+                }
             }
         } else {
             return new Response("", 404);
