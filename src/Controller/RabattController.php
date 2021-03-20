@@ -152,13 +152,13 @@ class RabattController extends AbstractController {
             if ($RECHTE >= 0) {
                 foreach ($parsedData as $data) {
                     $title = $data["title"];
-                    $is_percent = $data["is_percent"];
+                    $is_percent = $data["isPercent"];
                     $neededPoints = $data["value"];
                     $price = $data["price"] ?? null;
                     $text = $data["text"] ?? null;
                     $percentage = $data['percentage'] ?? null;
-                    $kategorie = $data["kategorie"] ?? null;
-                    $pos = $data["pos"];
+                    $kategorie = $data["kategorie"] ?? 0;
+                    $pos = $data["pos"] ?? null;
 
 
                     $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
