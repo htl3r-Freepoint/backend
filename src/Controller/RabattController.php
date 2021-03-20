@@ -163,7 +163,7 @@ class RabattController extends AbstractController {
                     $fk_firma_id = $Firma->getID();
 
                     if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) == true) {
-                        return new Response("successfull", 200);
+                        return new Response("", 200);
                     } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
                 }
             }
@@ -223,7 +223,7 @@ class RabattController extends AbstractController {
                     $entityManager->flush();
 
 
-                    return new Response("successful", 200);
+                    return new Response("", 200);
                 }
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         } else {
@@ -256,7 +256,7 @@ class RabattController extends AbstractController {
                     $entityManager->flush();
 
 
-                    return new Response("successfuly deleted", 200);
+                    return new Response("", 200);
                 }
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         } else {
