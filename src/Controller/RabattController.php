@@ -164,7 +164,7 @@ class RabattController extends AbstractController {
                     $fk_firma_id = $Firma->getID();
 
                     if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) == true) {
-                        return new Response($serializer->serialize($Firma, 'json'), 200);
+                        return new Response("successfull", 200);
                     } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
                 }
             }
