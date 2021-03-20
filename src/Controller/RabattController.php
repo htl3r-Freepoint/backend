@@ -195,7 +195,7 @@ class RabattController extends AbstractController {
                     $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $id])[0];
                     $fkFirmaID = $RABATT->getFKFirmaID();
                     $title = $data["title"] ?? null;
-                    $is_percent = $data["is_percent"] ?? null;
+                    $is_percent = $data["isPercent"] ?? null;
                     $neededPoints = $data["value"] ?? null;
                     $price = $data["price"] ?? null;
                     $text = $data["text"] ?? null;
@@ -224,6 +224,39 @@ class RabattController extends AbstractController {
 
 
                     return new Response("successful", 200);
+                }
+            } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+        } else {
+            return new Response("", 404);
+        }
+    }
+
+
+    /**
+     * @Route("/api/deleteRabatt")
+     * @param Request $request
+     * @return Response
+     */
+    public function DELETE_Rabatt_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        if ($request->getMethod() == 'POST') {
+            $entityManager = $this->getDoctrine()->getManager();
+            $rawData = json_decode($request->getContent(), true);
+            $firmenname = $rawData['firmenname'];
+            $RECHTE = $jsonAuth->returnRechteFromHash($rawData['hash'], $firmenname);
+            $parsedData = json_decode($rawData['data'], true);
+
+            if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) != 1) return new Response("You have to provide a company Name");
+
+            if ($RECHTE >= 0) {
+                foreach ($parsedData as $data) {
+                    $id = $data['id'];
+                    $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $id])[0];
+
+                    $entityManager->remove($RABATT);
+                    $entityManager->flush();
+
+
+                    return new Response("successfuly deleted", 200);
                 }
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         } else {
