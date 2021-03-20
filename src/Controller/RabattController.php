@@ -64,6 +64,7 @@ class RabattController extends AbstractController {
             }
 
             $firmenname = $data['firmenname'];
+            if (count($FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) == 0) return new Response("Company Name not found", 418);
 
 
             if (isset($firmenname)) {
