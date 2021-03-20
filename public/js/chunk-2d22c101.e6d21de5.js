@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d22c101"],{f243:function(e,n,a){"use strict";a.r(n);var s=function(){var e=this,n=e.$createElement,a=e._self._c||n;return a("form",[e._v(" dasdad ")])},t=[],c={name:"ResetPassword"},r=c,o=a("2877"),u=Object(o["a"])(r,s,t,!1,null,"518cfafb",null);n["default"]=u.exports}}]);
-//# sourceMappingURL=chunk-2d22c101.e6d21de5.js.map
