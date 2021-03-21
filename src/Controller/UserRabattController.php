@@ -97,7 +97,7 @@ class UserRabattController extends AbstractController {
             $Rabatt = $Rabatt[0];
 
             /** @var Rabatt $Rabatte */
-            $Rabatte = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(["id" => $Rabatt->getFKRabattID()]);
+            $Rabatte = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(["id" => $Rabatt->getFKRabattID()])[0];
 
             $item = $Rabatte;
             $dataa = [
