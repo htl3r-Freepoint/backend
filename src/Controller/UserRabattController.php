@@ -65,7 +65,7 @@ class UserRabattController extends AbstractController {
                         'text' => $item->getText(),
                         'kategorie' => $item->getKategorie(),
                         'pos' => $item->getPos(),
-                        'rabattCode' => $userrabatt->getRabattCode()
+                        'code' => $userrabatt->getRabattCode()
                     ];
                     array_push($erg, $dataa);
                 }
@@ -78,7 +78,7 @@ class UserRabattController extends AbstractController {
     }
 
     /**
-     * @Route("/api/useUserrabatte")
+     * @Route("/api/useCoupon")
      * @param Request $request
      * @return Response
      */
