@@ -98,6 +98,21 @@ class UserRabattController extends AbstractController {
 
             /** @var Rabatt $Rabatte */
             $Rabatte = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(["id" => $Rabatt->getFKRabattID()]);
+
+            $item = $Rabatte;
+            $dataa = [
+                'id' => $item->getId(),
+                'isPercent' => $item->getIsPercent(),
+                'neededPoints' => $item->getNeededPoints(),
+                'price' => $item->getPrice(),
+                'percentage' => $item->getPercentage(),
+                'title' => $item->getTitle(),
+                'text' => $item->getText(),
+                'kategorie' => $item->getKategorie(),
+                'pos' => $item->getPos(),
+                'code' => $code
+            ];
+
             /** @var Firma $FIRMA */
             $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['id' => $Rabatte->getFKFirmaID()])[0];
 
@@ -115,7 +130,8 @@ class UserRabattController extends AbstractController {
                 $entityManager->persist($STATISTIK);
                 $entityManager->flush();
 
-                return new Response('successful', 200);
+
+                return new Response($dataa, 200);
             }
         } else {
             return new Response("", 404);
