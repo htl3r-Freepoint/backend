@@ -23,7 +23,6 @@ use \Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use App\Form\UserType;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Service\Hash;
-use Spatie\Async\Pool;
 
 class UserController extends AbstractController {
     /**
@@ -102,10 +101,8 @@ class UserController extends AbstractController {
         $entityManager->persist($VERIFY);
         $entityManager->flush();
 
-        $erg ['ergebnis'] = true;
-        $erg ["code"] = $code;
-
-        return $erg;
+        $this->sendEmail($email, $mailer, $code);
+        return true;
     }
 
     /**
@@ -149,26 +146,19 @@ class UserController extends AbstractController {
 //                        if ($exists == "-1 Username") return new Response("-1 Username", 400);
                     if ($exists == "-1 Email") return new Response("Email already used", 400);
                 } else {
-                    $statusSaveUser = $this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash);
-                    if ($statusSaveUser["ergebnis"] == true) {
-
+                    if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) == true) {
                         $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email])[0];
                         $hash = $jsonHash->saveJsonCode($Users->getID());
 //                            return new Response("1", 200);
-                        $returnData = [
+                        $data = [
 //                            'email' => $email,
                             'username' => $username,
                             'verified' => false,
 //                            'id' => $Users->getID(),
                             'token' => $hash
                         ];
+                        return new Response($serializer->serialize($data, 'json'), 200);
 
-                        $pool = Pool::create();
-                        $pool->add(function () use ($email, $mailer, $statusSaveUser) {
-                            $this->sendEmail($email, $mailer, $statusSaveUser["ergebnis"]);
-                        });
-
-                        return new Response($serializer->serialize($returnData, 'json'), 200);
                     } else {
                         return new Response("-1", 400);
                     }

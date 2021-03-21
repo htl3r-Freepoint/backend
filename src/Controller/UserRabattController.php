@@ -34,17 +34,43 @@ class UserRabattController extends AbstractController {
     public function GET_Userrabatte_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
+
+            $hash = $data['hash'] ?? null;
+            if (!isset($hash)) return new Response("You have to provide a user token!", 400);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('User Token not valid', 403);
+
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             $id = $user->getID();
             $firmenname = $data['firmenname'];
-            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+            if (count($FIRMA) == 0) return new Response("You have to provide a valid company name", 400);
+            $FIRMA = $FIRMA[0];
             $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['FK_Firma_ID' => $FIRMA->getID()]);
+
             $erg = array();
+            /** @var Rabatt $item */
             foreach ($RABATT as $item) {
-                $USERRABATTE = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
-                array_push($erg, $USERRABATTE);
+                $USERRABATTE = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_User_ID' => $id, 'FK_Rabatt_ID' => $item->getId()]); //Hier umändern
+
+                /** @var UserRabatte $userrabatt */
+                foreach ($USERRABATTE as $userrabatt) {
+                    $dataa = [
+                        'id' => $item->getId(),
+                        'isPercent' => $item->getIsPercent(),
+                        'neededPoints' => $item->getNeededPoints(),
+                        'price' => $item->getPrice(),
+                        'percentage' => $item->getPercentage(),
+                        'title' => $item->getTitle(),
+                        'text' => $item->getText(),
+                        'kategorie' => $item->getKategorie(),
+                        'pos' => $item->getPos(),
+                        'rabattCode' => $userrabatt->getRabattCode()
+                    ];
+                    array_push($erg, $dataa);
+                }
             }
+
             return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
             return new Response("", 404);
