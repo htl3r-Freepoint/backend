@@ -6,6 +6,7 @@ use App\Entity\Angestellte;
 use App\Entity\Firma;
 use App\Entity\Rabatt;
 use App\Entity\User;
+use App\Entity\UserRabatte;
 use App\Service\Hash;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -253,14 +254,21 @@ class RabattController extends AbstractController {
             if ($RECHTE >= 0) {
                 foreach ($parsedData as $data) {
                     $id = $data['id'];
-                    $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $id])[0];
+                    $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $id]);
 
-                    $entityManager->remove($RABATT);
-                    $entityManager->flush();
+                    if (count($RABATT) > 0) {
+                        $RABATT = $RABATT[0];
+                        $Userrabatte = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['$FK_Rabatt_ID' => $id]);
+                        foreach ($Userrabatte as $userrabatt) {
+                            $entityManager->remove($userrabatt);
+                            $entityManager->flush();
+                        }
 
-
-                    return new Response("", 200);
+                        $entityManager->remove($RABATT);
+                        $entityManager->flush();
+                    }
                 }
+                return new Response("", 200);
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         } else {
             return new Response("", 404);
