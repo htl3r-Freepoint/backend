@@ -165,7 +165,6 @@ class UserRabattController extends AbstractController {
             }
 
             $PUNKTE = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_Firma_ID' => $FIRMA->getId(), "FK_User_ID" => $user->getId()])[0];
-            $erg['points'] = $PUNKTE->getPunkte();
             $item = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $rabattID])[0];
             $dataa = [
                 'id' => $item->getId(),
@@ -177,9 +176,10 @@ class UserRabattController extends AbstractController {
                 'text' => $item->getText(),
                 'kategorie' => $item->getKategorie(),
                 'pos' => $item->getPos(),
-                'rabattCode' => $code
+                'code' => $code
             ];
 
+            $erg['points'] = $PUNKTE->getPunkte();
             $erg['coupon'] = $dataa;
 
             return new Response($serializer->serialize($erg, 'json'), 200);
