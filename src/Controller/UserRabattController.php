@@ -166,7 +166,7 @@ class UserRabattController extends AbstractController {
 
             $PUNKTE = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_Firma_ID' => $FIRMA->getId(), "FK_User_ID" => $user->getId()])[0];
             $erg['points'] = $PUNKTE->getPunkte();
-            $erg['code'] = $code;
+            $erg['coupon'] = ['code' => $code];
 
             return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
