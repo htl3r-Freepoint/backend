@@ -134,7 +134,7 @@ class RabattController extends AbstractController {
     }
 
     /**
-     * @Route("/api/saveRabatt")
+     * @Route("/api/newCoupon")
      * @param Request $request
      * @return Response
      */
@@ -173,7 +173,7 @@ class RabattController extends AbstractController {
     }
 
     /**
-     * @Route("/api/changeRabatt")
+     * @Route("/api/editCoupon")
      * @param Request $request
      * @return Response
      */
@@ -233,7 +233,7 @@ class RabattController extends AbstractController {
 
 
     /**
-     * @Route("/api/deleteRabatt")
+     * @Route("/api/deleteCoupon")
      * @param Request $request
      * @return Response
      */
