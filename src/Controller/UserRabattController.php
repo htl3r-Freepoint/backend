@@ -114,7 +114,7 @@ class UserRabattController extends AbstractController {
     }
 
     /**
-     * @Route("/api/addUserrabatte")
+     * @Route("/api/buyCoupon")
      * @param Request $request
      * @return Response
      */
@@ -123,18 +123,23 @@ class UserRabattController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             $data = json_decode($request->getContent(), true);
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
-            /** @var User $user */
+
             $hash = $data['hash'];
             $user = $jsonAuth->returnUserFromHash($hash)['user'];
             $firmenname = $data['firmenname'];
             $rabattID = $data['rabattID'];
 
-            /** @var Firma $FIRMA */
-            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
-            /** @var Punkte $PUNKTE */
-            $PUNKTE = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_Firma_ID' => $FIRMA->getId(), "FK_User_ID" => $user->getId()])[0];
-            /** @var Rabatt $RABATT */
-            $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $rabattID])[0];
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+            if (count($FIRMA) == 0) return new Response("no company with th name " . $firmenname . " not found", 400);
+            $FIRMA = $FIRMA[0];
+
+            $PUNKTE = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_Firma_ID' => $FIRMA->getId(), "FK_User_ID" => $user->getId()]);
+            if (count($PUNKTE) == 0) return new Response("insufficient Points", 400);
+            $PUNKTE = $PUNKTE[0];
+
+            $RABATT = $this->getDoctrine()->getRepository(Rabatt::class)->findBy(['id' => $rabattID]);
+            if (count($RABATT) == 0) return new Response("Coupon not found", 400);
+            $RABATT = $RABATT [0];
 
             if ($PUNKTE->getPunkte() - $RABATT->getNeededPoints() >= 0) {
                 $PUNKTE->setPunkte($PUNKTE->getPunkte() - $RABATT->getNeededPoints());
@@ -155,9 +160,15 @@ class UserRabattController extends AbstractController {
                 $STATISTIK->setType("gekauft");
                 $STATISTIK->setFKFirmaID($FIRMA->getId());
 
+            } else {
+                return new Response("insufficient Points", 400);
             }
 
-            return new Response($serializer->serialize($code, 'json'), 200);
+            $PUNKTE = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_Firma_ID' => $FIRMA->getId(), "FK_User_ID" => $user->getId()])[0];
+            $erg['points'] = $PUNKTE->getPunkte();
+            $erg['couponCode'] = $code;
+
+            return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
             return new Response("", 404);
         }
