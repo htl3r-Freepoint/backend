@@ -131,7 +131,7 @@ class UserRabattController extends AbstractController {
                 $entityManager->flush();
 
 
-                return new Response($dataa, 200);
+                return new Response($serializer->serialize($dataa, 'json'), 200);
             }
         } else {
             return new Response("", 404);
