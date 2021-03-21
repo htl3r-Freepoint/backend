@@ -191,7 +191,7 @@ class RabattController extends AbstractController {
 
             if (count($this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])) != 1) return new Response("You have to provide a company Name");
 
-            if ($RECHTE >= 0) {
+            if ($RECHTE >= 2) {
                 foreach ($parsedData as $data) {
 
                     $id = $data['id'];
