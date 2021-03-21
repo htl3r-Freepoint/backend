@@ -27,7 +27,7 @@ class UserRabattController extends AbstractController {
 //    }
 
     /**
-     * @Route("/api/getUserrabatte")
+     * @Route("/api/getUserCoupons")
      * @param Request $request
      * @return Response
      */
@@ -41,7 +41,7 @@ class UserRabattController extends AbstractController {
 
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             $id = $user->getID();
-            $firmenname = $data['firmenname'];
+            $firmenname = $data['companyName'];
 
             $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
             if (count($FIRMA) == 0) return new Response("You have to provide a valid company name", 400);
