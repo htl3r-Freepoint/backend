@@ -168,6 +168,9 @@
     "ocramius/proxy-manager": {
         "version": "2.8.0"
     },
+    "opis/closure": {
+        "version": "3.6.1"
+    },
     "php": {
         "version": "7.4"
     },
@@ -209,6 +212,9 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "spatie/async": {
+        "version": "1.5.3"
     },
     "symfony/asset": {
         "version": "v5.1.6"

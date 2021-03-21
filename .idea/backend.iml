@@ -145,6 +145,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/sync" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/windows-registry" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/async" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/opis/closure" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

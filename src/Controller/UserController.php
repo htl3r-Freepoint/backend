@@ -23,6 +23,7 @@ use \Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use App\Form\UserType;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Service\Hash;
+use Spatie\Async\Pool;
 
 class UserController extends AbstractController {
     /**
@@ -101,8 +102,10 @@ class UserController extends AbstractController {
         $entityManager->persist($VERIFY);
         $entityManager->flush();
 
-        $this->sendEmail($email, $mailer, $code);
-        return true;
+        $erg ['ergebnis'] = true;
+        $erg ["code"] = $code;
+
+        return $erg;
     }
 
     /**
@@ -146,19 +149,26 @@ class UserController extends AbstractController {
 //                        if ($exists == "-1 Username") return new Response("-1 Username", 400);
                     if ($exists == "-1 Email") return new Response("Email already used", 400);
                 } else {
-                    if ($this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash) == true) {
+                    $statusSaveUser = $this->saveUser($username, $email, $vorname, $nachname, $password, $mailer, $loginType, $jsonHash);
+                    if ($statusSaveUser["ergebnis"] == true) {
+
                         $Users = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $email])[0];
                         $hash = $jsonHash->saveJsonCode($Users->getID());
 //                            return new Response("1", 200);
-                        $data = [
+                        $returnData = [
 //                            'email' => $email,
                             'username' => $username,
                             'verified' => false,
 //                            'id' => $Users->getID(),
                             'token' => $hash
                         ];
-                        return new Response($serializer->serialize($data, 'json'), 200);
 
+                        $pool = Pool::create();
+                        $pool->add(function () use ($email, $mailer, $statusSaveUser) {
+                            $this->sendEmail($email, $mailer, $statusSaveUser["ergebnis"]);
+                        });
+
+                        return new Response($serializer->serialize($returnData, 'json'), 200);
                     } else {
                         return new Response("-1", 400);
                     }
@@ -333,10 +343,11 @@ class UserController extends AbstractController {
     public function Get_User_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
+            $hash = $data['hash'] ?? null;
+            if (!isset($hash)) return new Response("please provide a User Token", 400);
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token invalid', 403);
             $entityManager = $this->getDoctrine()->getManager();
 
-            $hash = $data['hash'];
 
             $DataDB = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['Hash' => $hash]);
             /** @var User $user */
@@ -344,8 +355,8 @@ class UserController extends AbstractController {
 
             $erg = [
                 'username' => $user->getUsername(),
-                'FirstName' => $user->getVorname(),
-                'LastName' => $user->getNachname(),
+                'firstName' => $user->getVorname(),
+                'lastName' => $user->getNachname(),
                 'email' => $user->getEmail(),
                 'verified' => $user->getVerified(),
             ];
