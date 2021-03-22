@@ -126,7 +126,7 @@ class KasseController extends AbstractController {
             $rechte = $jsonAuth->returnRechteFromHash($hash, $firmenname);
 
             if ($rechte >= 2) {
-                $entityManager->remove($KASSE);
+                $entityManager->remove($KASSE[0]);
                 $entityManager->flush();
             }
 
