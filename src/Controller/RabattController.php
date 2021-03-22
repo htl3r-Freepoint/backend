@@ -166,10 +166,11 @@ class RabattController extends AbstractController {
                     $Firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
                     $fk_firma_id = $Firma->getID();
 
-                    if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) == true) {
-                        return new Response("", 200);
-                    } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+                    if ($this->saveRabatt($fk_firma_id, $price, $title, $text, $is_percent, $neededPoints, $kategorie, $percentage, $pos) != true) {
+                        return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
+                    }
                 }
+                return new Response("", 200);
             }
         } else {
             return new Response("", 404);
@@ -227,7 +228,7 @@ class RabattController extends AbstractController {
                     $entityManager->flush();
 
 
-                    return new Response(count($parsedData), 200);
+                    return new Response("", 200);
                 }
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         } else {
