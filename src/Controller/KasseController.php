@@ -130,7 +130,7 @@ class KasseController extends AbstractController {
                 $entityManager->flush();
             }
 
-            return new Response($serializer->serialize($KASSE, 'json'), 200);
+            return new Response("Successful", 200);
         }
     }
 
