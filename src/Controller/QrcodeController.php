@@ -138,7 +138,7 @@ class QrcodeController extends AbstractController {
                 return new Response("QR-Code wurde bereits eingescanned", 400);
             } else {
                 $savedPoints = $this->saveCode($OGCode, $UserID);
-                if ($savedPoints == "-1 Kassa") return new Response("-1 Kassa", 400);
+                if ($savedPoints == "-1 Kassa") return new Response("Kassa not found", 400);
                 return new Response($serializer->serialize($savedPoints, 'json'), 200);
             }
         } else {
