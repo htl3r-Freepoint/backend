@@ -120,9 +120,9 @@ class KasseController extends AbstractController {
             $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
             if (count($FIRMA) == 0) return new Response("Company not found", 400);
             $FIRMA = $FIRMA[0];
-
-            $KASSE = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['id' => $id]);
-            if (count($KASSE) == 0) return new Response("Kasse not found", 400);
+            /*
+                        $KASSE = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['id' => $id]);
+                        if (count($KASSE) == 0) return new Response("Kasse not found", 400);*/
             $rechte = $jsonAuth->returnRechteFromHash($hash, $firmenname);
 
             if ($rechte >= 2) {
