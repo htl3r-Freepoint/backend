@@ -28,7 +28,7 @@ class KasseController extends AbstractController {
             $hash = $data['hash'];
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
 
-            $name = $data["qrcode"];
+            $name = mb_split("_", $data["qrcode"])[2];
             $firmenname = $data['companyName'];
 
             $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
