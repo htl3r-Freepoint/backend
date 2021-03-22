@@ -89,7 +89,6 @@ class KasseController extends AbstractController {
     public function GET_Kasse_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
 
             $firmenname = $data['companyName'];
 
