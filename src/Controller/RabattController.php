@@ -227,7 +227,7 @@ class RabattController extends AbstractController {
                     $entityManager->flush();
 
 
-                    return new Response("", 200);
+                    return new Response(count($parsedData), 200);
                 }
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
         } else {
