@@ -44,7 +44,7 @@ class KasseController extends AbstractController {
     }
 
     /**
-     * @Route("/api/addRegisters")
+     * @Route("/api/addRegister")
      * @param Request $request
      * @return Response
      */
