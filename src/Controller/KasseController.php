@@ -77,7 +77,7 @@ class KasseController extends AbstractController {
 
             $Kassen = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['fk_firma_id' => $FIRMA->getID()]);
 
-            return new Response($Kassen, 200);
+            return new Response($serializer->serialize($Kassen, 'json'), 200);
         }
     }
 
@@ -101,4 +101,38 @@ class KasseController extends AbstractController {
             return new Response($serializer->serialize($KASSE, 'json'), 200);
         }
     }
+
+    /**
+     * @Route("/api/deleteRegister")
+     * @param Request $request
+     * @return Response
+     */
+    public function DELETE_Kasse_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        if ($request->getMethod() == 'POST') {
+            $entityManager = $this->getDoctrine()->getManager();
+            $data = json_decode($request->getContent(), true);
+            $hash = $data['hash'];
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
+
+            $firmenname = $data['companyName'];
+            $kassaID = $data['Bezeichnung'];
+            $id = $data['id'];
+
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+            if (count($FIRMA) == 0) return new Response("Company not found", 400);
+            $FIRMA = $FIRMA[0];
+
+            $KASSE = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['id' => $id]);
+            if (count($KASSE) == 0) return new Response("Kasse not found", 400);
+            $rechte = $jsonAuth->returnRechteFromHash($hash, $firmenname);
+
+            if ($rechte >= 2) {
+                $entityManager->remove($KASSE[0]);
+                $entityManager->flush();
+            }
+
+            return new Response($serializer->serialize($KASSE, 'json'), 200);
+        }
+    }
+
 }
