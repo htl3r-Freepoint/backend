@@ -258,7 +258,7 @@ class RabattController extends AbstractController {
 
                     if (count($RABATT) > 0) {
                         $RABATT = $RABATT[0];
-                        $Userrabatte = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['$FK_Rabatt_ID' => $id]);
+                        $Userrabatte = $this->getDoctrine()->getRepository(UserRabatte::class)->findBy(['FK_Rabatt_ID' => $id]);
                         foreach ($Userrabatte as $userrabatt) {
                             $entityManager->remove($userrabatt);
                             $entityManager->flush();
