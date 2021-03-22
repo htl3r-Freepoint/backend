@@ -115,8 +115,7 @@ class KasseController extends AbstractController {
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Hash Invalid', 403);
 
             $firmenname = $data['companyName'];
-            $kassaID = $data['Bezeichnung'];
-            $id = $data['id'];
+            $kassa = $data['register'];
 
             $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
             if (count($FIRMA) == 0) return new Response("Company not found", 400);
@@ -127,7 +126,7 @@ class KasseController extends AbstractController {
             $rechte = $jsonAuth->returnRechteFromHash($hash, $firmenname);
 
             if ($rechte >= 2) {
-                $entityManager->remove($KASSE[0]);
+                $entityManager->remove($kassa);
                 $entityManager->flush();
             }
 
