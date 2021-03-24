@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\LoginAuthentification;
 use App\Entity\Verify;
 use App\Service\clean;
+use App\Service\DSGVO;
 use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -357,5 +358,28 @@ class UserController extends AbstractController {
         }
     }
 
+    /**
+     * @Route("/api/deleteUser")
+     * @param Request $request
+     * @return Response
+     *
+     */
+    public function DELETE_User_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth, DSGVO $dsgvo): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
 
+            $hash = $data['hash'] ?? "MiCi7dPfX9123sqfDvgyUbjUS39s6DZpwwrSZGPEYPnVcHJStMHrcV8lTNKyMnoz5NDhknMh5M9bTTu7JAUf9f9pJbpHRcTsGIAc";
+            if (!isset($hash)) return new Response("Please provide a token", 400);
+            $passwort = $data['password'] ?? "123";
+
+            /**@var User $user */
+            $user = $jsonAuth->returnUserFromHash($hash)['user'];
+            if (password_verify($passwort, $user->getPassword())) {
+                if ($dsgvo->deleteEverything($hash, $user->getEmail()) == 1) return new Response("successful", 200);
+            }
+
+        } else {
+            return new Response("", 404);
+        }
+    }
 }

@@ -230,4 +230,23 @@ class FirmaController extends AbstractController {
         }
     }
 
+    /**
+     * @Route("/api/deleteCompany")
+     * @param Request $request
+     * @return Response
+     *
+     */
+    public function DELETE_User_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+
+            $hash = $data['hash'] ?? "MiCi7dPfX9123sqfDvgyUbjUS39s6DZpwwrSZGPEYPnVcHJStMHrcV8lTNKyMnoz5NDhknMh5M9bTTu7JAUf9f9pJbpHRcTsGIAc";
+            if (!isset($hash)) return new Response("Please provide a token", 400);
+            $passwort = $data['password'] ?? "123";
+
+            $jsonAuth->returnUserFromHash($hash)['user'];
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname']);
+        }
+    }
+
 }
