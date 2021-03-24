@@ -111,7 +111,6 @@ class FirmaController extends AbstractController {
                 $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             }
             $firmenname = strtolower($data['companyName']) ?? null;
-            return new Response($firmenname, 401);
 
             if (!isset($firmenname)) {
                 $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
@@ -154,6 +153,7 @@ class FirmaController extends AbstractController {
             }
             if (isset($firmenname)) {
                 $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Domain' => $firmenname]);
+                return new Response("fnpoijeqwnptfgoieqrawg", 517);
                 if (count($firma) == 0) return new Response("The company was not found", 404);
                 $firma = $firma[0];
                 $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
