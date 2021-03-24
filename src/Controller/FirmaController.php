@@ -136,7 +136,7 @@ class FirmaController extends AbstractController {
                         }
                         array_push($designs, $tmp);
                     }
-                    if (count($farbe) == 0) $farbe[0] = null;
+                    if (count($farbe) == 0) $farbe[0] = '["#10cdb7","#2c3e50","#fafafa","#ffffff"]';
                     $tmperg = [
                         'owner' => $firma->getId(),
                         'companyName' => $firma->getFirmanname(),
