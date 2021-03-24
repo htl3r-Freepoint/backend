@@ -81,7 +81,7 @@ class DesignController extends AbstractController {
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
 
 
-            return new Response("1", 200);
+            return new Response("", 200);
         } else {
             return new Response("", 404);
         }

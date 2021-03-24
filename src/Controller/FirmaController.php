@@ -122,6 +122,7 @@ class FirmaController extends AbstractController {
                     /** @var DesignZuweisung $DESIGNZUWEISUNG */
                     $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
                     $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()]);
+                    $farbe = array();
                     $designs = array();
                     /** @var Design $design */
                     foreach ($DESIGN as $design) {
@@ -130,16 +131,23 @@ class FirmaController extends AbstractController {
                             "file" => $design->getDatei(),
                             "color" => $design->getStingDatei()
                         ];
+                        if ($designs->getTyp() == "Farbe") {
+                            $farbe[0] = $designs->getStingDatei();
+                        }
                         array_push($designs, $tmp);
                     }
+                    if (count($farbe) == 0) $farbe[0] = null;
                     $tmperg = [
                         'owner' => $firma->getId(),
                         'companyName' => $firma->getFirmanname(),
                         'contactMail' => $firma->getKontaktEmail(),
                         'conversionRate' => $firma->getXEuroFuer1Punkt(),
-                        'logo' => $firma->getDatei(),
                         'domain' => $firma->getDomain(),
-                        'files' => $designs
+                        'files' => $designs,
+                        'design' => [
+                            'logo' => $firma->getDatei(),
+                            'design' => $farbe[0]
+                        ]
                     ];
                     $name = $firma->getFirmanname();
                     $erg[$name] = $tmperg;
