@@ -112,27 +112,24 @@ class FirmaController extends AbstractController {
             }
             $firmenname = strtolower($data['companyName']) ?? null;
 
-            if (!isset($firmenname)) {
+            if (!isset($firmenname)) {/*
                 $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
                 $FIRMA = $Firmen[0];
 
                 $tmperg = array();
-                /** @var Firma $firma */
                 foreach ($Firmen as $firma) {
-                    /** @var DesignZuweisung $DESIGNZUWEISUNG */
                     $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
                     $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()]);
                     $farbe = array();
                     $designs = array();
-                    /** @var Design $design */
                     foreach ($DESIGN as $design) {
                         $tmp = [
                             "type" => $design->getTyp(),
                             "file" => $design->getDatei(),
                             "color" => $design->getStingDatei()
                         ];
-                        if ($designs->getTyp() == "Farbe") {
-                            $farbe[0] = $designs->getStingDatei();
+                        if ($design->getTyp() == "Farbe") {
+                            $farbe[0] = $design->getStingDatei();
                         }
                         array_push($designs, $tmp);
                     }
@@ -151,7 +148,7 @@ class FirmaController extends AbstractController {
                     ];
                     $name = $firma->getFirmanname();
                     $erg[$name] = $tmperg;
-                }
+                }*/
 
             }
             if (isset($firmenname)) {
@@ -159,29 +156,34 @@ class FirmaController extends AbstractController {
                 if (count($firma) == 0) return new Response("The company was not found", 404);
                 $firma = $firma[0];
                 $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
+                $farbe = array();
                 $designs = array();
-                $FIRMA = $firma;
-                if (count($DESIGNZUWEISUNG) >= 1) {
-                    $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG[0]->getFKDesignID()]);
-                    /** @var Design $design */
-                    foreach ($DESIGN as $design) {
-                        $tmp = [
-                            "type" => $design->getTyp(),
-                            "file" => $design->getDatei(),
-                            "color" => $design->getStingDatei()
-                        ];
-                        array_push($designs, $tmp);
+                /** @var Design $design */
+                foreach ($DESIGNZUWEISUNG as $design) {
+                    $tmp = [
+                        "type" => $design->getTyp(),
+                        "file" => $design->getDatei(),
+                        "color" => $design->getStingDatei()
+                    ];
+                    if ($design->getTyp() == "Farbe") {
+                        $farbe[0] = $design->getStingDatei();
                     }
+                    array_push($designs, $tmp);
                 }
+                if (count($farbe) == 0) $farbe[0] = '["#10cdb7","#2c3e50","#fafafa","#ffffff"]';
 
                 $erg['company'] = [
 //                    'owner' => $firma->getId(),
                     'companyName' => $firma->getFirmanname(),
                     'contactMail' => $firma->getKontaktEmail(),
                     'conversionRate' => $firma->getXEuroFuer1Punkt(),
-                    'logo' => $firma->getDatei(),
                     'domain' => $firma->getDomain(),
-                    'files' => $designs
+                    'files' => $designs,
+                    'design' => [
+                        'logo' => $firma->getDatei(),
+                        'design' => $farbe[0]
+                    ]
+
                 ];
             }
 
