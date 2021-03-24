@@ -156,10 +156,15 @@ class FirmaController extends AbstractController {
                 if (count($firma) == 0) return new Response("The company was not found", 404);
                 $firma = $firma[0];
                 $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
+                if (count($DESIGNZUWEISUNG) == 0) {
+                    $DESIGN = [];
+                } else {
+                    $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()])[0];
+                }
                 $farbe = array();
                 $designs = array();
                 /** @var Design $design */
-                foreach ($DESIGNZUWEISUNG as $design) {
+                foreach ($DESIGN as $design) {
                     $tmp = [
                         "type" => $design->getTyp(),
                         "file" => $design->getDatei(),
