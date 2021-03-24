@@ -186,7 +186,7 @@ class FirmaController extends AbstractController {
                     'files' => $designs,
                     'design' => [
                         'logo' => $firma->getDatei(),
-                        'design' => $farbe[0]
+                        'colorPallet' => $farbe[0]
                     ]
 
                 ];
