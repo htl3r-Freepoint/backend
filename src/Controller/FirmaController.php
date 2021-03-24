@@ -112,7 +112,7 @@ class FirmaController extends AbstractController {
             }
             $firmenname = strtolower($data['companyName']) ?? null;
 
-            if (!isset($firmenname)) {
+            if (!isset($firmenname)) {/*
                 $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
                 $FIRMA = $Firmen[0];
 
@@ -148,7 +148,7 @@ class FirmaController extends AbstractController {
                     ];
                     $name = $firma->getFirmanname();
                     $erg[$name] = $tmperg;
-                }
+                }*/
 
             }
             if (isset($firmenname)) {
