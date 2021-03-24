@@ -153,8 +153,8 @@ class FirmaController extends AbstractController {
             }
             if (isset($firmenname)) {
                 $firma = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Domain' => $firmenname]);
-                return new Response("fnpoijeqwnptfgoieqrawg", 517);
                 if (count($firma) == 0) return new Response("The company was not found", 404);
+                return new Response("fnpoijeqwnptfgoieqrawg", 517);
                 $firma = $firma[0];
                 $DESIGNZUWEISUNG = $this->getDoctrine()->getRepository(DesignZuweisung::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
                 if (count($DESIGNZUWEISUNG) == 0) {
