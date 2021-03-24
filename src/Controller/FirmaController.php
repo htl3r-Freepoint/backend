@@ -159,7 +159,7 @@ class FirmaController extends AbstractController {
                 if (count($DESIGNZUWEISUNG) == 0) {
                     $DESIGN = [];
                 } else {
-                    $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG->getFKDesignID()])[0];
+                    $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG[0]->getFKDesignID()]);
                 }
                 $farbe = array();
                 $designs = array();
