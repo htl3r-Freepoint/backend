@@ -190,7 +190,7 @@ class FirmaController extends AbstractController {
             $STATISTIK = new Statistik();
             $STATISTIK->setDate(new DateTime("0 days ago"));
             $STATISTIK->setType("gekauft");
-            $STATISTIK->setFKFirmaID($FIRMA->getId());
+            $STATISTIK->setFKFirmaID($firma->getId());
 //            $tmp ['company'] = $erg;
 
             return new Response($serializer->serialize($erg, 'json'), 200);
