@@ -200,7 +200,7 @@ class FirmaController extends AbstractController {
 
             return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
-            return new Response("", 404);
+            return new Response("", 403);
         }
     }
 
