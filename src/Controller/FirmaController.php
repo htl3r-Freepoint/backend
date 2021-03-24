@@ -111,6 +111,7 @@ class FirmaController extends AbstractController {
                 $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             }
             $firmenname = strtolower($data['companyName']) ?? null;
+            return new Response($firmenname, 417);
 
             if (!isset($firmenname)) {
                 $Firmen = $this->getDoctrine()->getRepository(Firma::class)->findAll();
