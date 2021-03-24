@@ -36,8 +36,12 @@ class DesignController extends AbstractController {
             if (isset($data['name'])) $name = $data['name']; else $name = null; //z.B.: Logo
             $datei = $data['datei'] ?? null;
             $firmenname = $data['companyName'];
-            $typ = $data['typ'];
             $StringDesign = $data['farbcode'] ?? null;
+            if (isset($StringDesign)) {
+                $typ = "Farbe";
+            } else {
+                $typ = $data['typ'];
+            }
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
 
 
