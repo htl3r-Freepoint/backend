@@ -35,7 +35,7 @@ class DesignController extends AbstractController {
             $data = json_decode($request->getContent(), true);
             if (isset($data['name'])) $name = $data['name']; else $name = null; //z.B.: Logo
             $datei = $data['datei'] ?? null;
-            $firmenname = $data['firmenname'];
+            $firmenname = $data['companyName'];
             $typ = $data['typ'];
             $StringDesign = $data['farbcode'] ?? null;
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('-1 invalid', 403);
@@ -53,24 +53,25 @@ class DesignController extends AbstractController {
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            $DESIGN = new Design();
-            $DESIGN->setName($firmenname);
-            $DESIGN->setDatei($datei);
-            $DESIGN->setTyp($typ);
-            $DESIGN->setStingDatei($StringDesign);
-
-            $entityManager->persist($DESIGN);
-            $entityManager->flush();
-
-            $firmaID = $FirmaDB[0]->getID();
-            $designID = $DESIGN->getId();
-
-            $ZUWEISUNG = new DesignZuweisung();
-            $ZUWEISUNG->setFKDesignID($designID);
-            $ZUWEISUNG->setFKFirmaID($firmaID);
-
             $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
             if ($RECHTE >= 2) {
+
+                $DESIGN = new Design();
+                $DESIGN->setName($firmenname);
+                $DESIGN->setDatei($datei);
+                $DESIGN->setTyp($typ);
+                $DESIGN->setStingDatei($StringDesign);
+
+                $entityManager->persist($DESIGN);
+                $entityManager->flush();
+
+                $firmaID = $FirmaDB[0]->getID();
+                $designID = $DESIGN->getId();
+
+                $ZUWEISUNG = new DesignZuweisung();
+                $ZUWEISUNG->setFKDesignID($designID);
+                $ZUWEISUNG->setFKFirmaID($firmaID);
+
                 $entityManager->persist($ZUWEISUNG);
                 $entityManager->flush();
             } else return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
