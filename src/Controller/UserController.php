@@ -368,9 +368,9 @@ class UserController extends AbstractController {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
 
-            $hash = $data['hash'] ?? "MiCi7dPfX9123sqfDvgyUbjUS39s6DZpwwrSZGPEYPnVcHJStMHrcV8lTNKyMnoz5NDhknMh5M9bTTu7JAUf9f9pJbpHRcTsGIAc";
+            $hash = $data['hash'];
             if (!isset($hash)) return new Response("Please provide a token", 400);
-            $passwort = $data['password'] ?? "123";
+            $passwort = $data['password'];
 
             /**@var User $user */
             $user = $jsonAuth->returnUserFromHash($hash)['user'];
