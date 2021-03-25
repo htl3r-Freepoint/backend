@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Angestellte;
 use App\Entity\Firma;
+use App\Entity\LoginAuthentification;
 use App\Entity\User;
 use App\Service\clean;
 use App\Service\Hash;
@@ -103,9 +104,12 @@ class MitarbeiterController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token Invalid', 403);
 
+            $hash = $data['hash'];
             $firmenname = $data['companyName'];
             $rechte = $data['rechteLevel'] ?? 1;
             $addedUser = $data['email'];
+
+            if (count($this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['Hash' => $hash])) == 0) return new Response("User Token not found", 400);
 
             $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $addedUser]);
             if (count($USER) == 0) return new Response("User not found", 400);
@@ -115,7 +119,7 @@ class MitarbeiterController extends AbstractController {
             $FIRMA = $jsonAuth->returnFirmenFromHash("token", $firmenname);
             $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $USER->getID(), 'FK_Fimra_ID' => $FIRMA->getID()])[0];
 
-            $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
+            $RECHTE = $jsonAuth->returnRechteFromHash($hash, $firmenname);
             if ($RECHTE < $rechte) return new Response("You do not have enough rights to do this action", 400);
 
             $ANGESTELLTER->setRechte($rechte);
