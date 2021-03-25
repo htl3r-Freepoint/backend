@@ -87,7 +87,8 @@ class DesignController extends AbstractController {
             $erg = [
                 'rechte' => $RECHTE,
                 'design' => $DESIGN,
-                'firma' => $FirmaDB
+                'firma' => $FirmaDB,
+                'zuweisung' => $ZUWEISUNG
             ];
 
             return new Response($serializer->serialize($erg, 'json'), 200);
