@@ -170,19 +170,20 @@ class FirmaController extends AbstractController {
                 $designs = array();
                 /** @var Design $design */
                 foreach ($DESIGN as $design) {
-                    $tmp = [
-                        "type" => $design->getTyp(),
-                        "file" => $design->getDatei(),
-                        "color" => $design->getStingDatei()
-                    ];
                     if ($design->getTyp() == "Farbe") {
                         array_push($farbe, $design->getStingDatei());
+                    } else {
+                        $tmp = [
+                            "type" => $design->getTyp(),
+                            "file" => $design->getDatei(),
+                            "color" => $design->getStingDatei()
+                        ];
+                        array_push($designs, $tmp);
                     }
-                    array_push($designs, $tmp);
                 }
 
                 $erg['company'] = [
-                    'id' => $firma->getId(),
+//                    'id' => $firma->getId(),
                     'companyName' => $firma->getFirmanname(),
                     'contactMail' => $firma->getKontaktEmail(),
                     'conversionRate' => $firma->getXEuroFuer1Punkt(),
@@ -191,9 +192,9 @@ class FirmaController extends AbstractController {
                     'design' => [
                         'logo' => $firma->getDatei(),
                         'colorPalette' => $farbe[count($farbe) - 1],
-                        'paletteLength' => count($farbe),
-                        'designLength' => count($DESIGN),
-                        'designzuweisungLength' => count($DESIGNZUWEISUNG)
+//                        'paletteLength' => count($farbe),
+//                        'designLength' => count($DESIGN),
+//                        'designzuweisungLength' => count($DESIGNZUWEISUNG)
                     ]
 
                 ];
