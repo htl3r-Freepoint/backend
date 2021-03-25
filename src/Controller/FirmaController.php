@@ -213,10 +213,10 @@ class FirmaController extends AbstractController {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
             $entityManager = $this->getDoctrine()->getManager();
-            if (!$jsonAuth->checkJsonCode($data['token'])) return new Response('Token Invalid', 403);
-            $user = $jsonAuth->returnUserFromHash($data['token'])['user'];
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token Invalid', 403);
+            $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
 
-            $hash = $data['token'];
+            $hash = $data['hash'];
             $logo = $data['logo'] ?? null;
             $firmenname = $data['companyName'] ?? null;
             $email = $data['email'] ?? null;

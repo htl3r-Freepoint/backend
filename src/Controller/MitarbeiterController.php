@@ -93,7 +93,7 @@ class MitarbeiterController extends AbstractController {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
             $entityManager = $this->getDoctrine()->getManager();
-            if (!$jsonAuth->checkJsonCode($data['token'])) return new Response('Token Invalid', 403);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token Invalid', 403);
 
             $firmenname = $data['companyName'];
             $rechte = $data['rechteLevel'] ?? 1;
