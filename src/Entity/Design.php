@@ -80,6 +80,7 @@ class Design {
 
     public function getDatei() {
         $datei = $this->Datei;
+        return null;
         if (isset($datei)) return stream_get_contents($datei); else return null;
 
     }
