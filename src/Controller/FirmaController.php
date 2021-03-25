@@ -190,7 +190,8 @@ class FirmaController extends AbstractController {
                     'files' => $designs,
                     'design' => [
                         'logo' => $firma->getDatei(),
-                        'colorPalette' => $farbe[count($farbe) - 1]
+                        'colorPalette' => $farbe[count($farbe) - 1],
+                        'paletteLength' => count($farbe)
                     ]
 
                 ];
