@@ -59,6 +59,7 @@ class DesignController extends AbstractController {
 
             $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
             if ($RECHTE >= 2) {
+                return new Response("successfull", 400);
 
                 $DESIGN = new Design();
                 $DESIGN->setName($firmenname);
@@ -79,7 +80,6 @@ class DesignController extends AbstractController {
                 $entityManager->persist($ZUWEISUNG);
                 $entityManager->flush();
 
-                return new Response("successfull", 400);
             } else {
                 return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
             }
