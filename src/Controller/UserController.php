@@ -391,6 +391,8 @@ class UserController extends AbstractController {
                 $entityManager->flush();
             }
 
+            return new Response("", 200);
+
         } else {
             return new Response("", 404);
         }
