@@ -379,7 +379,7 @@ class UserController extends AbstractController {
 //                if ($dsgvo->deleteEverything($hash, $user->getEmail()) == 1) return new Response("successful", 200);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($user);
-                $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_Fimra_ID' => $FIRMA->getID()]);
+                $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getID()]);
                 foreach ($ANGESTELLTER as $an) {
                     $entityManager->remove($an);
                 }
