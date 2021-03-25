@@ -135,23 +135,23 @@ class MitarbeiterController extends AbstractController {
             $entityManager->persist($ANGESTELLTER);
             $entityManager->flush();
 
-            if ($rechte == 3) {
-                $user = $jsonAuth->returnUserFromHash($hash)['user'];
-                $oldOwner = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getID(), 'FK_Fimra_ID' => $FIRMA->getID()]);
-                if (count($oldOwner) == 0) {
-                    $angestellter = new Angestellte();
-                } else {
-                    $angestellter = $oldOwner[0];
-                }
-
-                $angestellter->setRechte(2);
-                $entityManager->persist($angestellter);
-                $entityManager->flush();
-
-                $firma[0]->setFKUserIDOwner($user->getID());
-                $entityManager->persist($firma[0]);
-                $entityManager->flush();
-            }
+//            if ($rechte == 3) {
+//                $user = $jsonAuth->returnUserFromHash($hash)['user'];
+//                $oldOwner = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getID(), 'FK_Fimra_ID' => $FIRMA->getID()]);
+//                if (count($oldOwner) == 0) {
+//                    $angestellter = new Angestellte();
+//                } else {
+//                    $angestellter = $oldOwner[0];
+//                }
+//
+//                $angestellter->setRechte(2);
+//                $entityManager->persist($angestellter);
+//                $entityManager->flush();
+//
+//                $firma[0]->setFKUserIDOwner($user->getID());
+//                $entityManager->persist($firma[0]);
+//                $entityManager->flush();
+//            }
 
             return new Response("", 200);
         } else {
