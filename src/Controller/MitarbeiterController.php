@@ -99,8 +99,10 @@ class MitarbeiterController extends AbstractController {
             $rechte = $data['rechteLevel'] ?? 1;
             $addedUser = $data['email'];
 
+            $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $addedUser]);
+            if (count($USER) == 0) return new Response("User not found", 400);
             /** @var User $USER */
-            $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $addedUser])[0];
+            $USER = $USER[0];
             /** @var Firma $FIRMA */
             $FIRMA = $jsonAuth->returnFirmenFromHash("token", $firmenname);
             $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $USER->getID(), 'FK_Fimra_ID' => $FIRMA->getID()])[0];
