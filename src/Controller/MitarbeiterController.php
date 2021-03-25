@@ -107,7 +107,7 @@ class MitarbeiterController extends AbstractController {
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token Invalid', 403);
 
             $firmenname = $data['companyName'];
-            $rechte = $data['rechteLevel'] ?? 1;
+            $rechte = $data['role'] ?? 1;
             $addedUser = $data['email'];
 
 
