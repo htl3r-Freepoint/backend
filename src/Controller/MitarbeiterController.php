@@ -119,6 +119,7 @@ class MitarbeiterController extends AbstractController {
             $FIRMA = $jsonAuth->returnFirmenFromHash($hash, $firmenname)[0];
             $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $USER->getID(), 'FK_Fimra_ID' => $FIRMA->getID()]);
             if (count($ANGESTELLTER) == 0) return new Response("User or Company not found", 400);
+            /** @var Angestellte $ANGESTELLTER */
             $ANGESTELLTER = $ANGESTELLTER[0];
 
 
@@ -126,11 +127,10 @@ class MitarbeiterController extends AbstractController {
             if ($RECHTE < $rechte) return new Response("You do not have enough rights to do this action", 400);
 
             $ANGESTELLTER->setRechte($rechte);
-
             $entityManager->persist($ANGESTELLTER);
             $entityManager->flush();
 
-            return new Response("", 200);
+            return new Response($ANGESTELLTER->getRechte(), 200);
         } else {
             return new Response("", 404);
         }
