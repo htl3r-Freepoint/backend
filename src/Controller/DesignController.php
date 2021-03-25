@@ -76,11 +76,11 @@ class DesignController extends AbstractController {
                 $ZUWEISUNG->setFKDesignID($designID);
                 $ZUWEISUNG->setFKFirmaID($firmaID);
 
-                return new Response($serializer->serialize(['design' => $DESIGN, 'designID' => $designID], 'json'), 400);
 
                 $entityManager->persist($ZUWEISUNG);
                 $entityManager->flush();
 
+                return new Response($serializer->serialize(['design' => $DESIGN, 'designID' => $designID], 'json'), 400);
             } else {
                 return new Response("You do not have the rights to do this action. Please ask the owner to give you permission.", 400);
             }
