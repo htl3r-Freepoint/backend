@@ -130,12 +130,24 @@ class MitarbeiterController extends AbstractController {
             $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
             if (count($FIRMA) == 0) return new Response("Please provide a company name", 400);
             $FIRMA = $FIRMA[0];
+            $erg = array();
 
             $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
             if ($RECHTE >= 3) {
                 $MITARBEITER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_Fimra_ID' => $FIRMA->getID()]);
-                return new Response($serializer->serialize($MITARBEITER, 'json'), 200);
+                /** @var Angestellte $mitarbeiter */
+                foreach ($MITARBEITER as $mitarbeiter) {
+                    $ret = [];
+                    /** @var User $USER */
+                    $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['id', $mitarbeiter->getId()]);
+                    $ret['name'] = $USER->getVorname() . " " . $USER->getNachname();
+                    $ret['role'] = $mitarbeiter->getRechte();
+                    $ret['email'] = $USER->getEmail();
+
+                    array_push($erg, $ret);
+                }
             }
+            return new Response($serializer->serialize($erg, 'json'), 200);
         }
     }
 }
