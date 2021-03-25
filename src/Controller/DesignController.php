@@ -71,11 +71,12 @@ class DesignController extends AbstractController {
 
                 $firmaID = $FirmaDB[0]->getID();
                 $designID = $DESIGN->getId();
-                return new Response("successfull", 400);
 
                 $ZUWEISUNG = new DesignZuweisung();
                 $ZUWEISUNG->setFKDesignID($designID);
                 $ZUWEISUNG->setFKFirmaID($firmaID);
+
+                return new Response($serializer->serialize(['design' => $DESIGN, 'designID' => $designID], 'json'), 400);
 
                 $entityManager->persist($ZUWEISUNG);
                 $entityManager->flush();
