@@ -311,7 +311,7 @@ class UserController extends AbstractController {
                     $user->setPassword($newPassword);
                 } else return new Response("Passwords dont match", 400);
             } elseif (isset($oldPassword) && !isset($newPassword)) return new Response("You have to set a new Password", 400);
-            if (isset($user)) $user->setUsername($username);
+            if (isset($username)) $user->setUsername($username);
             if (isset($email)) $user->setEmail($email);
             if (isset($firstname)) $user->setVorname($firstname);
             if (isset($lastName)) $user->setNachname($lastName);
