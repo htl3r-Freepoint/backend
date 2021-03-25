@@ -162,11 +162,7 @@ class FirmaController extends AbstractController {
                     $DESIGN = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $DESIGNZUWEISUNG[0]->getFKDesignID()]);
                 }
                 $farbe = array();
-                array_push($farbe, [
-                    "type" => "Farbe",
-                    "file" => null,
-                    "color" => '["#10cdb7","#2c3e50","#fafafa","#ffffff"]'
-                ]);
+                array_push($farbe, '["#10cdb7","#2c3e50","#fafafa","#ffffff"]');
                 $designs = array();
                 /** @var Design $design */
                 foreach ($DESIGN as $design) {
@@ -176,7 +172,7 @@ class FirmaController extends AbstractController {
                         "color" => $design->getStingDatei()
                     ];
                     if ($design->getTyp() == "Farbe") {
-                        $farbe[0] = $design->getStingDatei();
+                        array_push($farbe, $design->getStingDatei());
                     }
                     array_push($designs, $tmp);
                 }
