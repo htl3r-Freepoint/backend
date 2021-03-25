@@ -21,7 +21,7 @@ class StatistikController extends AbstractController {
      */
     public function Save_Statistik(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         $entityManager = $this->getDoctrine()->getManager();
-        $type = ["eingescannt", "gekauft", "eingelöst", "aufruf"];
+        $type = ["scanned", "bought", "used", "opened"];
         $erg = array();
         foreach ($type as $item) {
             for ($i = 0; $i <= 8; $i++) {
@@ -65,19 +65,19 @@ class StatistikController extends AbstractController {
                 $eingeloest = array();
                 $aufrufe = array();
                 $STATISTIK = $this->getDoctrine()->getRepository(Statistik::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
-                return new Response($serializer->serialize($STATISTIK, 'json'), 400);
+//                return new Response($serializer->serialize($STATISTIK, 'json'), 400);
                 /** @var Statistik $stat */
                 foreach ($STATISTIK as $stat) {
-                    if ($stat->getType() == "eingescannt") {
+                    if ($stat->getType() == "scanned") {
                         array_push($eingescanned, $stat);
                     }
-                    if ($stat->getType() == "gekauft") {
+                    if ($stat->getType() == "bought") {
                         array_push($gekauft, $stat);
                     }
-                    if ($stat->getType() == "eingelöst") {
+                    if ($stat->getType() == "used") {
                         array_push($eingeloest, $stat);
                     }
-                    if ($stat->getType() == "aufruf") {
+                    if ($stat->getType() == "opened") {
                         array_push($aufrufe, $stat);
                     }
                 }
