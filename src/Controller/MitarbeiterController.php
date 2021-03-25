@@ -34,7 +34,7 @@ class MitarbeiterController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             if (!$jsonAuth->checkJsonCode($data['token'])) return new Response('Token Invalid', 403);
 
-            $firmenname = $data['firmenname'];
+            $firmenname = $data['comapnyName'];
             $rechte = $data['rechteLevel'] ?? 0;
             $addedUser = $data['email'];
 
@@ -68,7 +68,7 @@ class MitarbeiterController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             if (!$jsonAuth->checkJsonCode($data['token'])) return new Response('Token Invalid', 403);
 
-            $firmenname = $data['firmenname'];
+            $firmenname = $data['companyName'];
             $user = $data['email'];
 
             $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $user])[0];
@@ -95,7 +95,7 @@ class MitarbeiterController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             if (!$jsonAuth->checkJsonCode($data['token'])) return new Response('Token Invalid', 403);
 
-            $firmenname = $data['firmenname'];
+            $firmenname = $data['companyName'];
             $rechte = $data['rechteLevel'] ?? 1;
             $addedUser = $data['email'];
 
@@ -113,6 +113,29 @@ class MitarbeiterController extends AbstractController {
             return new Response($serializer->serialize($ANGESTELLTER, 'json'), 200);
         } else {
             return new Response("", 404);
+        }
+    }
+
+    /**
+     * @Route("/api/getMitarbeiter")
+     * @param Request $request
+     * @return Response
+     */
+    public function GET_Mitarbeiter(Request $request, SerializerInterface $serializer, Hash $jsonAuth, clean $clean): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+            if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token Invalid', 403);
+
+            $firmenname = $data['companyName'];
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+            if (count($FIRMA) == 0) return new Response("Please provide a company name", 400);
+            $FIRMA = $FIRMA[0];
+
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
+            if ($RECHTE >= 3) {
+                $MITARBEITER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_Fimra_ID' => $FIRMA->getID()]);
+                return new Response($serializer->serialize($MITARBEITER, 'json'), 200);
+            }
         }
     }
 }
