@@ -57,7 +57,7 @@ class StatistikController extends AbstractController {
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             $firmenname = $data['companyName'];
             $firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
-
+            return new Response($serializer->serialize($firmen, 'json'), 400);
 
             /** @var Firma $firma */
             foreach ($firmen as $firma) {
