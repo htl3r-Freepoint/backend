@@ -258,9 +258,10 @@ class FirmaController extends AbstractController {
             $hash = $data['hash'];
             if (!isset($hash)) return new Response("Please provide a token", 400);
             $passwort = $data['password'];
+            $firmenname = $data['companyName'];
 
             $user = $jsonAuth->returnUserFromHash($hash)['user'];
-            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname']);
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
             if (count($FIRMA) == 0) return new Response("Firma not found", 400);
             $FIRMA = $FIRMA[0];
             if (password_verify($passwort, $user->getPassword())) {
