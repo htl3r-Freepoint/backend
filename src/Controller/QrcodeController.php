@@ -60,8 +60,12 @@ class QrcodeController extends AbstractController {
 
         $STATISTIK = new Statistik();
         $STATISTIK->setDate(new DateTime("0 days ago"));
-        $STATISTIK->setType("gekauft");
+        $STATISTIK->setType("scanned");
         $STATISTIK->setFKFirmaID($firma_id);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($STATISTIK);
+        $entityManager->flush();
+
 
         return $punkte;
     }

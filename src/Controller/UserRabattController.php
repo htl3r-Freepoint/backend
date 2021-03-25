@@ -125,7 +125,7 @@ class UserRabattController extends AbstractController {
 
                 $STATISTIK = new Statistik();
                 $STATISTIK->setDate(new DateTime("0 days ago"));
-                $STATISTIK->setType("gekauft");
+                $STATISTIK->setType("used");
                 $STATISTIK->setFKFirmaID($FIRMA->getId());
                 $entityManager->persist($STATISTIK);
                 $entityManager->flush();
@@ -182,8 +182,12 @@ class UserRabattController extends AbstractController {
 
                 $STATISTIK = new Statistik();
                 $STATISTIK->setDate(new DateTime("0 days ago"));
-                $STATISTIK->setType("gekauft");
+                $STATISTIK->setType("bought");
                 $STATISTIK->setFKFirmaID($FIRMA->getId());
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($STATISTIK);
+                $entityManager->flush();
+
 
             } else {
                 return new Response("insufficient Points", 400);

@@ -202,9 +202,11 @@ class FirmaController extends AbstractController {
 
             $STATISTIK = new Statistik();
             $STATISTIK->setDate(new DateTime("0 days ago"));
-            $STATISTIK->setType("gekauft");
+            $STATISTIK->setType("opened");
             $STATISTIK->setFKFirmaID($firma->getId());
-//            $tmp ['company'] = $erg;
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($STATISTIK);
+            $entityManager->flush();
 
             return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
