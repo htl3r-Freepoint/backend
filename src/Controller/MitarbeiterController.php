@@ -116,7 +116,7 @@ class MitarbeiterController extends AbstractController {
             /** @var User $USER */
             $USER = $USER[0];
             /** @var Firma $FIRMA */
-            $FIRMA = $jsonAuth->returnFirmenFromHash("token", $firmenname);
+            $FIRMA = $jsonAuth->returnFirmenFromHash($hash, $firmenname);
             $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $USER->getID(), 'FK_Fimra_ID' => $FIRMA->getID()]);
             if (count($ANGESTELLTER) == 0) return new Response("User or Company not found", 400);
             $ANGESTELLTER = $ANGESTELLTER[0];
