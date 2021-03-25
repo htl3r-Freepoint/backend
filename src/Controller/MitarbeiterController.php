@@ -101,15 +101,15 @@ class MitarbeiterController extends AbstractController {
     public function Edit_Mitarbeiter(Request $request, SerializerInterface $serializer, Hash $jsonAuth, clean $clean): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
+            $hash = $data['hash'];
             $entityManager = $this->getDoctrine()->getManager();
+            if (count($this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['Hash' => $hash])) == 0) return new Response("User Token not found", 400);
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token Invalid', 403);
 
-            $hash = $data['hash'];
             $firmenname = $data['companyName'];
             $rechte = $data['rechteLevel'] ?? 1;
             $addedUser = $data['email'];
 
-            if (count($this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['Hash' => $hash])) == 0) return new Response("User Token not found", 400);
 
             $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $addedUser]);
             if (count($USER) == 0) return new Response("User not found", 400);
@@ -118,6 +118,8 @@ class MitarbeiterController extends AbstractController {
             /** @var Firma $FIRMA */
             $FIRMA = $jsonAuth->returnFirmenFromHash("token", $firmenname);
             $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $USER->getID(), 'FK_Fimra_ID' => $FIRMA->getID()])[0];
+
+            return new Response("wadesgagvdsasdgvf", 200);
 
             $RECHTE = $jsonAuth->returnRechteFromHash($hash, $firmenname);
             if ($RECHTE < $rechte) return new Response("You do not have enough rights to do this action", 400);
