@@ -251,7 +251,7 @@ class FirmaController extends AbstractController {
      * @return Response
      *
      */
-    public function DELETE_User_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+    public function DELETE_Firma_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
 
@@ -259,8 +259,22 @@ class FirmaController extends AbstractController {
             if (!isset($hash)) return new Response("Please provide a token", 400);
             $passwort = $data['password'];
 
-            $jsonAuth->returnUserFromHash($hash)['user'];
+            $user = $jsonAuth->returnUserFromHash($hash)['user'];
             $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname']);
+            if (count($FIRMA) == 0) return new Response("Firma not found", 400);
+            $FIRMA = $FIRMA[0];
+            if (password_verify($passwort, $user->getPassword())) {
+                $entityManager = $this->getDoctrine()->getManager();
+
+                $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_Fimra_ID' => $FIRMA->getID()]);
+                foreach ($ANGESTELLTER as $an) {
+                    $entityManager->remove($an);
+                }
+
+                $entityManager->remove($FIRMA);
+                $entityManager->flush();
+            }
+            return new Response("successful", 200);
         }
     }
 
