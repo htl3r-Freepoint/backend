@@ -135,9 +135,9 @@ class MitarbeiterController extends AbstractController {
             $erg = array();
 
             $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
-            return new Response("löololol", 200);
             if ($RECHTE >= 3) {
                 $MITARBEITER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_Fimra_ID' => $FIRMA->getID()]);
+                return new Response("löololol2", 200);
                 /** @var Angestellte $mitarbeiter */
                 foreach ($MITARBEITER as $mitarbeiter) {
                     $ret = [];
