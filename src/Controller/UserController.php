@@ -382,4 +382,22 @@ class UserController extends AbstractController {
             return new Response("", 404);
         }
     }
+
+    /**
+     * @Route("/api/getUserRights")
+     * @param Request $request
+     * @return Response
+     *
+     */
+    public function GET_UserRights_API(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
+        if ($request->getMethod() == 'POST') {
+            $data = json_decode($request->getContent(), true);
+
+            $hash = $data['hash'];
+            $firmenname = $data['companyName'];
+            if (!isset($hash)) return new Response("Please provide a token", 400);
+            $RECHTE = $jsonAuth->returnRechteFromHash($hash, $firmenname);
+            return new Response($RECHTE, 200);
+        }
+    }
 }
