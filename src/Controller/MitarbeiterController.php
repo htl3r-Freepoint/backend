@@ -38,10 +38,16 @@ class MitarbeiterController extends AbstractController {
             $rechte = $data['role'] ?? 0;
             $addedUser = $data['email'];
 
+            $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $addedUser]);
+            if (count($USER) == 0) return new Response("The User does not exist", 400);
             /** @var User $USER */
-            $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $addedUser])[0];
+            $USER = $USER[0];
+
+            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
+            if (count($FIRMA) == 0) return new Response("The Company does not exist", 400);
             /** @var Firma $FIRMA */
-            $FIRMA = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname])[0];
+            $FIRMA = $FIRMA[0];
+
 
             $MITARBEITER = new Angestellte();
             $MITARBEITER->setFKUserID($USER->getId());
