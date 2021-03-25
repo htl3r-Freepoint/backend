@@ -81,7 +81,7 @@ class MitarbeiterController extends AbstractController {
             $user = $data['email'];
 
             $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $user])[0];
-            $FIRMA = $jsonAuth->returnFirmenFromHash("token", $firmenname);
+            $FIRMA = $jsonAuth->returnFirmenFromHash($data['hash'], $firmenname);
             $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $USER->getID(), 'FK_Fimra_ID' => $FIRMA->getID()])[0];
 
             $entityManager->remove($ANGESTELLTER);
@@ -130,7 +130,7 @@ class MitarbeiterController extends AbstractController {
             $entityManager->persist($ANGESTELLTER);
             $entityManager->flush();
 
-            return new Response($ANGESTELLTER->getRechte(), 200);
+            return new Response("", 200);
         } else {
             return new Response("", 404);
         }
