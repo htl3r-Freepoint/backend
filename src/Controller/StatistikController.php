@@ -56,7 +56,6 @@ class StatistikController extends AbstractController {
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token invalid', 403);
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             $firmen = $jsonAuth->returnFirmenFromHash($data['hash']);
-            $final = [];
 
 
             /** @var Firma $firma */
@@ -88,10 +87,9 @@ class StatistikController extends AbstractController {
                     'used' => $this->sortDates($eingeloest),
                     'opened' => $this->sortDates($aufrufe)
                 ];
-                $final [$firma->getFirmanname()] = $erg;
             }
 
-            return new Response($serializer->serialize($final, 'json'), 200);
+            return new Response($serializer->serialize($erg, 'json'), 200);
         } else {
             return new Response("", 404);
         }
