@@ -233,7 +233,7 @@ class FirmaController extends AbstractController {
             if (isset($email)) $firma->setKontaktEmail($email);
             if (isset($conversionRate)) $firma->setXEuroFuer1Punkt($conversionRate);
 
-            $RECHTE = $jsonAuth->returnRechteFromHash($data['token'], $firmenname);
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
             if ($RECHTE == 3) {
                 $entityManager->persist($firma);
                 $entityManager->flush();
