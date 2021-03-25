@@ -140,13 +140,17 @@ class MitarbeiterController extends AbstractController {
                 /** @var Angestellte $mitarbeiter */
                 foreach ($MITARBEITER as $mitarbeiter) {
                     $ret = [];
-                    /** @var User $USER */
                     $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $mitarbeiter->getId()]);
-                    $ret['name'] = $USER->getVorname() . " " . $USER->getNachname();
-                    $ret['role'] = $mitarbeiter->getRechte();
-                    $ret['email'] = $USER->getEmail();
-
-                    array_push($erg, $ret);
+                    if (count($USER) != 0) {
+                        /** @var User $USER */
+                        $USER = $USER[0];
+                        $ret['name'] = $USER->getVorname() . " " . $USER->getNachname();
+                        $ret['role'] = $mitarbeiter->getRechte();
+                        $ret['email'] = $USER->getEmail();
+                        array_push($erg, $ret);
+                    } else {
+                        array_push($erg, []);
+                    }
                 }
             }
             return new Response($serializer->serialize($erg, 'json'), 200);
