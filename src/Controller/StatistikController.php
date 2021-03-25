@@ -22,7 +22,6 @@ class StatistikController extends AbstractController {
     public function Save_Statistik(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         $entityManager = $this->getDoctrine()->getManager();
         $type = ["eingescannt", "gekauft", "eingelöst", "aufruf"];
-//        $type = ["gekauft", "eingescannt", "aufruf"];
         $erg = array();
         foreach ($type as $item) {
             for ($i = 0; $i <= 8; $i++) {
@@ -52,7 +51,8 @@ class StatistikController extends AbstractController {
     public function GET_Statistik(Request $request, SerializerInterface $serializer, Hash $jsonAuth): Response {
         if ($request->getMethod() == 'POST') {
             $data = json_decode($request->getContent(), true);
-            $data['hash'] = $data['hash'] ?? "ttgIeo6YNCoDg3YoJNUlMy868vhWBblZv6z4Ki61pEV3ATcWiqr4aZPPLiu19MfNHl5wa48tnJM6l2N7iAJumg7mnw6z0kGIhGtS";
+            $hash = $data['hash'] ?? null;
+            if (!isset($hash)) return new Response("You have to provide a user token", 400);
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token invalid', 403);
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             $firmen = $jsonAuth->returnFirmenFromHash($data['hash']);
@@ -105,8 +105,8 @@ class StatistikController extends AbstractController {
             [new DateTime("3 days ago"), 0],
             [new DateTime("4 days ago"), 0],
             [new DateTime("5 days ago"), 0],
-            [new DateTime("6 days ago"), 0],
-            [new DateTime("7 days ago"), 0]
+            [new DateTime("6 days ago"), 0]
+//            [new DateTime("7 days ago"), 0]
         ];
 
 
@@ -134,14 +134,14 @@ class StatistikController extends AbstractController {
                 case $dates[6][0]->format("Y-m-d"):
                     $dates[6][1]++;
                     break;
-                case $dates[7][0]->format("Y-m-d"):
-                    $dates[7][1]++;
-                    break;
+//                case $dates[7][0]->format("Y-m-d"):
+//                    $dates[7][1]++;
+//                    break;
             }
-            if (isset($dates[8])) {
-                $dates[8][0]->format("Y-M-D");
-                $dates[8][1]++;
-            }
+//            if (isset($dates[8])) {
+//                $dates[8][0]->format("Y-M-D");
+//                $dates[8][1]++;
+//            }
 
         }
 
@@ -152,10 +152,10 @@ class StatistikController extends AbstractController {
         $dates[4][0] = $dates[4][0]->format('Y-m-d');
         $dates[5][0] = $dates[5][0]->format('Y-m-d');
         $dates[6][0] = $dates[6][0]->format('Y-m-d');
-        $dates[7][0] = $dates[7][0]->format('Y-m-d');
-        if (isset($dates[8])) {
-            $dates[8][0] = $dates[8][0]->format('Y-m-d');
-        }
+//        $dates[7][0] = $dates[7][0]->format('Y-m-d');
+//        if (isset($dates[8])) {
+//            $dates[8][0] = $dates[8][0]->format('Y-m-d');
+//        }
         return $dates;
     }
 }
