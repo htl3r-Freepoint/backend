@@ -140,7 +140,7 @@ class MitarbeiterController extends AbstractController {
                 /** @var Angestellte $mitarbeiter */
                 foreach ($MITARBEITER as $mitarbeiter) {
                     $ret = [];
-                    $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $mitarbeiter->getId()]);
+                    $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['id' => $mitarbeiter->getFKUserID()]);
                     if (count($USER) != 0) {
                         /** @var User $USER */
                         $USER = $USER[0];
