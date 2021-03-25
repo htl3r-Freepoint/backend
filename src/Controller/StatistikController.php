@@ -57,7 +57,6 @@ class StatistikController extends AbstractController {
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
             $firmenname = $data['companyName'];
             $firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
-            return new Response($serializer->serialize($firmen, 'json'), 400);
 
             /** @var Firma $firma */
             foreach ($firmen as $firma) {
@@ -66,6 +65,7 @@ class StatistikController extends AbstractController {
                 $eingeloest = array();
                 $aufrufe = array();
                 $STATISTIK = $this->getDoctrine()->getRepository(Statistik::class)->findBy(['FK_Firma_ID' => $firma->getId()]);
+                return new Response($serializer->serialize($STATISTIK, 'json'), 400);
                 /** @var Statistik $stat */
                 foreach ($STATISTIK as $stat) {
                     if ($stat->getType() == "eingescannt") {
