@@ -143,7 +143,7 @@ class FirmaController extends AbstractController {
                         'files' => $designs,
                         'design' => [
                             'logo' => $firma->getDatei(),
-                            'design' => $farbe[0]
+                            'design' => $farbe[count($farbe) - 1]
                         ]
                     ];
                     $name = $firma->getFirmanname();
@@ -186,7 +186,7 @@ class FirmaController extends AbstractController {
                     'files' => $designs,
                     'design' => [
                         'logo' => $firma->getDatei(),
-                        'colorPalette' => $farbe[0]
+                        'colorPalette' => $farbe[count($farbe) - 1]
                     ]
 
                 ];
