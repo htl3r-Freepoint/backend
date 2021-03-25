@@ -178,7 +178,7 @@ class FirmaController extends AbstractController {
                 }
 
                 $erg['company'] = [
-//                    'owner' => $firma->getId(),
+                    'id' => $firma->getId(),
                     'companyName' => $firma->getFirmanname(),
                     'contactMail' => $firma->getKontaktEmail(),
                     'conversionRate' => $firma->getXEuroFuer1Punkt(),
