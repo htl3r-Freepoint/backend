@@ -130,7 +130,7 @@ class MitarbeiterController extends AbstractController {
             $entityManager->persist($ANGESTELLTER);
             $entityManager->flush();
 
-            return new Response($serializer->serialize($ANGESTELLTER, 'json'), 200);
+            return new Response("", 200);
         } else {
             return new Response("", 404);
         }
