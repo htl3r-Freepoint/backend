@@ -34,7 +34,7 @@ class MitarbeiterController extends AbstractController {
             $entityManager = $this->getDoctrine()->getManager();
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token Invalid', 403);
 
-            $firmenname = $data['comapnyName'];
+            $firmenname = $data['companyName'];
             $rechte = $data['role'] ?? 0;
             $addedUser = $data['email'];
 
