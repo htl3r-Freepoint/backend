@@ -48,6 +48,8 @@ class MitarbeiterController extends AbstractController {
             /** @var Firma $FIRMA */
             $FIRMA = $FIRMA[0];
 
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
+            if ($RECHTE < $rechte) return new Response("You do not have enough rights to do this action", 400);
 
             $MITARBEITER = new Angestellte();
             $MITARBEITER->setFKUserID($USER->getId());
@@ -112,6 +114,9 @@ class MitarbeiterController extends AbstractController {
             /** @var Firma $FIRMA */
             $FIRMA = $jsonAuth->returnFirmenFromHash("token", $firmenname);
             $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $USER->getID(), 'FK_Fimra_ID' => $FIRMA->getID()])[0];
+
+            $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
+            if ($RECHTE < $rechte) return new Response("You do not have enough rights to do this action", 400);
 
             $ANGESTELLTER->setRechte($rechte);
 
