@@ -143,6 +143,7 @@ class MitarbeiterController extends AbstractController {
                 $angestellter->setRechte(2);
                 $FIRMA->setFKUserIDOwner($user->getID());
                 $entityManager->persist($angestellter);
+                $entityManager->flush();
                 $entityManager->persist($FIRMA);
                 $entityManager->flush();
             }
