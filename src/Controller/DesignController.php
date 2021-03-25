@@ -59,7 +59,6 @@ class DesignController extends AbstractController {
 
             $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
             if ($RECHTE >= 2) {
-                return new Response("successfull", 400);
 
                 $DESIGN = new Design();
                 $DESIGN->setName($firmenname);
@@ -72,6 +71,7 @@ class DesignController extends AbstractController {
 
                 $firmaID = $FirmaDB[0]->getID();
                 $designID = $DESIGN->getId();
+                return new Response("successfull", 400);
 
                 $ZUWEISUNG = new DesignZuweisung();
                 $ZUWEISUNG->setFKDesignID($designID);
