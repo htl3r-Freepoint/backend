@@ -55,7 +55,8 @@ class StatistikController extends AbstractController {
             if (!isset($hash)) return new Response("You have to provide a user token", 400);
             if (!$jsonAuth->checkJsonCode($data['hash'])) return new Response('Token invalid', 403);
             $user = $jsonAuth->returnUserFromHash($data['hash'])['user'];
-            $firmen = $jsonAuth->returnFirmenFromHash($data['hash']);
+            $firmenname = $data['companyName'];
+            $firmen = $this->getDoctrine()->getRepository(Firma::class)->findBy(['Firmanname' => $firmenname]);
 
 
             /** @var Firma $firma */
