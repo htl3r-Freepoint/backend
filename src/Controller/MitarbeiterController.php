@@ -144,7 +144,11 @@ class MitarbeiterController extends AbstractController {
                     if (count($USER) != 0) {
                         /** @var User $USER */
                         $USER = $USER[0];
-                        $ret['name'] = $USER->getVorname() . " " . $USER->getNachname();
+                        $vorname = $USER->getVorname();
+                        $nachname = $USER->getNachname();
+                        if (isset($vorname) && !isset($nachname)) $ret['name'] = $vorname;
+                        if (!isset($vorname) && isset($nachname)) $ret['name'] = $nachname;
+                        if (isset($vorname) && isset($nachname)) $ret['name'] = $vorname . " " . $nachname;
                         $ret['role'] = $mitarbeiter->getRechte();
                         $ret['email'] = $USER->getEmail();
                         array_push($erg, $ret);
