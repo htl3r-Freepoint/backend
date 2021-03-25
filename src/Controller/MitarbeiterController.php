@@ -132,6 +132,21 @@ class MitarbeiterController extends AbstractController {
             $entityManager->persist($ANGESTELLTER);
             $entityManager->flush();
 
+            if ($rechte == 3) {
+                $user = $jsonAuth->returnUserFromHash($hash)['user'];
+                $oldOwner = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_User_ID' => $user->getID(), 'FK_Fimra_ID' => $FIRMA->getID()]);
+                if (count($oldOwner) == 0) {
+                    $angestellter = new Angestellte();
+                } else {
+                    $angestellter = $oldOwner[0];
+                }
+                $angestellter->setRechte(2);
+                $FIRMA->setFKUserIDOwner($user->getID());
+                $entityManager->persist($angestellter);
+                $entityManager->persist($FIRMA);
+                $entityManager->flush();
+            }
+
             return new Response("", 200);
         } else {
             return new Response("", 404);
