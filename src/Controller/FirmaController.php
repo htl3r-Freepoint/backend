@@ -161,7 +161,7 @@ class FirmaController extends AbstractController {
 //                } else {
                 $DESIGN = array();
                 foreach ($DESIGNZUWEISUNG as $dz) {
-                    $DESIGNS = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $dz->getFKDesignID()]);
+                    $DESIGNS = $this->getDoctrine()->getRepository(Design::class)->findBy(['id' => $dz->getFKDesignID()])[0];
                     array_push($DESIGN, $DESIGNS);
                 }
 //                }
