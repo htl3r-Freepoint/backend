@@ -137,12 +137,12 @@ class MitarbeiterController extends AbstractController {
             $RECHTE = $jsonAuth->returnRechteFromHash($data['hash'], $firmenname);
             if ($RECHTE >= 3) {
                 $MITARBEITER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_Fimra_ID' => $FIRMA->getID()]);
-                return new Response("löololol2", 200);
                 /** @var Angestellte $mitarbeiter */
                 foreach ($MITARBEITER as $mitarbeiter) {
                     $ret = [];
                     /** @var User $USER */
                     $USER = $this->getDoctrine()->getRepository(User::class)->findBy(['id', $mitarbeiter->getId()]);
+                    return new Response("löololol420", 200);
                     $ret['name'] = $USER->getVorname() . " " . $USER->getNachname();
                     $ret['role'] = $mitarbeiter->getRechte();
                     $ret['email'] = $USER->getEmail();
