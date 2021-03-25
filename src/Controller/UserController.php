@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Angestellte;
 use App\Entity\LoginAuthentification;
 use App\Entity\Verify;
 use App\Service\clean;
@@ -375,7 +376,19 @@ class UserController extends AbstractController {
             /**@var User $user */
             $user = $jsonAuth->returnUserFromHash($hash)['user'];
             if (password_verify($passwort, $user->getPassword())) {
-                if ($dsgvo->deleteEverything($hash, $user->getEmail()) == 1) return new Response("successful", 200);
+//                if ($dsgvo->deleteEverything($hash, $user->getEmail()) == 1) return new Response("successful", 200);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($user);
+                $ANGESTELLTER = $this->getDoctrine()->getRepository(Angestellte::class)->findBy(['FK_Fimra_ID' => $FIRMA->getID()]);
+                foreach ($ANGESTELLTER as $an) {
+                    $entityManager->remove($an);
+                }
+                $HASH = $this->getDoctrine()->getRepository(LoginAuthentification::class)->findBy(['Hash' => $hash]);
+                foreach ($HASH as $h) {
+                    $entityManager->remove($h);
+                }
+
+                $entityManager->flush();
             }
 
         } else {
