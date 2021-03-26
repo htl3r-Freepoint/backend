@@ -30,7 +30,7 @@ class QrcodeController extends AbstractController {
         $entityManager = $this->getDoctrine()->getManager();
         $kasse = mb_split("_", $OGCode)[2];
         $firmen = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['Bezeichnung' => $kasse]);
-        if (count($firmen) == 0) return "No company was identified with this 'Kassa'";
+        if (count($firmen) == 0) return "-1 Kassa";
 
         $QRCODE = new Qrcode();
         $QRCODE->setKlartext($OGCode);
@@ -142,7 +142,7 @@ class QrcodeController extends AbstractController {
                 return new Response("QR-Code wurde bereits eingescanned", 400);
             } else {
                 $savedPoints = $this->saveCode($OGCode, $UserID);
-                if ($savedPoints == "-1 Kassa") return new Response("Kassa not found", 400);
+                if ($savedPoints == "-1 Kassa") return new Response("No company was identified with this 'Kassa'", 400);
                 return new Response($serializer->serialize($savedPoints, 'json'), 200);
             }
         } else {
