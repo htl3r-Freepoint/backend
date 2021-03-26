@@ -54,6 +54,7 @@ class PunkteController extends AbstractController {
                         $erg = $data[0]->getPunkte();
                     } else {
                         $erg = 0;
+                        return new Response("0000", 417);
                     }
 
                     return new Response($serializer->serialize($erg, 'json'), 200);
