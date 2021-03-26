@@ -136,16 +136,14 @@ class QrcodeController extends AbstractController {
             $UserID = $user->getId();
 
             $exists = 0;
-//            $exists = $this->checkCode($OGCode);
+            $exists = $this->checkCode($OGCode);
 
             if ($exists != 0 && $exists == "vorhanden") {
                 return new Response("QR-Code wurde bereits eingescanned", 400);
             } else {
                 $savedPoints = $this->saveCode($OGCode, $UserID);
                 if ($savedPoints == "-1 Kassa") return new Response("Kassa not found", 400);
-                $kasse = mb_split("_", $OGCode)[2];
-                $firmen = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['Bezeichnung' => $kasse]);
-                return new Response($serializer->serialize(['points' => $savedPoints, 'kassen' => $firmen], 'json'), 200);
+                return new Response($serializer->serialize($savedPoints, 'json'), 200);
             }
         } else {
             return new Response("", 404);
