@@ -116,6 +116,9 @@ class QrcodeController extends AbstractController {
             if ($OGCode == "ADD_CODE_HERE") {
                 return "vorhanden";
             }
+            if (count($this->getDoctrine()->getRepository(Qrcode::class)->findBy(['Klartext' => $OGCode])) != 0) {
+                return "vorhanden";
+            }
         }
         return 0;
     }
