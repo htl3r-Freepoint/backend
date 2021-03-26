@@ -53,10 +53,10 @@ class PunkteController extends AbstractController {
                     if (count($data) > 0) {
                         $erg = $data[0]->getPunkte();
                     } else {
-                        return new Response($serializer->serialize(['user' => $user, 'firma' => $FIRMA, 'punkte' => $data, 'zallePunkte' => $this->getDoctrine()->getRepository(Punkte::class)->findAll()], 'json'), 200);
                         $erg = 0;
                     }
 
+                    return new Response($serializer->serialize(['user' => $user, 'firma' => $FIRMA, 'punkte' => $data, 'zallePunkte' => $this->getDoctrine()->getRepository(Punkte::class)->findAll()], 'json'), 200);
                     return new Response($serializer->serialize($erg, 'json'), 200);
                 } else {
                     $data = $this->getDoctrine()->getRepository(Punkte::class)->findBy(['FK_User_ID' => $id]); //Hier umändern
