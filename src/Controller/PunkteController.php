@@ -33,7 +33,7 @@ class PunkteController extends AbstractController {
             $data = json_decode($request->getContent(), true);
             $hash = $data['hash'] ?? null;
 
-            if (!isset($hash)) return new Response(0);
+            if (!isset($hash)) return new Response("please provide a token", 400);
 
             if (!$jsonAuth->checkJsonCode($hash)) return new Response('-1 invalid', 403);
             $firmenname = $data['companyName'];
