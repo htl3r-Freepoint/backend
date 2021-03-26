@@ -53,6 +53,7 @@ class PunkteController extends AbstractController {
                     if (count($data) > 0) {
                         $erg = $data[0]->getPunkte();
                     } else {
+                        return new Response($serializer->serialize(['user' => $user, 'firma' => $FIRMA, 'punkte' => $data], 'json'), 200);
                         $erg = 0;
                     }
 
