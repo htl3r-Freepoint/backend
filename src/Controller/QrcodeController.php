@@ -36,8 +36,8 @@ class QrcodeController extends AbstractController {
         $QRCODE->setKlartext($OGCode);
         $QRCODE->setFKUserID($FKUserId);
         $QRCODE->setScannDatum(new \DateTime());
-//        $entityManager->persist($QRCODE);
-//        $entityManager->flush();
+        $entityManager->persist($QRCODE);
+        $entityManager->flush();
 
 
         $firma_id = $firmen[0]->getFkFirmaId();
