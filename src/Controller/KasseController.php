@@ -37,6 +37,9 @@ class KasseController extends AbstractController {
 
             $rechte = $jsonAuth->returnRechteFromHash($hash, $firmenname);
 
+            $KASSEN = $this->getDoctrine()->getRepository(Kasse::class)->findBy(['Bezeichnung' => $name]);
+            if (count($KASSEN) != 0) return new Response("Already used", 400);
+
             if ($rechte >= 2) {
                 $KASSE = new Kasse();
                 $KASSE->setBezeichnung($name);
