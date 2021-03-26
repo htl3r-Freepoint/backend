@@ -91,6 +91,7 @@ class Firma {
     }
 
     public function getDatei() {
+        return null;
         return $this->Datei;
     }
 
